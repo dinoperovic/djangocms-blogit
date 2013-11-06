@@ -45,6 +45,10 @@ class Post(TranslatableModel):
     def title_(self):
         return self.__unicode__()
 
+    def save(self, *args, **kwargs):
+        self.last_modified = datetime.now()
+        super(Post, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
 
@@ -83,6 +87,10 @@ class Category(TranslatableModel):
     @property
     def title_(self):
         return self.__unicode__()
+
+    def save(self, *args, **kwargs):
+        self.last_modified = datetime.now()
+        super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))

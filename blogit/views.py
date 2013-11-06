@@ -23,7 +23,7 @@ def single(request, slug):
     """
     try:
         post = Post.objects.language().get(slug=slug, is_public=True)
-    except post.DoesNotExist:
+    except Post.DoesNotExist:
         raise Http404
 
     return render(request, 'blogit/single.html', {'post': post})

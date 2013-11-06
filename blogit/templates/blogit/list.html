@@ -1,0 +1,11 @@
+<div class="blogit-list">
+{% for post in posts %}
+    <div class="blogit-post">
+        <div class="blogit-post-header">
+            <a href="{{ post.get_absolute_url }}">
+                <h2>{{ post.title }}</h2>
+            </a>
+        </div>
+    </div>
+{% endfor %}
+</div>

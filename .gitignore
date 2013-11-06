@@ -1,0 +1,7 @@
+*.sw[op]
+*.pyc
+*.orig
+.DS_Store
+*/migrations/
+dist/
+*.egg-info/

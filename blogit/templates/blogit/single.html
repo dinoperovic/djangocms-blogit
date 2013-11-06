@@ -1,0 +1,11 @@
+{% load placeholder_tags %}
+<div class="blogit-single">
+    <div class="blogit-post">
+        <div class="blogit-post-header">
+            <h2>{{ post.title }}</h2>
+        </div>
+        <div class="blogit-post-content">
+            {% render_placeholder post.content %}
+        </div>
+    </div>
+</div>

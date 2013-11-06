@@ -5,6 +5,31 @@
             <a href="{{ post.get_absolute_url }}">
                 <h2>{{ post.title }}</h2>
             </a>
+            {% if post.subtitle %}
+                <h3>{{ post.subtitle }}</h3>
+            {% endif %}
+            {% if post.featured_image %}
+                <a href="{{ post.get_absolute_url }}">
+                    <img src="{{ post.featured_image.url }}">
+                </a>
+            {% endif %}
+        </div>
+        <div class="blogit-post-content">
+            <p>{{ post.description }}</p>
+        </div>
+        <div class="blogit-post-footer">
+            {% if post.get_tags.all %}
+                <div class="blogit-post-tags">
+                    <p>
+                        {% for tag in post.get_tags.all %}
+                            {% if forloop.counter0 > 0 %}, {% endif %}{{ tag.name }}
+                        {% endfor %}
+                    </p>
+                </div>
+            {% endif %}
+            <div class="blogit-post-date">
+                <p>{{ post.date_created }}</p>
+            </div>
         </div>
     </div>
 {% endfor %}

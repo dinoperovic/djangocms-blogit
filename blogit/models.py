@@ -21,8 +21,8 @@ class Post(TranslatableModel):
     featured_image = FilerImageField(blank=True, null=True)
     categories = models.ManyToManyField('Category', blank=True, null=True)
     is_public = models.BooleanField(default=True)
-    date_created = models.DateTimeField(default=datetime.now(), blank=True)
-    last_modified = models.DateTimeField(default=datetime.now(), blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    last_modified = models.DateTimeField(default=datetime.now())
 
     translations = TranslatedFields(
         title = models.CharField(max_length=255),
@@ -58,6 +58,9 @@ class Post(TranslatableModel):
     def get_absolute_url(self, language=get_language()):
         return reverse('blogit_single', kwargs={'slug': self.get_slug(language=language)})
 
+    def get_tags(self, language=get_language()):
+        return self.lazy_translation_getter('tags')
+
     def admin_image(self):
         return utils.thumb(self.featured_image, '72x72')
     admin_image.short_description = _(u'Featured image')
@@ -68,8 +71,8 @@ class Category(TranslatableModel):
     """
     Category model.
     """
-    date_created = models.DateTimeField(default=datetime.now(), blank=True)
-    last_modified = models.DateTimeField(default=datetime.now(), blank=True)
+    date_created = models.DateTimeField(default=datetime.now())
+    last_modified = models.DateTimeField(default=datetime.now())
 
     translations = TranslatedFields(
         title = models.CharField(max_length=255),

@@ -29,7 +29,7 @@ class Post(TranslatableModel):
         slug = models.SlugField(max_length=255),
         subtitle = models.CharField(max_length=255, blank=True, null=True),
         description = models.TextField(blank=True, null=True),
-        tags = TaggableManager(),
+        tags = TaggableManager(blank=True),
     )
 
     content = PlaceholderField('blogit_post_content')

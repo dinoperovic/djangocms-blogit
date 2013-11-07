@@ -18,9 +18,9 @@ def thumb(image, size, crop=True, upscale=True):
         }
         thumbnailer = get_thumbnailer(image)
         thumb = thumbnailer.get_thumbnail(options)
-        return u'<img src="{}">'.format(thumb.url)
+        return thumb.url
     else:
-        return _(u'(None)')
+        return None
 
 
 def paginate(queryset, request, items_per_page=10, orphans=0):

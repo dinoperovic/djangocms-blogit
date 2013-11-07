@@ -62,7 +62,8 @@ class Post(TranslatableModel):
         return self.lazy_translation_getter('tags')
 
     def admin_image(self):
-        return utils.thumb(self.featured_image, '72x72')
+        thumb = utils.thumb(self.featured_image, '72x72')
+        return '<img src="{}">'.format(thumb) if thumb else _(u'(None)')
     admin_image.short_description = _(u'Featured image')
     admin_image.allow_tags = True
 
@@ -128,7 +129,8 @@ class Author(TranslatableModel):
         return reverse('blogit_author', kwargs={'slug': self.slug})
 
     def admin_image(self):
-        return utils.thumb(self.picture, '72x72')
+        thumb = utils.thumb(self.picture, '72x72')
+        return '<img src="{}">'.format(thumb) if thumb else _(u'(None)')
     admin_image.short_description = _(u'Author image')
     admin_image.allow_tags = True
 

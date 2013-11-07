@@ -50,13 +50,13 @@ class Post(TranslatableModel):
         super(Post, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.safe_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
+        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
 
     def get_slug(self):
         return self.lazy_translation_getter('slug')
 
     def get_absolute_url(self):
-        return reverse('blogit_single', kwargs={'slug': self.get_slug()})
+        return reverse('blogit_single', kwargs={'post_slug': self.get_slug()})
 
     def get_tags(self):
         return self.lazy_translation_getter('tags')
@@ -83,6 +83,7 @@ class Category(TranslatableModel):
     class Meta:
         db_table = 'blogit_categories'
         verbose_name_plural = _(u'Categories')
+        ordering = ('date_created',)
 
     @property
     def slug_(self):
@@ -97,13 +98,13 @@ class Category(TranslatableModel):
         super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.safe_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
+        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
 
     def get_slug(self):
         return self.lazy_translation_getter('slug')
 
     def get_absolute_url(self):
-        return reverse('blogit_category', kwargs={'slug': self.get_slug()})
+        return reverse('blogit_category', kwargs={'category_slug': self.get_slug()})
 
 
 class Author(TranslatableModel):
@@ -126,7 +127,7 @@ class Author(TranslatableModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('blogit_author', kwargs={'slug': self.slug})
+        return reverse('blogit_author', kwargs={'author_slug': self.slug})
 
     def admin_image(self):
         thumb = utils.thumb(self.picture, '72x72')
@@ -136,7 +137,10 @@ class Author(TranslatableModel):
 
 
 class AuthorLink(models.Model):
-    author = models.ForeignKey('Author', verbose_name=_(u'Author'))
+    """
+    Author link model.
+    """
+    author = models.ForeignKey('Author', related_name='author_links', verbose_name=_(u'Author'))
     link_type = models.CharField(max_length=255, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
         default=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES[0][0], verbose_name=_(u'Link type'))
 
@@ -144,6 +148,7 @@ class AuthorLink(models.Model):
 
     class Meta:
         db_table = 'blogit_author_links'
+        ordering = ('pk',)
 
     def __unicode__(self):
         return self.url

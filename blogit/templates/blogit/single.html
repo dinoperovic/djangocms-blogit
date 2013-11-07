@@ -1,31 +1,23 @@
 {% load placeholder_tags %}
-<div class="blogit-single">
-    <div class="blogit-post">
-        <div class="blogit-post-header">
-            <h1>{{ post.title }}</h1>
-            {% if post.subtitle %}
-                <h2>{{ post.subtitle }}</h2>
-            {% endif %}
-            {% if post.featured_image %}
-                <img src="{{ post.featured_image.url }}">
-            {% endif %}
-        </div>
-        <div class="blogit-post-content">
-            {% render_placeholder post.content %}
-        </div>
-        <div class="blogit-post-footer">
-            {% if post.get_tags.all %}
-                <div class="blogit-post-tags">
-                    <p>
-                        {% for tag in post.get_tags.all %}
-                            {% if forloop.counter0 > 0 %}, {% endif %}{{ tag.name }}
-                        {% endfor %}
-                    </p>
-                </div>
-            {% endif %}
-            <div class="blogit-post-date">
-                <p>{{ post.date_created }}</p>
-            </div>
-        </div>
-    </div>
+
+<div>
+    <h1>{{ post.title }}</h2>
+
+    {% if post.subtitle %}
+        <h2>{{ post.subtitle }}</h2>
+    {% endif %}
+
+    {% if post.featured_image %}
+        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+    {% endif %}
+
+    <p>{{ post.date_created }}</p>
+
+    {% include "blogit/includes/categories.html" with categories=post.categories %}
+
+    {% include "blogit/includes/tags.html" with tags=post.get_tags %}
+
+    {% render_placeholder post.content %}
+
+    {% include "blogit/includes/author.html" with author=post.author %}
 </div>

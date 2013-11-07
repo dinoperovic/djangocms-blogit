@@ -1,0 +1,8 @@
+{% if tags.all %}
+    <p>
+        <strong>Tags:</strong>
+        {% for tag in tags.all %}
+            {{ tag.name }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </p>
+{% endif %}

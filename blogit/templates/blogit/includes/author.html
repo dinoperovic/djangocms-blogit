@@ -1,0 +1,21 @@
+{% if author %}
+    <div>
+        <h4>{{ author.name }}</h4>
+
+        {% if author.picture %}
+            <img src="{{ author.picture.url }}" alt="{{ author.name }}">
+        {% endif %}
+
+        {% if author.bio %}
+            <p>{{ author.bio }}</p>
+        {% endif %}
+
+        {% if author.author_links.all %}
+            <ul>
+                {% for link in author.author_links.all %}
+                    <li><a class="{{ link.type }}" href="{{ link.url }}">{{ link.url }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endif %}

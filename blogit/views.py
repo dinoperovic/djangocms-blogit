@@ -2,27 +2,32 @@
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render
 
-from .models import Post
+from .models import Post, Category
 
 from blogit import utils
 
 
-def list(request):
+def list(request, category_slug=None):
     """
     List of all posts.
     """
-    posts = Post.objects.language().filter(is_public=True).order_by('-date_created')
-    posts = utils.paginate(posts, request)
+    posts = Post.objects.language().filter(is_public=True)
+
+    if category_slug:
+        category_id = Category.objects.language().get(slug=category_slug)
+        posts = posts.filter(categories=category_id)
+
+    posts = utils.paginate(posts.order_by('-date_created'), request)
 
     return render(request, 'blogit/list.html', {'posts': posts})
 
 
-def single(request, slug):
+def single(request, post_slug):
     """
     Sigle post.
     """
     try:
-        post = Post.objects.language().get(slug=slug, is_public=True)
+        post = Post.objects.language().get(slug=post_slug, is_public=True)
     except Post.DoesNotExist:
         raise Http404
 

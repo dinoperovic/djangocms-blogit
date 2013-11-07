@@ -17,22 +17,22 @@ class Post(TranslatableModel):
     """
     Post model.
     """
-    author = models.ForeignKey('Author', blank=True, null=True)
-    featured_image = FilerImageField(blank=True, null=True)
-    categories = models.ManyToManyField('Category', blank=True, null=True)
-    is_public = models.BooleanField(default=True)
-    date_created = models.DateTimeField(default=datetime.now())
-    last_modified = models.DateTimeField(default=datetime.now())
+    author = models.ForeignKey('Author', blank=True, null=True, verbose_name=_(u'Author'))
+    featured_image = FilerImageField(blank=True, null=True, verbose_name=_(u'Featured image'))
+    categories = models.ManyToManyField('Category', blank=True, null=True, verbose_name=_(u'Categories'))
+    is_public = models.BooleanField(default=True, verbose_name=_(u'Is public'))
+    date_created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Date created'))
+    last_modified = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Last modified'))
 
     translations = TranslatedFields(
-        title = models.CharField(max_length=255),
-        slug = models.SlugField(max_length=255),
-        subtitle = models.CharField(max_length=255, blank=True, null=True),
-        description = models.TextField(blank=True, null=True),
-        tags = TaggableManager(blank=True),
+        title = models.CharField(max_length=255, verbose_name=_(u'Title')),
+        slug = models.SlugField(max_length=255, verbose_name=_(u'Slug')),
+        subtitle = models.CharField(max_length=255, blank=True, null=True, verbose_name=_(u'Subtitle')),
+        description = models.TextField(blank=True, null=True, verbose_name=_(u'Description')),
+        tags = TaggableManager(blank=True, verbose_name=_(u'Tags')),
     )
 
-    content = PlaceholderField('blogit_post_content')
+    content = PlaceholderField('blogit_post_content', verbose_name=_(u'Content'))
 
     class Meta:
         db_table = 'blogit_posts'
@@ -72,12 +72,12 @@ class Category(TranslatableModel):
     """
     Category model.
     """
-    date_created = models.DateTimeField(default=datetime.now())
-    last_modified = models.DateTimeField(default=datetime.now())
+    date_created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Date created'))
+    last_modified = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Last modified'))
 
     translations = TranslatedFields(
-        title = models.CharField(max_length=255),
-        slug = models.SlugField(max_length=255),
+        title = models.CharField(max_length=255, verbose_name=_(u'Title')),
+        slug = models.SlugField(max_length=255, verbose_name=_(u'Slug')),
     )
 
     class Meta:
@@ -110,13 +110,13 @@ class Author(TranslatableModel):
     """
     Author model.
     """
-    user = models.ForeignKey('auth.User', blank=True, null=True, unique=True)
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
-    picture = FilerImageField(blank=True, null=True, related_name='author_image')
+    user = models.ForeignKey('auth.User', blank=True, null=True, unique=True, verbose_name=_(u'User'))
+    name = models.CharField(max_length=255, verbose_name=_(u'Name'))
+    slug = models.SlugField(max_length=255, verbose_name=_(u'Slug'))
+    picture = FilerImageField(blank=True, null=True, related_name='author_image', verbose_name=_(u'Picture'))
 
     translations = TranslatedFields(
-        bio = models.TextField(blank=True, null=True),
+        bio = models.TextField(blank=True, null=True, verbose_name=_(u'Bio')),
     )
 
     class Meta:

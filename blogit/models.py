@@ -52,13 +52,13 @@ class Post(TranslatableModel):
     def __unicode__(self):
         return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
 
-    def get_slug(self, language=get_language()):
+    def get_slug(self):
         return self.lazy_translation_getter('slug', '{}-{}'.format(_(u'post'), self.pk))
 
-    def get_absolute_url(self, language=get_language()):
-        return reverse('blogit_single', kwargs={'slug': self.get_slug(language=language)})
+    def get_absolute_url(self):
+        return reverse('blogit_single', kwargs={'slug': self.get_slug()})
 
-    def get_tags(self, language=get_language()):
+    def get_tags(self):
         return self.lazy_translation_getter('tags')
 
     def admin_image(self):
@@ -99,11 +99,11 @@ class Category(TranslatableModel):
     def __unicode__(self):
         return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
 
-    def get_slug(self, language=get_language()):
+    def get_slug(self):
         return self.lazy_translation_getter('slug', 'category-{}'.format(self.pk))
 
-    def get_absolute_url(self, language=get_language()):
-        return reverse('blogit_category', kwargs={'slug': self.get_slug(language=language)})
+    def get_absolute_url(self):
+        return reverse('blogit_category', kwargs={'slug': self.get_slug()})
 
 
 class Author(TranslatableModel):
@@ -125,7 +125,7 @@ class Author(TranslatableModel):
     def __unicode__(self):
         return self.name
 
-    def get_absolute_url(self, language=get_language()):
+    def get_absolute_url(self):
         return reverse('blogit_author', kwargs={'slug': self.slug})
 
     def admin_image(self):

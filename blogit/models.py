@@ -10,7 +10,7 @@ from filer.fields.file import FilerFileField
 
 from datetime import datetime
 
-from blogit import utils
+from blogit import settings, utils
 
 
 class Post(TranslatableModel):
@@ -134,3 +134,16 @@ class Author(TranslatableModel):
     admin_image.short_description = _(u'Author image')
     admin_image.allow_tags = True
 
+
+class AuthorLink(models.Model):
+    author = models.ForeignKey('Author', verbose_name=_(u'Author'))
+    link_type = models.CharField(max_length=255, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
+        default=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES[0][0], verbose_name=_(u'Link type'))
+
+    url = models.CharField(max_length=255, verbose_name=_(u'Url'))
+
+    class Meta:
+        db_table = 'blogit_author_links'
+
+    def __unicode__(self):
+        return self.url

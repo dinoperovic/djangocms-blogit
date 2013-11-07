@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from .models import Post, Category, Author
+from .models import Post, Category, Author, AuthorLink
 
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
@@ -46,8 +46,13 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         )
 
 
+class AuthorLinkAdmin(admin.StackedInline):
+    model = AuthorLink
+    extra = 0
+
 class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = ('name', 'slug', 'all_translations', 'admin_image')
+    inlines = (AuthorLinkAdmin,)
 
     def __init__(self, *args, **kwargs):
         super(AuthorAdmin, self).__init__(*args, **kwargs)

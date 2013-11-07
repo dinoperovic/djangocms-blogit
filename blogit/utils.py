@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language, ugettext_lazy as _
 from easy_thumbnails.files import get_thumbnailer
 
 
@@ -37,3 +37,17 @@ def paginate(queryset, request, items_per_page=10, orphans=0):
         queryset = paginator.page(paginator.num_pages)
 
     return queryset
+
+
+def get_translation(default, translations, language=None):
+    if not language:
+        language = get_language()
+
+    if translations:
+        for item in translations:
+            if item[0] == language:
+                return item[1]
+
+        return translations[0][1]
+    else:
+        return default

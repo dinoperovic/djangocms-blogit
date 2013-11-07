@@ -103,8 +103,14 @@ class Category(TranslatableModel):
     def get_slug(self):
         return self.lazy_translation_getter('slug')
 
-    def get_absolute_url(self):
-        return reverse('blogit_category', kwargs={'category_slug': self.get_slug()})
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_language()
+
+        return reverse('blogit_category', kwargs={
+            'category_url': utils.get_translation('category', settings.BLOGIT_CATEGORY_URL_TRANSLATIONS, language),
+            'category_slug': self.get_slug()
+        })
 
 
 class Author(TranslatableModel):

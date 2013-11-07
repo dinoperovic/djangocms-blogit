@@ -50,10 +50,10 @@ class Post(TranslatableModel):
         super(Post, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
+        return self.safe_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
 
     def get_slug(self):
-        return self.lazy_translation_getter('slug', '{}-{}'.format(_(u'post'), self.pk))
+        return self.lazy_translation_getter('slug')
 
     def get_absolute_url(self):
         return reverse('blogit_single', kwargs={'slug': self.get_slug()})
@@ -97,10 +97,10 @@ class Category(TranslatableModel):
         super(Category, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
+        return self.safe_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
 
     def get_slug(self):
-        return self.lazy_translation_getter('slug', 'category-{}'.format(self.pk))
+        return self.lazy_translation_getter('slug')
 
     def get_absolute_url(self):
         return reverse('blogit_category', kwargs={'slug': self.get_slug()})

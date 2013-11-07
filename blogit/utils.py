@@ -40,6 +40,9 @@ def paginate(queryset, request, items_per_page=10, orphans=0):
 
 
 def get_translation(default, translations, language=None):
+    """
+    Returns the correct translation for the given list of tuples.
+    """
     if not language:
         language = get_language()
 

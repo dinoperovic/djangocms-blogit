@@ -10,9 +10,9 @@ register = template.Library()
 
 
 @register.assignment_tag
-def get_recent_posts(limit, category=None, category_slug=None):
+def get_posts(limit, category=None, category_slug=None):
     """
-    Returns recent posts.
+    Returns posts.
     """
 
     posts = Post.objects.language().filter(is_public=True)
@@ -35,3 +35,12 @@ def get_recent_posts(limit, category=None, category_slug=None):
                 category_slug = None
 
     return posts.order_by('-date_created')[:limit]
+
+
+@register.assignment_tag
+def get_categories():
+    """
+    Returns all categories.
+    """
+    categories = Category.objects.all()
+    return categories.order_by('date_created')

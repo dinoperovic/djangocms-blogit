@@ -10,10 +10,10 @@ Dependencies
 ------------
 
 * `django-cms`_ >= 2.4
-* `easy_thumbnails`_ 1.3
+* `easy-thumbnails`_ == 1.3
 * `django-filer`_ >= 0.9
-* `django-hvad`_ 0.3
-* `django-taggit`_ 0.10
+* `django-hvad`_ == 0.3
+* `django-taggit`_ == 0.10
 
 Installation
 ------------
@@ -40,7 +40,7 @@ Install `django-cms`_ and add to ``INSTALLED_APPS``::
 
 
 .. _django-cms: https://github.com/divio/django-cms
-.. _easy_thumbnails: https://github.com/SmileyChris/easy-thumbnails
+.. _easy-thumbnails: https://github.com/SmileyChris/easy-thumbnails
 .. _django-filer: https://github.com/stefanfoulis/django-filer
 .. _django-hvad: https://github.com/kristianoellegaard/django-hvad
 .. _django-taggit: https://github.com/alex/django-taggit

@@ -14,7 +14,7 @@ def list(request, category_url=None, category_slug=None):
     """
 
     # Raise 404 if current language doesn't match category_url.
-    if category_url:
+    if category_url and settings.BLOGIT_CATEGORY_URL_TRANSLATIONS:
         if utils.get_translation(None, settings.BLOGIT_CATEGORY_URL_TRANSLATIONS) != category_url:
             raise Http404
 

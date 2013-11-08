@@ -3,8 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render
 from django.utils.translation import get_language
 
-from .models import Post, Category
-
+from blogit.models import Post, Category
 from blogit import settings, utils
 
 

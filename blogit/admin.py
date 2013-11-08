@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from .models import Post, Category, Author, AuthorLink
+from blogit.models import Post, Category, Author, AuthorLink
 
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):

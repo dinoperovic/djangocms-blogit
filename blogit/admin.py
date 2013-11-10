@@ -46,13 +46,13 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         )
 
 
-class AuthorLinkAdmin(admin.StackedInline):
+class AuthorLinkInline(admin.StackedInline):
     model = AuthorLink
     extra = 0
 
 class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = ('name', 'slug', 'all_translations', 'admin_image')
-    inlines = (AuthorLinkAdmin,)
+    inlines = (AuthorLinkInline,)
 
     def __init__(self, *args, **kwargs):
         super(AuthorAdmin, self).__init__(*args, **kwargs)

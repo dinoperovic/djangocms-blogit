@@ -132,8 +132,14 @@ class Author(TranslatableModel):
     def __unicode__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse('blogit_author', kwargs={'author_slug': self.slug})
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_language()
+
+        return reverse('blogit_author', kwargs={
+            'author_url': utils.get_translation('author', settings.BLOGIT_AUTHOR_URL_TRANSLATIONS, language),
+            'author_slug': self.slug
+        })
 
     def admin_image(self):
         thumb = utils.thumb(self.picture, '72x72')
@@ -147,8 +153,8 @@ class AuthorLink(models.Model):
     Author link model.
     """
     author = models.ForeignKey('Author', related_name='author_links', verbose_name=_(u'Author'))
-    link_type = models.CharField(max_length=255, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
-        default=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES[0][0], verbose_name=_(u'Link type'))
+    link_type = models.CharField(max_length=255, blank=True, null=True, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
+        verbose_name=_(u'Link type'))
 
     url = models.CharField(max_length=255, verbose_name=_(u'Url'))
 

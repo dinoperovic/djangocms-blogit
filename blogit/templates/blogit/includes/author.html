@@ -1,6 +1,8 @@
 {% if author %}
     <div>
-        <h4>{{ author.name }}</h4>
+        <a href="{{ author.get_absolute_url }}">
+            <h4>{{ author.name }}</h4>
+        </a>
 
         {% if author.picture %}
             <img src="{{ author.picture.url }}" alt="{{ author.name }}">

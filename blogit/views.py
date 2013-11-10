@@ -7,28 +7,44 @@ from blogit.models import Post, Category
 from blogit import settings, utils
 
 
-def list(request, category_url=None, category_slug=None):
+def post_list(request, posts=None):
     """
-    List of all posts.
+    List posts.
+    """
+    posts = posts if posts else Post.objects.all()
+    posts = utils.paginate(posts.filter(is_public=True).order_by('-date_created'), request)
+
+    return render(request, 'blogit/list.html', {'posts': posts})
+
+
+def category_list(request, category_url, category_slug):
+    """
+    List posts with given category.
     """
 
     # Raise 404 if current language doesn't match category_url.
-    if category_url and settings.BLOGIT_CATEGORY_URL_TRANSLATIONS:
-        if utils.get_translation(None, settings.BLOGIT_CATEGORY_URL_TRANSLATIONS) != category_url:
+    if settings.BLOGIT_CATEGORY_URL_TRANSLATIONS:
+        if utils.get_translation('category', settings.BLOGIT_CATEGORY_URL_TRANSLATIONS) != category_url:
             raise Http404
 
-    posts = Post.objects.language().filter(is_public=True)
+    try:
+        category_id = Category.objects.language().get(slug=category_slug)
+        return post_list(request, Post.objects.language().filter(categories=category_id))
+    except Category.DoesNotExist:
+        raise Http404
 
-    if category_slug:
-        try:
-            category_id = Category.objects.language().get(slug=category_slug)
-            posts = posts.filter(categories=category_id)
-        except Category.DoesNotExist:
+
+def author_list(request, author_url, author_slug):
+    """
+    List posts with given author.
+    """
+
+    # Raise 404 if current language doesn't match author_url.
+    if settings.BLOGIT_AUTHOR_URL_TRANSLATIONS:
+        if utils.get_translation('author', settings.BLOGIT_AUTHOR_URL_TRANSLATIONS) != author_url:
             raise Http404
 
-    posts = utils.paginate(posts.order_by('-date_created'), request)
-
-    return render(request, 'blogit/list.html', {'posts': posts})
+    return post_list(request, Post.objects.language().filter(author__slug=author_slug))
 
 
 def single(request, post_slug):

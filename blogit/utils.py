@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from os.path import isfile
 from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -9,7 +10,7 @@ def thumb(image, size, crop=True, upscale=True):
     """
     Returns a thumbnail.
     """
-    if image:
+    if image and isfile(image.url):
         options = {
             'size': size.split('x'),
             'crop': crop,

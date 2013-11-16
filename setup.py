@@ -32,7 +32,7 @@ setup(
     install_requires=(
         'django-cms>=2.4',
         'django-hvad==0.3',
-        'easy-thumbnails==1.3',
+        'easy-thumbnails==1.4',
         'django-filer>=0.9',
         'django-taggit==0.10',
     ),

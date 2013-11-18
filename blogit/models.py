@@ -45,18 +45,18 @@ class Post(TranslatableModel):
     def title_(self):
         return self.__unicode__()
 
+    def __unicode__(self):
+        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
+
     def save(self, *args, **kwargs):
         self.last_modified = datetime.now()
         super(Post, self).save(*args, **kwargs)
 
-    def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
+    def get_absolute_url(self):
+        return reverse('blogit_single', kwargs={'post_slug': self.get_slug()})
 
     def get_slug(self):
         return self.lazy_translation_getter('slug')
-
-    def get_absolute_url(self):
-        return reverse('blogit_single', kwargs={'post_slug': self.get_slug()})
 
     def get_tags(self):
         return self.lazy_translation_getter('tags')
@@ -85,23 +85,12 @@ class Category(TranslatableModel):
         verbose_name_plural = _(u'Categories')
         ordering = ('date_created',)
 
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__unicode__()
+    def __unicode__(self):
+        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
 
     def save(self, *args, **kwargs):
         self.last_modified = datetime.now()
         super(Category, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
-
-    def get_slug(self):
-        return self.lazy_translation_getter('slug')
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -111,6 +100,18 @@ class Category(TranslatableModel):
             'category_url': utils.get_translation('category', settings.BLOGIT_CATEGORY_URL_TRANSLATIONS, language),
             'category_slug': self.get_slug()
         })
+
+    def get_slug(self):
+        return self.lazy_translation_getter('slug')
+
+    @property
+    def slug_(self):
+        return self.get_slug()
+
+    @property
+    def title_(self):
+        return self.__unicode__()
+
 
 
 class Author(TranslatableModel):

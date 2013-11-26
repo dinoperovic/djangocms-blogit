@@ -118,7 +118,7 @@ class Author(TranslatableModel):
     """
     Author model.
     """
-    user = models.ForeignKey('auth.User', blank=True, null=True, unique=True, verbose_name=_(u'User'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, unique=True, verbose_name=_(u'User'))
     name = models.CharField(max_length=255, verbose_name=_(u'Name'))
     slug = models.SlugField(max_length=255, verbose_name=_(u'Slug'))
     picture = FilerImageField(blank=True, null=True, related_name='author_image', verbose_name=_(u'Picture'))

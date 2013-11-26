@@ -12,7 +12,7 @@ def post_list(request, posts=None, extra_context=None):
     List posts.
     """
     posts = posts if posts else Post.objects.all()
-    posts = utils.paginate(posts.filter(is_public=True).order_by('-date_created'), request)
+    posts = utils.paginate(posts.filter(is_public=True).order_by('-date_created'), request, settings.BLOGIT_POSTS_PER_PAGE)
 
     context = {'posts': posts}
     if extra_context:

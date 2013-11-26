@@ -3,18 +3,22 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render
 from django.utils.translation import get_language
 
-from blogit.models import Post, Category
+from blogit.models import Post, Category, Author
 from blogit import settings, utils
 
 
-def post_list(request, posts=None):
+def post_list(request, posts=None, extra_context=None):
     """
     List posts.
     """
     posts = posts if posts else Post.objects.all()
     posts = utils.paginate(posts.filter(is_public=True).order_by('-date_created'), request)
 
-    return render(request, 'blogit/list.html', {'posts': posts})
+    context = {'posts': posts}
+    if extra_context:
+        context.update(extra_context)
+
+    return render(request, 'blogit/list.html', context)
 
 
 def category_list(request, category_url, category_slug):
@@ -28,8 +32,8 @@ def category_list(request, category_url, category_slug):
             raise Http404
 
     try:
-        category_id = Category.objects.language().get(slug=category_slug)
-        return post_list(request, Post.objects.language().filter(categories=category_id))
+        category = Category.objects.language().get(slug=category_slug)
+        return post_list(request, Post.objects.language().filter(categories=category), {'category': category})
     except Category.DoesNotExist:
         raise Http404
 
@@ -44,7 +48,11 @@ def author_list(request, author_url, author_slug):
         if utils.get_translation('author', settings.BLOGIT_AUTHOR_URL_TRANSLATIONS) != author_url:
             raise Http404
 
-    return post_list(request, Post.objects.language().filter(author__slug=author_slug))
+    try:
+        author = Author.objects.language().get(slug=author_slug)
+        return post_list(request, Post.objects.language().filter(author=author), {'author': author})
+    except Author.DoesNotExist:
+        raise Http404
 
 
 def single(request, post_slug):

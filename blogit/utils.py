@@ -10,7 +10,7 @@ def thumb(image, size, crop=True, upscale=True):
     """
     Returns a thumbnail.
     """
-    if image and isfile(image.url):
+    try:
         options = {
             'size': size.split('x'),
             'crop': crop,
@@ -19,7 +19,7 @@ def thumb(image, size, crop=True, upscale=True):
         thumbnailer = get_thumbnailer(image)
         thumb = thumbnailer.get_thumbnail(options)
         return thumb.url
-    else:
+    except IOError:
         return None
 
 

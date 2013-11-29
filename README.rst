@@ -10,7 +10,7 @@ Dependencies
 ------------
 
 * `django-cms`_ >= 2.4
-* `easy-thumbnails`_ == 1.3
+* `easy-thumbnails`_ == 1.4
 * `django-filer`_ >= 0.9
 * `django-hvad`_ == 0.3
 * `django-taggit`_ == 0.10

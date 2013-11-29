@@ -11,10 +11,7 @@ register = template.Library()
 
 @register.assignment_tag
 def get_posts(limit, category=None, category_slug=None):
-    """
-    Returns posts.
-    """
-
+    # Returns posts by limit and category.
     posts = Post.objects.language().filter(is_public=True)
 
     # Filter posts by category if it exists.
@@ -39,8 +36,6 @@ def get_posts(limit, category=None, category_slug=None):
 
 @register.assignment_tag
 def get_categories():
-    """
-    Returns all categories.
-    """
+    # Returns all categories.
     categories = Category.objects.all()
     return categories.order_by('date_created')

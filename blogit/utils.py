@@ -7,9 +7,7 @@ from easy_thumbnails.files import get_thumbnailer
 
 
 def thumb(image, size, crop=True, upscale=True):
-    """
-    Returns a thumbnail.
-    """
+    # Returns a thumbnail.
     try:
         options = {
             'size': size.split('x'),
@@ -24,9 +22,7 @@ def thumb(image, size, crop=True, upscale=True):
 
 
 def paginate(queryset, request, items_per_page=10, orphans=0):
-    """
-    Paginates given queryset.
-    """
+    # Paginates given queryset.
     paginator = Paginator(queryset, items_per_page, orphans)
     page = request.GET.get('page')
 
@@ -41,9 +37,7 @@ def paginate(queryset, request, items_per_page=10, orphans=0):
 
 
 def get_translation(default, translations, language=None):
-    """
-    Returns the correct translation for the given list of tuples.
-    """
+    # Returns the correct translation for the given list of tuples.
     if not language:
         language = get_language()
 

@@ -8,9 +8,7 @@ from blogit import settings, utils
 
 
 def post_list(request, posts=None, extra_context=None):
-    """
-    List posts.
-    """
+    # List posts.
     posts = posts if posts else Post.objects.all()
     posts = utils.paginate(posts.filter(is_public=True).order_by('-date_created'), request, settings.BLOGIT_POSTS_PER_PAGE)
 
@@ -22,10 +20,7 @@ def post_list(request, posts=None, extra_context=None):
 
 
 def category_list(request, category_url, category_slug):
-    """
-    List posts with given category.
-    """
-
+    # List posts with given category.
     # Raise 404 if current language doesn't match category_url.
     if settings.BLOGIT_CATEGORY_URL_TRANSLATIONS:
         if utils.get_translation('category', settings.BLOGIT_CATEGORY_URL_TRANSLATIONS) != category_url:
@@ -39,10 +34,7 @@ def category_list(request, category_url, category_slug):
 
 
 def author_list(request, author_url, author_slug):
-    """
-    List posts with given author.
-    """
-
+    # List posts with given author.
     # Raise 404 if current language doesn't match author_url.
     if settings.BLOGIT_AUTHOR_URL_TRANSLATIONS:
         if utils.get_translation('author', settings.BLOGIT_AUTHOR_URL_TRANSLATIONS) != author_url:
@@ -56,9 +48,7 @@ def author_list(request, author_url, author_slug):
 
 
 def single(request, post_slug):
-    """
-    Sigle post.
-    """
+    # Sigle post.
     try:
         post = Post.objects.language().get(slug=post_slug, is_public=True)
     except Post.DoesNotExist:

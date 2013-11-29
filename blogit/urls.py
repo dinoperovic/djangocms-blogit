@@ -3,7 +3,7 @@ from django.conf.urls.defaults import patterns, url
 
 from blogit import views, settings, utils
 
-
+# Translated urls.
 CATEGORY_URLS = '(category|{})'.format('|'.join([item[1] for item in settings.BLOGIT_CATEGORY_URL_TRANSLATIONS]))
 AUTHOR_URLS = '(author|{})'.format('|'.join([item[1] for item in settings.BLOGIT_AUTHOR_URL_TRANSLATIONS]))
 

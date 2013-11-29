@@ -14,9 +14,6 @@ from blogit import settings, utils
 
 
 class Post(TranslatableModel):
-    """
-    Post model.
-    """
     author = models.ForeignKey('Author', blank=True, null=True, verbose_name=_(u'Author'))
     featured_image = FilerImageField(blank=True, null=True, verbose_name=_(u'Featured image'))
     categories = models.ManyToManyField('Category', blank=True, null=True, verbose_name=_(u'Categories'))
@@ -37,14 +34,6 @@ class Post(TranslatableModel):
     class Meta:
         db_table = 'blogit_posts'
 
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__unicode__()
-
     def __unicode__(self):
         return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
 
@@ -59,6 +48,7 @@ class Post(TranslatableModel):
         return self.lazy_translation_getter('slug')
 
     def get_tags(self):
+        # Returns correct translated tags.
         return self.lazy_translation_getter('tags')
 
     def admin_image(self):
@@ -67,11 +57,16 @@ class Post(TranslatableModel):
     admin_image.short_description = _(u'Featured image')
     admin_image.allow_tags = True
 
+    @property
+    def slug_(self):
+        return self.get_slug()
+
+    @property
+    def title_(self):
+        return self.__unicode__()
+
 
 class Category(TranslatableModel):
-    """
-    Category model.
-    """
     date_created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Date created'))
     last_modified = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Last modified'))
 
@@ -115,9 +110,6 @@ class Category(TranslatableModel):
 
 
 class Author(TranslatableModel):
-    """
-    Author model.
-    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, unique=True, verbose_name=_(u'User'))
     name = models.CharField(max_length=255, verbose_name=_(u'Name'))
     slug = models.SlugField(max_length=255, verbose_name=_(u'Slug'))
@@ -150,9 +142,6 @@ class Author(TranslatableModel):
 
 
 class AuthorLink(models.Model):
-    """
-    Author link model.
-    """
     author = models.ForeignKey('Author', related_name='author_links', verbose_name=_(u'Author'))
     link_type = models.CharField(max_length=255, blank=True, null=True, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
         verbose_name=_(u'Link type'))

@@ -1,126 +1,36 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _
+
 from hvad.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
-from filer.fields.file import FilerFileField
 
-from datetime import datetime
-
-from blogit import settings, utils
-
-
-class Post(TranslatableModel):
-    author = models.ForeignKey('Author', blank=True, null=True, verbose_name=_(u'Author'))
-    featured_image = FilerImageField(blank=True, null=True, verbose_name=_(u'Featured image'))
-    categories = models.ManyToManyField('Category', blank=True, null=True, verbose_name=_(u'Categories'))
-    is_public = models.BooleanField(default=True, verbose_name=_(u'Is public'))
-    date_created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Date created'))
-    last_modified = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Last modified'))
-
-    translations = TranslatedFields(
-        title = models.CharField(max_length=255, verbose_name=_(u'Title')),
-        slug = models.SlugField(max_length=255, verbose_name=_(u'Slug')),
-        subtitle = models.CharField(max_length=255, blank=True, null=True, verbose_name=_(u'Subtitle')),
-        description = models.TextField(blank=True, null=True, verbose_name=_(u'Description')),
-        tags = TaggableManager(blank=True, verbose_name=_(u'Tags')),
-    )
-
-    content = PlaceholderField('blogit_post_content', verbose_name=_(u'Content'))
-
-    class Meta:
-        db_table = 'blogit_posts'
-
-    def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Post'), self.pk))
-
-    def save(self, *args, **kwargs):
-        self.last_modified = datetime.now()
-        super(Post, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('blogit_single', kwargs={'post_slug': self.get_slug()})
-
-    def get_slug(self):
-        return self.lazy_translation_getter('slug')
-
-    def get_tags(self):
-        # Returns correct translated tags.
-        return self.lazy_translation_getter('tags')
-
-    def admin_image(self):
-        thumb = utils.thumb(self.featured_image, '72x72')
-        return '<img src="{}">'.format(thumb) if thumb else _(u'(None)')
-    admin_image.short_description = _(u'Featured image')
-    admin_image.allow_tags = True
-
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__unicode__()
-
-
-class Category(TranslatableModel):
-    date_created = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Date created'))
-    last_modified = models.DateTimeField(default=datetime.now(), verbose_name=_(u'Last modified'))
-
-    translations = TranslatedFields(
-        title = models.CharField(max_length=255, verbose_name=_(u'Title')),
-        slug = models.SlugField(max_length=255, verbose_name=_(u'Slug')),
-    )
-
-    class Meta:
-        db_table = 'blogit_categories'
-        verbose_name_plural = _(u'Categories')
-        ordering = ('date_created',)
-
-    def __unicode__(self):
-        return self.lazy_translation_getter('title', '{}: {}'.format(_(u'Category'), self.pk))
-
-    def save(self, *args, **kwargs):
-        self.last_modified = datetime.now()
-        super(Category, self).save(*args, **kwargs)
-
-    def get_absolute_url(self, language=None):
-        if not language:
-            language = get_language()
-
-        return reverse('blogit_category', kwargs={
-            'category_url': utils.get_translation('category', settings.BLOGIT_CATEGORY_URL_TRANSLATIONS, language),
-            'category_slug': self.get_slug()
-        })
-
-    def get_slug(self):
-        return self.lazy_translation_getter('slug')
-
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__unicode__()
-
+from . import settings as bs
+from .utils import get_translation, thumb
 
 
 class Author(TranslatableModel):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, unique=True, verbose_name=_(u'User'))
-    name = models.CharField(max_length=255, verbose_name=_(u'Name'))
-    slug = models.SlugField(max_length=255, verbose_name=_(u'Slug'))
-    picture = FilerImageField(blank=True, null=True, related_name='author_image', verbose_name=_(u'Picture'))
+    user = models.ForeignKey(
+        bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
+        verbose_name=_(u'user'))
+    name = models.CharField(_(u'name'), max_length=255)
+    slug = models.SlugField(_(u'slug'), max_length=255)
+    picture = FilerImageField(
+        blank=True, null=True, related_name='author_image',
+        verbose_name=_(u'picture'))
 
     translations = TranslatedFields(
-        bio = models.TextField(blank=True, null=True, verbose_name=_(u'Bio')),
+        bio=models.TextField(_(u'bio'), blank=True, null=True),
     )
 
     class Meta:
         db_table = 'blogit_authors'
+        verbose_name = _(u'author')
+        verbose_name_plural = _(u'authors')
 
     def __unicode__(self):
         return self.name
@@ -130,27 +40,150 @@ class Author(TranslatableModel):
             language = get_language()
 
         return reverse('blogit_author', kwargs={
-            'author_url': utils.get_translation('author', settings.BLOGIT_AUTHOR_URL_TRANSLATIONS, language),
-            'author_slug': self.slug
+            'url': get_translation(
+                bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, language),
+            'slug': self.slug
         })
 
     def admin_image(self):
-        thumb = utils.thumb(self.picture, '72x72')
-        return '<img src="{}">'.format(thumb) if thumb else _(u'(None)')
-    admin_image.short_description = _(u'Author image')
+        if self.picture:
+            return '<img src="{}">'.format(
+                thumb(self.picture, '72x72'))
+        return None
+    admin_image.short_description = _(u'author image')
     admin_image.allow_tags = True
 
 
 class AuthorLink(models.Model):
-    author = models.ForeignKey('Author', related_name='author_links', verbose_name=_(u'Author'))
-    link_type = models.CharField(max_length=255, blank=True, null=True, choices=settings.BLOGIT_AUTHOR_LINK_TYPE_CHOICES,
-        verbose_name=_(u'Link type'))
-
-    url = models.CharField(max_length=255, verbose_name=_(u'Url'))
+    author = models.ForeignKey(
+        Author, related_name='author_links', verbose_name=_(u'author'))
+    link_type = models.CharField(
+        _(u'link type'), max_length=255, blank=True, null=True,
+        choices=bs.AUTHOR_LINK_TYPE_CHOICES)
+    url = models.URLField(_(u'url'))
 
     class Meta:
         db_table = 'blogit_author_links'
+        verbose_name = _(u'author link')
+        verbose_name_plural = _(u'author links')
         ordering = ('pk',)
 
     def __unicode__(self):
         return self.url
+
+
+class Category(TranslatableModel):
+    date_created = models.DateTimeField(
+        _(u'date created'), default=timezone.now)
+    last_modified = models.DateTimeField(
+        _(u'last modified'), default=timezone.now)
+
+    translations = TranslatedFields(
+        title=models.CharField(_(u'title'), max_length=255),
+        slug=models.SlugField(_(u'slug'), max_length=255),
+    )
+
+    class Meta:
+        db_table = 'blogit_categories'
+        verbose_name = _(u'category')
+        verbose_name_plural = _(u'categories')
+        ordering = ('date_created',)
+
+    def __unicode__(self):
+        return self.lazy_translation_getter(
+            'title', '{}: {}'.format(_(u'Category'), self.pk))
+
+    def save(self, *args, **kwargs):
+        self.last_modified = timezone.now()
+        super(Category, self).save(*args, **kwargs)
+
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_language()
+
+        return reverse('blogit_category', kwargs={
+            'url': get_translation(
+                bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, language),
+            'slug': self.get_slug()
+        })
+
+    def get_slug(self):
+        return self.lazy_translation_getter('slug')
+
+    @property
+    def slug_(self):
+        return self.get_slug()
+
+    @property
+    def title_(self):
+        return self.__unicode__()
+
+
+class Post(TranslatableModel):
+    author = models.ForeignKey(
+        Author, blank=True, null=True, verbose_name=_(u'author'))
+    featured_image = FilerImageField(
+        blank=True, null=True, verbose_name=_(u'featured image'))
+    categories = models.ManyToManyField(
+        Category, blank=True, null=True, verbose_name=_(u'categories'))
+    date_created = models.DateTimeField(
+        _(u'date created'), blank=True, null=True, default=timezone.now)
+    last_modified = models.DateTimeField(
+        _(u'last modified'), default=timezone.now)
+
+    translations = TranslatedFields(
+        title=models.CharField(_(u'title'), max_length=255),
+        slug=models.SlugField(
+            _(u'slug'), max_length=255,
+            help_text=_(u'Text used in the url.')),
+        is_public=models.BooleanField(
+            _(u'is public'), default=True, help_text=_(
+                u'Designates whether the post is visible to the public.')),
+        subtitle=models.CharField(
+            _(u'subtitle'), max_length=255, blank=True, null=True),
+        description=models.TextField(
+            _(u'description'), blank=True, null=True),
+        tags=TaggableManager(blank=True, verbose_name=_(u'tags')),
+    )
+
+    content = PlaceholderField(
+        'blogit_post_content', verbose_name=_(u'content'))
+
+    class Meta:
+        db_table = 'blogit_posts'
+        verbose_name = _(u'post')
+        verbose_name_plural = _(u'posts')
+        ordering = ('-date_created',)
+
+    def __unicode__(self):
+        return self.lazy_translation_getter(
+            'title', '{}: {}'.format(_(u'Post'), self.pk))
+
+    def save(self, *args, **kwargs):
+        self.last_modified = timezone.now()
+        super(Post, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('blogit_detail', kwargs={'slug': self.get_slug()})
+
+    def get_slug(self):
+        return self.lazy_translation_getter('slug')
+
+    def get_tags(self):
+        return self.lazy_translation_getter('tags')
+
+    def admin_image(self):
+        if self.featured_image:
+            return '<img src="{}">'.format(
+                thumb(self.featured_image, '72x72'))
+        return None
+    admin_image.short_description = _(u'featured image')
+    admin_image.allow_tags = True
+
+    @property
+    def slug_(self):
+        return self.get_slug()
+
+    @property
+    def title_(self):
+        return self.__unicode__()

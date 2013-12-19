@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
-from blogit import views, settings, utils
+from . import settings as bs
+from .utils import get_translation_regex
+from .views import (
+    PostListView, CategoryListView, AuthorListView, PostDetailView)
 
-# Translated urls.
-CATEGORY_URLS = '(category|{})'.format('|'.join([item[1] for item in settings.BLOGIT_CATEGORY_URL_TRANSLATIONS]))
-AUTHOR_URLS = '(author|{})'.format('|'.join([item[1] for item in settings.BLOGIT_AUTHOR_URL_TRANSLATIONS]))
 
-urlpatterns = patterns('',
-    url(r'^$', views.post_list, name='blogit_list'),
-    url(r'^(?P<category_url>{})/(?P<category_slug>[-\w\d]+)/$'.format(CATEGORY_URLS), views.category_list, name='blogit_category'),
-    url(r'^(?P<author_url>{})/(?P<author_slug>[-\w\d]+)$'.format(AUTHOR_URLS), views.author_list, name='blogit_author'),
-    url(r'^(?P<post_slug>[-\w\d]+)/$', views.single, name='blogit_single'),
+urlpatterns = patterns(
+    '',
+    url(r'^$', PostListView.as_view(), name='blogit_list'),
+
+    url(r'^(?P<url>{})/(?P<slug>[-\w\d]+)/$'.format(
+        get_translation_regex(bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION)),
+        CategoryListView.as_view(), name='blogit_category'),
+
+    url(r'^(?P<url>{})/(?P<slug>[-\w\d]+)/$'.format(
+        get_translation_regex(bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION)),
+        AuthorListView.as_view(), name='blogit_author'),
+
+    url(r'^(?P<slug>[-\w\d]+)/$', PostDetailView.as_view(),
+        name='blogit_detail'),
 )

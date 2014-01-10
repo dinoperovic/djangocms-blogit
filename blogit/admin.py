@@ -9,10 +9,10 @@ from .models import Post, Category, Author, AuthorLink
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
-        'title_', 'slug_', 'date_created', 'last_modified', 'author',
-        'all_translations', 'admin_image')
-    list_filter = ('date_created', 'last_modified', 'author')
-    readonly_fields = ('last_modified',)
+        'title_', 'slug_', 'date_published',
+        'author', 'all_translations', 'admin_image')
+    list_filter = ('date_published', 'date_created', 'last_modified', 'author')
+    readonly_fields = ('date_created', 'last_modified',)
 
     def __init__(self, *args, **kwargs):
         super(PostAdmin, self).__init__(*args, **kwargs)
@@ -26,7 +26,8 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             }),
             (_(u'Common settings'), {
                 'fields': (
-                    'author', 'featured_image', 'categories', 'date_created'),
+                    'author', 'featured_image', 'categories',
+                    'date_published'),
                 'description': _(
                     u'These fields are the same across all languages.'),
             }),
@@ -34,7 +35,7 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'fields': ('content',),
             }),
             (_(u'Post info'), {
-                'fields': ('last_modified',),
+                'fields': ('date_created', 'last_modified',),
                 'classes': ('collapse',)
             }),
         )

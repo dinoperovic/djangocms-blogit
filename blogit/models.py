@@ -130,6 +130,8 @@ class Post(TranslatableModel):
         _(u'date created'), blank=True, null=True, default=timezone.now)
     last_modified = models.DateTimeField(
         _(u'last modified'), default=timezone.now)
+    date_published = models.DateTimeField(
+        _(u'date published'), default=timezone.now)
 
     translations = TranslatedFields(
         title=models.CharField(_(u'title'), max_length=255),
@@ -153,7 +155,7 @@ class Post(TranslatableModel):
         db_table = 'blogit_posts'
         verbose_name = _(u'post')
         verbose_name_plural = _(u'posts')
-        ordering = ('-date_created',)
+        ordering = ('-date_published',)
 
     def __unicode__(self):
         return self.lazy_translation_getter(

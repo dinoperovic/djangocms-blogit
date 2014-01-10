@@ -24,10 +24,9 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             (None, {
                 'fields': ('subtitle', 'description', 'tags'),
             }),
-            (_(u'Common settings'), {
+            (_(u'Common Settings'), {
                 'fields': (
-                    'author', 'featured_image', 'categories',
-                    'date_published'),
+                    'author', 'featured_image', 'categories'),
                 'description': _(
                     u'These fields are the same across all languages.'),
             }),
@@ -35,8 +34,10 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'fields': ('content',),
             }),
             (_(u'Date Information'), {
-                'fields': ('date_created', 'last_modified'),
-                'classes': ('collapse',)
+                'fields': ('date_published', 'date_created', 'last_modified'),
+                'classes': ('collapse',),
+                'description': _(
+                    u'These fields are the same across all languages.'),
             }),
             (_(u'SEO Settings'), {
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),

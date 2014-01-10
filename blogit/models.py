@@ -139,8 +139,9 @@ class Post(TranslatableModel):
             _(u'slug'), max_length=255,
             help_text=_(u'Text used in the url.')),
         is_public=models.BooleanField(
-            _(u'is public'), default=True, help_text=_(
-                u'Designates whether the post is visible to the public.')),
+            _(u'is public'), default=True,
+            help_text=_(u'Designates whether the post is visible to the '
+                        u'public.')),
         subtitle=models.CharField(
             _(u'subtitle'), max_length=255, blank=True, null=True),
         description=models.TextField(

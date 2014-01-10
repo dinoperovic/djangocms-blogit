@@ -34,8 +34,12 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             (_(u'Content'), {
                 'fields': ('content',),
             }),
-            (_(u'Post info'), {
-                'fields': ('date_created', 'last_modified',),
+            (_(u'Date Information'), {
+                'fields': ('date_created', 'last_modified'),
+                'classes': ('collapse',)
+            }),
+            (_(u'SEO Settings'), {
+                'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',)
             }),
         )

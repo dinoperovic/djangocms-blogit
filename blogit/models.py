@@ -146,6 +146,18 @@ class Post(TranslatableModel):
         description=models.TextField(
             _(u'description'), blank=True, null=True),
         tags=TaggableManager(blank=True, verbose_name=_(u'tags')),
+        meta_title=models.CharField(
+            _(u'page title'), max_length=255, blank=True, null=True,
+            help_text=_(u'Overwrites what is displayed at the top of your '
+                        u'browser or in bookmarks.')),
+        meta_description=models.TextField(
+            _(u'description meta tag'), blank=True, null=True,
+            help_text=_(u'A description of the page sometimes used by '
+                        u'search engines.')),
+        meta_keywords=models.CharField(
+            _(u'keywords meta tag'), max_length=255, blank=True, null=True,
+            help_text=_(u'A list of comma separated keywords sometimes used '
+                        u'by search engines.')),
     )
 
     content = PlaceholderField(

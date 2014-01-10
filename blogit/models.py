@@ -186,6 +186,16 @@ class Post(TranslatableModel):
     def get_tags(self):
         return self.lazy_translation_getter('tags')
 
+    def get_previous(self):
+        # Returns previous post if it exists, if not returns None.
+        posts = Post.objects.filter(date_published__lt=self.date_published)
+        return posts[0] if posts else None
+
+    def get_next(self):
+        # Returns next post if it exists, if not returns None.
+        posts = Post.objects.filter(date_published__gt=self.date_published)
+        return posts.order_by('date_published')[0] if posts else None
+
     def admin_image(self):
         if self.featured_image:
             return '<img src="{}">'.format(

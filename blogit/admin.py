@@ -26,7 +26,7 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             }),
             (_(u'Common Settings'), {
                 'fields': (
-                    'author', 'featured_image', 'categories'),
+                    'category', 'author', 'featured_image'),
                 'description': _(
                     u'These fields are the same across all languages.'),
             }),

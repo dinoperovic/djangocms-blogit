@@ -38,7 +38,7 @@ class CategoryListView(PostListMixin, ListView):
         try:
             category = Category.objects.language().get(
                 slug=kwargs.get('slug'))
-            self.filters.update({'categories': category})
+            self.filters.update({'category': category})
         except Category.DoesNotExist:
             raise Http404
 

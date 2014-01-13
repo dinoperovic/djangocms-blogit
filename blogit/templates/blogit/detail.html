@@ -12,8 +12,12 @@
     {% endif %}
 
     <p>{{ post.date_created }}</p>
-
-    {% include "blogit/includes/categories.html" with categories=post.categories %}
+    {% if post.category %}
+        <p>
+            <strong>Category: </strong>
+            <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a>
+        </p>
+    {% endif %}
 
     {% include "blogit/includes/tags.html" with tags=post.get_tags %}
 

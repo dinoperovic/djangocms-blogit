@@ -120,12 +120,12 @@ class Category(TranslatableModel):
 
 
 class Post(TranslatableModel):
+    category = models.ForeignKey(
+        Category, blank=True, null=True, verbose_name=_(u'category'))
     author = models.ForeignKey(
         Author, blank=True, null=True, verbose_name=_(u'author'))
     featured_image = FilerImageField(
         blank=True, null=True, verbose_name=_(u'featured image'))
-    categories = models.ManyToManyField(
-        Category, blank=True, null=True, verbose_name=_(u'categories'))
     date_created = models.DateTimeField(
         _(u'date created'), blank=True, null=True, default=timezone.now)
     last_modified = models.DateTimeField(

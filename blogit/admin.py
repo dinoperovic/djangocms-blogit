@@ -30,9 +30,6 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'description': _(
                     u'These fields are the same across all languages.'),
             }),
-            (_(u'Content'), {
-                'fields': ('content',),
-            }),
             (_(u'Date Information'), {
                 'fields': ('date_published', 'date_created', 'last_modified'),
                 'classes': ('collapse',),
@@ -42,6 +39,9 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             (_(u'SEO Settings'), {
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',)
+            }),
+            (_(u'Content'), {
+                'fields': ('content',),
             }),
         )
 
@@ -57,10 +57,13 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         self.prepopulated_fields = {'slug': ('title',)}
         self.fieldsets = (
             (None, {
-                'fields': ('date_created', 'last_modified'),
-            }),
-            (_(u'Basic info'), {
                 'fields': ('title', 'slug'),
+            }),
+            (_(u'Date Information'), {
+                'fields': ('date_created', 'last_modified'),
+                'classes': ('collapse',),
+                'description': _(
+                    u'These fields are the same across all languages.'),
             }),
         )
 
@@ -79,10 +82,12 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
         self.prepopulated_fields = {'slug': ('name',)}
         self.fieldsets = (
             (None, {
-                'fields': ('user', 'name', 'slug', 'picture'),
-            }),
-            (_(u'Basic info'), {
                 'fields': ('bio',),
+            }),
+            (_(u'Common Settings'), {
+                'fields': ('user', 'name', 'slug', 'picture'),
+                'description': _(
+                    u'These fields are the same across all languages.'),
             }),
         )
 

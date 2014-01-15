@@ -38,7 +38,7 @@ class CategoryListView(PostListMixin, ListView):
         try:
             category = Category.objects.language().get(
                 slug=kwargs.get('slug'))
-            self.filters.update({'category': category})
+            self.filters = {'category': category}
         except Category.DoesNotExist:
             raise Http404
 
@@ -53,7 +53,7 @@ class AuthorListView(PostListMixin, ListView):
         # Add author filter to posts.
         try:
             author = Author.objects.language().get(slug=kwargs.get('slug'))
-            self.filters.update({'author': author})
+            self.filters = {'author': author}
         except Author.DoesNotExist:
             raise Http404
 

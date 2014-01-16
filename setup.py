@@ -31,6 +31,7 @@ setup(
     include_package_data=True,
     install_requires=(
         'django-cms>=2.4',
+        'django-mptt==0.5.5',
         'django-hvad==0.3',
         'easy-thumbnails==1.4',
         'django-filer>=0.9',

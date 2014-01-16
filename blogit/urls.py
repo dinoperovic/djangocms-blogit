@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, url
 
 from . import settings as bs
-from .utils import get_translation_regex
+from .utils.translation import get_translation_regex
 from .views import (
     PostListView, PostDetailView,
     CategoryListView,

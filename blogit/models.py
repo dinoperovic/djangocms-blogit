@@ -4,13 +4,16 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _
 
+from mptt.models import MPTTModel, TreeForeignKey
 from hvad.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
 
 from . import settings as bs
-from .utils import get_translation, thumb
+from .utils.translation import get_translation
+from .utils.noconflict import classmaker
+from .utils.image import thumb
 
 
 class Author(TranslatableModel):
@@ -115,7 +118,12 @@ class AuthorLink(models.Model):
         return self.url
 
 
-class Category(TranslatableModel):
+class Category(TranslatableModel, MPTTModel):
+    __metaclass__ = classmaker()
+
+    parent = TreeForeignKey(
+        'self', blank=True, null=True, related_name='children', db_index=True)
+
     date_created = models.DateTimeField(
         _(u'date created'), default=timezone.now)
     last_modified = models.DateTimeField(
@@ -131,6 +139,9 @@ class Category(TranslatableModel):
         verbose_name = _(u'category')
         verbose_name_plural = _(u'categories')
         ordering = ('date_created',)
+
+    class MPTTMeta:
+        pass
 
     def __unicode__(self):
         return self.lazy_translation_getter(
@@ -164,9 +175,11 @@ class Category(TranslatableModel):
 
 class Post(TranslatableModel):
     category = models.ForeignKey(
-        Category, blank=True, null=True, verbose_name=_(u'category'))
+        Category, blank=True, null=True, on_delete=models.SET_NULL,
+        verbose_name=_(u'category'))
     author = models.ForeignKey(
-        Author, blank=True, null=True, verbose_name=_(u'author'))
+        Author, blank=True, null=True, on_delete=models.SET_NULL,
+        verbose_name=_(u'author'))
     featured_image = FilerImageField(
         blank=True, null=True, verbose_name=_(u'featured image'))
     date_created = models.DateTimeField(

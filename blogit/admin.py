@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from mptt.admin import MPTTModelAdmin
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
@@ -35,9 +36,10 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
         )
 
 
-class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
+class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
     list_display = (
-        'title_', 'slug_', 'date_created', 'last_modified', 'all_translations')
+        'title_', 'slug_', 'parent', 'date_created', 'last_modified',
+        'all_translations')
     list_filter = ('date_created', 'last_modified')
     readonly_fields = ('last_modified',)
 
@@ -47,6 +49,11 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         self.fieldsets = (
             (None, {
                 'fields': ('title', 'slug'),
+            }),
+            (_(u'Common Settings'), {
+                'fields': ('parent',),
+                'description': _(
+                    u'These fields are the same across all languages.'),
             }),
             (_(u'Date Information'), {
                 'fields': ('date_created', 'last_modified'),

@@ -10,9 +10,10 @@ Dependencies
 ------------
 
 * `django-cms`_ >= 2.4
+* `django-mptt`_ == 0.5.5
+* `django-hvad`_ == 0.3
 * `easy-thumbnails`_ == 1.4
 * `django-filer`_ >= 0.9
-* `django-hvad`_ == 0.3
 * `django-taggit`_ == 0.10
 
 Installation
@@ -72,4 +73,5 @@ BLOGIT_CATEGORY_URL_TRANSLATION, BLOGIT_AUTHOR_URL_TRANSLATION
 .. _easy-thumbnails: https://github.com/SmileyChris/easy-thumbnails
 .. _django-filer: https://github.com/stefanfoulis/django-filer
 .. _django-hvad: https://github.com/kristianoellegaard/django-hvad
+.. _django-mptt: https://github.com/django-mptt/django-mptt
 .. _django-taggit: https://github.com/alex/django-taggit

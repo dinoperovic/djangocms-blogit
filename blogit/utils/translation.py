@@ -2,23 +2,6 @@
 from django.utils.translation import get_language
 from django.http import Http404
 
-from easy_thumbnails.files import get_thumbnailer
-
-
-def thumb(image, size, crop=True, upscale=True):
-    # Returns a thumbnail.
-    try:
-        options = {
-            'size': size.split('x'),
-            'crop': crop,
-            'upscale': upscale,
-        }
-        thumbnailer = get_thumbnailer(image)
-        thumb = thumbnailer.get_thumbnail(options)
-        return thumb.url
-    except IOError:
-        return None
-
 
 def get_translation(default, translation, language=None):
     # Returns the correct translation for the given list of tuples.

@@ -4,7 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
 from . import settings as bs
-from .utils import check_translation_or_404
+from .utils.translation import check_translation_or_404
 from .models import Post, Category, Author
 
 

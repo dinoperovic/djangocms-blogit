@@ -26,5 +26,17 @@
         <hr>
         {% render_placeholder post.content %}
         {% include "blogit/includes/author.html" with author=post.author %}
+
+        <hr>
+        {% with prev_post=post.get_previous next_post=post.get_next %}
+            <ul>
+                {% if prev_post %}
+                    <li><a href="{{ prev_post.get_absolute_url }}">Prev post</a></li>
+                {% endif %}
+                {% if next_post %}
+                    <li><a href="{{ next_post.get_absolute_url }}">Next post</a></li>
+                {% endif %}
+            </ul>
+        {% endwith %}
     </div>
 {% endblock %}

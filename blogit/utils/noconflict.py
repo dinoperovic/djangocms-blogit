@@ -27,7 +27,7 @@ memoized_metaclasses_map = {}
 
 
 def get_noconflict_metaclass(bases, left_metas, right_metas):
-    #N ot intended to be used outside of this module, unless you know
+    # Not intended to be used outside of this module, unless you know
     # what you are doing.
 
     # make tuple of needed metaclasses in specified priority order

@@ -74,18 +74,20 @@ class AuthorLinkInline(admin.TabularInline):
 
 
 class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
-    list_display = ('name', 'slug', 'all_translations', 'admin_image')
+    list_display = ('__unicode__', 'slug', 'all_translations', 'admin_image')
     inlines = (AuthorLinkInline,)
 
     def __init__(self, *args, **kwargs):
         super(AuthorAdmin, self).__init__(*args, **kwargs)
-        self.prepopulated_fields = {'slug': ('name',)}
+        self.prepopulated_fields = {'slug': ('first_name', 'last_name')}
         self.fieldsets = (
             (None, {
                 'fields': ('bio',),
             }),
             (_(u'Common Settings'), {
-                'fields': ('user', 'name', 'slug', 'picture'),
+                'fields': (
+                    'user', 'first_name', 'last_name', 'slug', 'email',
+                    'picture'),
                 'description': _(
                     u'These fields are the same across all languages.'),
             }),

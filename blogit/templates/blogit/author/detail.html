@@ -1,0 +1,21 @@
+{% extends "blogit/author/base.html" %}
+
+{% block "content" %}
+    <div>
+        <hr>
+        <h1>{{ author.get_full_name }}</h1>
+        {% if author.picture %}
+            <p><img src="{{ author.picture.url }}" alt="{{ author.get_full_name }}"></p>
+        {% endif %}
+        {% if author.bio %}
+            <p>{{ author.bio }}</p>
+        {% endif %}
+        <hr>
+        <h4>Post's by {{ author.get_full_name }}</h4>
+        <ul>
+            {% for post in author.get_posts %}
+                <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

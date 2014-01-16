@@ -1,11 +1,14 @@
 {% if author %}
     <div>
+        <hr>
         <a href="{{ author.get_absolute_url }}">
-            <h4>{{ author.name }}</h4>
+            <h4>{{ author.get_full_name }}</h4>
         </a>
 
         {% if author.picture %}
-            <img src="{{ author.picture.url }}" alt="{{ author.name }}">
+            <p><a href="{{ author.get_absolute_url }}">
+                <img src="{{ author.picture.url }}" alt="{{ author.get_full_name }}">
+            </a></p>
         {% endif %}
 
         {% if author.bio %}

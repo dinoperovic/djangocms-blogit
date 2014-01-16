@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import get_language
+from django.http import Http404
+
 from easy_thumbnails.files import get_thumbnailer
 
 
@@ -28,15 +30,19 @@ def get_translation(default, translation, language=None):
             if item[0] == language:
                 return item[1]
 
-        return translation[0][1]
-    else:
-        return default
+    return default
 
 
 def get_translation_regex(default, translation):
     # Returns translation match regex.
     if translation:
-        return '({}|{})'.format(
+        return r'({}|{})'.format(
             default, '|'.join([item[1] for item in translation]))
     else:
         return default
+
+
+def check_translation_or_404(default, translation, value):
+    # Raise 404 if translation doesn't match the value.
+    if get_translation(default, translation) != value:
+        raise Http404()

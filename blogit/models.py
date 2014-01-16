@@ -17,8 +17,12 @@ class Author(TranslatableModel):
     user = models.ForeignKey(
         bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
         verbose_name=_(u'user'))
-    name = models.CharField(_(u'name'), max_length=255)
-    slug = models.SlugField(_(u'slug'), max_length=255)
+    first_name = models.CharField(
+        _(u'first name'), max_length=30, blank=True, null=True)
+    last_name = models.CharField(
+        _(u'last name'), max_length=30, blank=True, null=True)
+    slug = models.SlugField(_(u'slug'), max_length=100, blank=True, null=True)
+    email = models.EmailField(_(u'email address'), blank=True, null=True)
     picture = FilerImageField(
         blank=True, null=True, related_name='author_image',
         verbose_name=_(u'picture'))
@@ -33,17 +37,49 @@ class Author(TranslatableModel):
         verbose_name_plural = _(u'authors')
 
     def __unicode__(self):
-        return self.name
+        name = self.get_full_name()
+        return name if name else u'Author: {}'.format(self.pk)
 
     def get_absolute_url(self, language=None):
         if not language:
             language = get_language()
 
-        return reverse('blogit_author', kwargs={
+        return reverse('blogit_author_detail', kwargs={
             'url': get_translation(
                 bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, language),
-            'slug': self.slug
+            'slug': self.get_slug()
         })
+
+    def get_slug(self):
+        # If slug specified returns it, else returns pk.
+        return self.slug if self.slug else self.pk
+
+    def get_full_name(self):
+        # Returns first_name plus last_name, with a space in between.
+        name = u'{} {}'.format(self.get_first_name(), self.get_last_name())
+        return name.strip()
+
+    def get_first_name(self):
+        # Returns first_name, fallbacks to users first_name.
+        if not self.first_name and self.user:
+            return self.user.first_name
+        return self.first_name
+
+    def get_last_name(self):
+        # Returns last_name, fallbacks to users last_name.
+        if not self.last_name and self.user:
+            return self.user.last_name
+        return self.last_name
+
+    def get_email(self):
+        # Returns email, fallbacks to users email.
+        if not self.email and self.user:
+            return self.user.email
+        return self.email
+
+    def get_posts(self):
+        # Returns all posts by author.
+        return Post.objects.language().filter(author=self, is_public=True)
 
     def admin_image(self):
         if self.picture:
@@ -179,7 +215,7 @@ class Post(TranslatableModel):
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('blogit_detail', kwargs={'slug': self.get_slug()})
+        return reverse('blogit_post_detail', kwargs={'slug': self.get_slug()})
 
     def get_slug(self):
         return self.lazy_translation_getter('slug')

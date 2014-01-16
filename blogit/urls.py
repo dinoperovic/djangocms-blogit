@@ -11,8 +11,13 @@ from .views import (
 
 urlpatterns = patterns(
     '',
-    # Category list.
+    # Category detail.
     url(r'^(?P<url>{})/(?P<slug>[-\w\d]+)/$'.format(
+        get_translation_regex(bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION)),
+        CategoryListView.as_view(), name='blogit_category'),
+
+    # Category list.
+    url(r'^(?P<url>{})/$'.format(
         get_translation_regex(bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION)),
         CategoryListView.as_view(), name='blogit_category'),
 

@@ -38,10 +38,11 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
 
 class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
     list_display = (
-        'title_', 'slug_', 'parent', 'date_created', 'last_modified',
+        'title_', 'slug_', 'date_created', 'last_modified',
         'all_translations')
     list_filter = ('date_created', 'last_modified')
     readonly_fields = ('last_modified',)
+    mptt_indent_field = 'title_'
 
     def __init__(self, *args, **kwargs):
         super(CategoryAdmin, self).__init__(*args, **kwargs)

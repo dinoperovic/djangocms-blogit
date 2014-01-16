@@ -4,7 +4,57 @@ from django.utils.translation import ugettext_lazy as _
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from .models import Post, Category, Author, AuthorLink
+from .models import AuthorLink, Author, Category, Post
+
+
+class AuthorLinkInline(admin.TabularInline):
+    model = AuthorLink
+    extra = 0
+
+
+class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
+    list_display = ('__unicode__', 'slug', 'all_translations', 'admin_image')
+    inlines = (AuthorLinkInline,)
+
+    def __init__(self, *args, **kwargs):
+        super(AuthorAdmin, self).__init__(*args, **kwargs)
+        self.fieldsets = (
+            (None, {
+                'fields': ('slug', 'user'),
+                'description': _(
+                    u'These fields are the same across all languages.'),
+            }),
+            (_(u'Personal Info'), {
+                'fields': ('first_name', 'last_name', 'email', 'picture'),
+                'description': _(
+                    u'These fields are the same across all languages.'),
+            }),
+            (None, {
+                'fields': ('bio',),
+            }),
+        )
+
+
+class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
+    list_display = (
+        'title_', 'slug_', 'date_created', 'last_modified', 'all_translations')
+    list_filter = ('date_created', 'last_modified')
+    readonly_fields = ('last_modified',)
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryAdmin, self).__init__(*args, **kwargs)
+        self.prepopulated_fields = {'slug': ('title',)}
+        self.fieldsets = (
+            (None, {
+                'fields': ('title', 'slug'),
+            }),
+            (_(u'Date Information'), {
+                'fields': ('date_created', 'last_modified'),
+                'classes': ('collapse',),
+                'description': _(
+                    u'These fields are the same across all languages.'),
+            }),
+        )
 
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
@@ -42,54 +92,6 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             }),
             (_(u'Content'), {
                 'fields': ('content',),
-            }),
-        )
-
-
-class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
-    list_display = (
-        'title_', 'slug_', 'date_created', 'last_modified', 'all_translations')
-    list_filter = ('date_created', 'last_modified')
-    readonly_fields = ('last_modified',)
-
-    def __init__(self, *args, **kwargs):
-        super(CategoryAdmin, self).__init__(*args, **kwargs)
-        self.prepopulated_fields = {'slug': ('title',)}
-        self.fieldsets = (
-            (None, {
-                'fields': ('title', 'slug'),
-            }),
-            (_(u'Date Information'), {
-                'fields': ('date_created', 'last_modified'),
-                'classes': ('collapse',),
-                'description': _(
-                    u'These fields are the same across all languages.'),
-            }),
-        )
-
-
-class AuthorLinkInline(admin.TabularInline):
-    model = AuthorLink
-    extra = 0
-
-
-class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
-    list_display = ('__unicode__', 'slug', 'all_translations', 'admin_image')
-    inlines = (AuthorLinkInline,)
-
-    def __init__(self, *args, **kwargs):
-        super(AuthorAdmin, self).__init__(*args, **kwargs)
-        self.prepopulated_fields = {'slug': ('first_name', 'last_name')}
-        self.fieldsets = (
-            (None, {
-                'fields': ('bio',),
-            }),
-            (_(u'Common Settings'), {
-                'fields': (
-                    'user', 'first_name', 'last_name', 'slug', 'email',
-                    'picture'),
-                'description': _(
-                    u'These fields are the same across all languages.'),
             }),
         )
 

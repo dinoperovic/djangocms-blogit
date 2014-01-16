@@ -16,12 +16,17 @@ from .utils import get_translation, thumb
 class Author(TranslatableModel):
     user = models.ForeignKey(
         bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
-        verbose_name=_(u'user'))
+        verbose_name=_(u'user'), help_text=_(
+            u'If selected, fields "First name", "Last name" and '
+            u'"Email address" will fallback tu "User" values if they are '
+            u'left empty.'))
     first_name = models.CharField(
         _(u'first name'), max_length=30, blank=True, null=True)
     last_name = models.CharField(
         _(u'last name'), max_length=30, blank=True, null=True)
-    slug = models.SlugField(_(u'slug'), max_length=100, blank=True, null=True)
+    slug = models.SlugField(
+        _(u'slug'), max_length=100, unique=True, help_text=_(
+            u'Text used in the url.'))
     email = models.EmailField(_(u'email address'), blank=True, null=True)
     picture = FilerImageField(
         blank=True, null=True, related_name='author_image',
@@ -38,6 +43,8 @@ class Author(TranslatableModel):
 
     def __unicode__(self):
         name = self.get_full_name()
+        if not name and self.user and self.user.username:
+            name = self.user.username
         return name if name else u'Author: {}'.format(self.pk)
 
     def get_absolute_url(self, language=None):
@@ -61,13 +68,13 @@ class Author(TranslatableModel):
 
     def get_first_name(self):
         # Returns first_name, fallbacks to users first_name.
-        if not self.first_name and self.user:
+        if not self.first_name and self.user and self.user.first_name:
             return self.user.first_name
         return self.first_name
 
     def get_last_name(self):
         # Returns last_name, fallbacks to users last_name.
-        if not self.last_name and self.user:
+        if not self.last_name and self.user and self.user.last_name:
             return self.user.last_name
         return self.last_name
 

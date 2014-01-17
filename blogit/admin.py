@@ -31,6 +31,9 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
                     u'These fields are the same across all languages.'),
             }),
             (None, {
+                'fields': ('description',),
+            }),
+            (None, {
                 'fields': ('bio',),
             }),
         )
@@ -98,7 +101,7 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',)
             }),
-            (_(u'Content'), {
+            (None, {
                 'fields': ('content',),
             }),
         )

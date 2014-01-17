@@ -36,8 +36,11 @@ class Author(TranslatableModel):
         verbose_name=_(u'picture'))
 
     translations = TranslatedFields(
-        bio=models.TextField(_(u'bio'), blank=True, null=True),
+        description=models.TextField(_(u'description'), blank=True, null=True),
     )
+
+    bio = PlaceholderField(
+        'blogit_author_bio', verbose_name=_(u'bio'))
 
     class Meta:
         db_table = 'blogit_authors'

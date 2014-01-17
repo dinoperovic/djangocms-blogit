@@ -12,8 +12,8 @@
                     <img src="{{ author.picture.url }}" alt="{{ author.get_full_name }}">
                 </a></p>
             {% endif %}
-            {% if author.bio %}
-                <p>{{ author.bio }}</p>
+            {% if author.description %}
+                <p>{{ author.description }}</p>
             {% endif %}
         </div>
     {% endfor %}

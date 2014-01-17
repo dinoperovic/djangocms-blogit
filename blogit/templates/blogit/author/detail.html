@@ -1,4 +1,5 @@
 {% extends "blogit/author/base.html" %}
+{% load placeholder_tags %}
 
 {% block "content" %}
     <div>
@@ -7,15 +8,17 @@
         {% if author.picture %}
             <p><img src="{{ author.picture.url }}" alt="{{ author.get_full_name }}"></p>
         {% endif %}
-        {% if author.bio %}
-            <p>{{ author.bio }}</p>
-        {% endif %}
+        {% render_placeholder author.bio %}
         <hr>
-        <h4>Post's by {{ author.get_full_name }}</h4>
-        <ul>
-            {% for post in author.get_posts %}
-                <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-            {% endfor %}
-        </ul>
+        {% with posts=author.get_posts %}
+            {% if posts %}
+                <h4>Post's by {{ author.get_full_name }}</h4>
+                <ul>
+                    {% for post in posts %}
+                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </div>
 {% endblock %}

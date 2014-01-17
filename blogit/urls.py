@@ -46,6 +46,7 @@ urlpatterns = patterns(
     url(r'^$', PostListView.as_view(), name='blogit_post_list'),
 )
 
+# Add detail patterns.
 if bs.POST_DETAIL_URL_BY_DATE:
     urlpatterns = patterns(
         '',

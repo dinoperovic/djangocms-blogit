@@ -31,6 +31,10 @@ class PostDateMixin(object):
     allow_future = True
 
 
+class ArchiveListMixin(PostDateMixin, PostListMixin):
+    template_name = bs.ARCHIVE_LIST_TEMPLATE
+
+
 class PostListView(PostListMixin, ListView):
     pass
 
@@ -51,15 +55,15 @@ class CategoryListView(PostListMixin, ListView):
         return super(CategoryListView, self).get(request, *args, **kwargs)
 
 
-class PostYearArchiveView(PostDateMixin, PostListMixin, YearArchiveView):
+class PostYearArchiveView(ArchiveListMixin, YearArchiveView):
     pass
 
 
-class PostMonthArchiveView(PostDateMixin, PostListMixin, MonthArchiveView):
+class PostMonthArchiveView(ArchiveListMixin, MonthArchiveView):
     pass
 
 
-class PostDayArchiveView(PostDateMixin, PostListMixin, DayArchiveView):
+class PostDayArchiveView(ArchiveListMixin, DayArchiveView):
     pass
 
 

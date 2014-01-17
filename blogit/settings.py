@@ -15,6 +15,9 @@ POST_LIST_TEMPLATE = getattr(
 POST_DETAIL_TEMPLATE = getattr(
     settings, 'BLOGIT_POST_DETAIL_TEMPLATE', 'blogit/detail.html')
 
+ARCHIVE_LIST_TEMPLATE = getattr(
+    settings, 'BLOGIT_ARCHIVE_LIST_TEMPLATE', POST_LIST_TEMPLATE)
+
 AUTHOR_LIST_TEMPLATE = getattr(
     settings, 'BLOGIT_AUTHOR_LIST_TEMPLATE', 'blogit/author/list.html')
 AUTHOR_DETAIL_TEMPLATE = getattr(

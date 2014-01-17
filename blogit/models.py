@@ -158,7 +158,7 @@ class Category(TranslatableModel, MPTTModel):
         if not language:
             language = get_language()
 
-        return reverse('blogit_category', kwargs={
+        return reverse('blogit_category_detail', kwargs={
             'url': get_translation(
                 bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, language),
             'slug': self.get_slug()
@@ -238,6 +238,14 @@ class Post(TranslatableModel):
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
+        if bs.POST_DETAIL_URL_BY_DATE:
+            return reverse('blogit_post_detail_by_date', kwargs={
+                'year': self.date_published.strftime(bs.URL_YEAR_FORMAT),
+                'month': self.date_published.strftime(
+                    bs.URL_MONTH_FORMAT).lower(),
+                'day': self.date_published.strftime(bs.URL_DAY_FORMAT),
+                'slug': self.get_slug()
+            })
         return reverse('blogit_post_detail', kwargs={'slug': self.get_slug()})
 
     def get_slug(self):
@@ -249,14 +257,14 @@ class Post(TranslatableModel):
     def get_previous(self):
         # Returns previous post if it exists, if not returns None.
         posts = Post.objects.language().filter(
-            date_published__lt=self.date_published)
+            date_published__lt=self.date_published).order_by('-date_published')
         return posts[0] if posts else None
 
     def get_next(self):
         # Returns next post if it exists, if not returns None.
         posts = Post.objects.language().filter(
-            date_published__gt=self.date_published)
-        return posts.order_by('date_published')[0] if posts else None
+            date_published__gt=self.date_published).order_by('date_published')
+        return posts[0] if posts else None
 
     def admin_image(self):
         if self.featured_image:

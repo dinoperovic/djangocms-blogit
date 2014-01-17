@@ -2,6 +2,8 @@
 from django.http import Http404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.dates import (
+    YearArchiveView, MonthArchiveView, DayArchiveView, DateDetailView)
 
 from . import settings as bs
 from .utils.translation import check_translation_or_404
@@ -17,7 +19,16 @@ class PostListMixin(object):
 
     def get_queryset(self):
         return self.model.objects.language().filter(
-            is_public=True, **self.filters)
+            is_public=True, **self.filters).order_by('-date_published')
+
+
+class PostDateMixin(object):
+    date_field = ('date_published')
+    month_format = bs.URL_MONTH_FORMAT
+    year_format = bs.URL_YEAR_FORMAT
+    day_format = bs.URL_DAY_FORMAT
+    make_object_list = True
+    allow_future = True
 
 
 class PostListView(PostListMixin, ListView):
@@ -38,6 +49,18 @@ class CategoryListView(PostListMixin, ListView):
             raise Http404()
 
         return super(CategoryListView, self).get(request, *args, **kwargs)
+
+
+class PostYearArchiveView(PostDateMixin, PostListMixin, YearArchiveView):
+    pass
+
+
+class PostMonthArchiveView(PostDateMixin, PostListMixin, MonthArchiveView):
+    pass
+
+
+class PostDayArchiveView(PostDateMixin, PostListMixin, DayArchiveView):
+    pass
 
 
 class AuthorListView(ListView):
@@ -73,14 +96,22 @@ class AuthorDetailView(DetailView):
                 raise Http404()
 
 
-class PostDetailView(DetailView):
+class PostDetailMixin(object):
     model = Post
     template_name = bs.POST_DETAIL_TEMPLATE
     context_object_name = 'post'
 
+
+class PostDetailView(PostDetailMixin, DetailView):
     def get_object(self):
         try:
             return self.model.objects.language().get(
                 slug=self.kwargs.get('slug'), is_public=True)
         except self.model.DoesNotExist:
             raise Http404()
+
+
+class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
+    def get_queryset(self):
+        return self.model.objects.language().filter(
+            is_public=True).order_by('-date_published')

@@ -24,7 +24,7 @@ AUTHOR_DETAIL_TEMPLATE = getattr(
 AUTHOR_LINK_TYPE_CHOICES = getattr(
     settings, 'BLOGIT_AUTHOR_LINK_TYPE_CHOICES', ())
 
-# Urls and translations.
+# Url defaults and translations.
 CATEGORY_URL = getattr(settings, 'BLOGIT_CATEGORY_URL', 'categories')
 CATEGORY_URL_TRANSLATION = getattr(
     settings, 'BLOGIT_CATEGORY_URL_TRANSLATION', ())
@@ -32,3 +32,12 @@ CATEGORY_URL_TRANSLATION = getattr(
 AUTHOR_URL = getattr(settings, 'BLOGIT_AUTHOR_URL', 'authors')
 AUTHOR_URL_TRANSLATION = getattr(
     settings, 'BLOGIT_AUTHOR_URL_TRANSLATION', ())
+
+# Show detail url by date.
+POST_DETAIL_URL_BY_DATE = getattr(
+    settings, 'BLOGIT_POST_DETAIL_URL_BY_DATE', False)
+
+# Url date formats.
+URL_YEAR_FORMAT = getattr(settings, 'BLOGIT_URL_YEAR_FORMAT', '%Y')
+URL_MONTH_FORMAT = getattr(settings, 'BLOGIT_URL_MONTH_FORMAT', '%m')
+URL_DAY_FORMAT = getattr(settings, 'BLOGIT_URL_DAY_FORMAT', '%d')

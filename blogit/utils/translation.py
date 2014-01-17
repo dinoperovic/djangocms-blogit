@@ -21,8 +21,7 @@ def get_translation_regex(default, translation):
     if translation:
         return r'({}|{})'.format(
             default, '|'.join([item[1] for item in translation]))
-    else:
-        return default
+    return default
 
 
 def check_translation_or_404(default, translation, value):

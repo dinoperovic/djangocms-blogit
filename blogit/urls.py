@@ -48,17 +48,17 @@ urlpatterns = patterns(
 
 # Add detail patterns.
 if bs.POST_DETAIL_URL_BY_DATE:
-    urlpatterns = patterns(
+    urlpatterns += patterns(
         '',
         # Post detail by date.
         url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
             r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
             name='blogit_post_detail_by_date'),
-    ) + urlpatterns
+    )
 else:
-    urlpatterns = patterns(
+    urlpatterns += patterns(
         '',
         # Post detail.
         url(r'^(?P<slug>[-\w\d]+)/$', PostDetailView.as_view(),
             name='blogit_post_detail'),
-    ) + urlpatterns
+    )

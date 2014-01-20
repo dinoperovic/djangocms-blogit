@@ -5,7 +5,7 @@ from mptt.admin import MPTTModelAdmin
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from .models import AuthorLink, Author, Category, Post
+from blogit.models import AuthorLink, Author, Category, Post
 
 
 class AuthorLinkInline(admin.TabularInline):

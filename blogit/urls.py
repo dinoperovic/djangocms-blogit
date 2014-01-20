@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 
-from . import settings as bs
-from .utils.translation import get_translation_regex
-from .views import (
+from blogit import settings as bs
+from blogit.utils.translation import get_translation_regex
+from blogit.views import (
     PostListView, PostDetailView, PostYearArchiveView, PostMonthArchiveView,
     PostDayArchiveView, PostDateDetailView, CategoryListView, AuthorListView,
     AuthorDetailView)

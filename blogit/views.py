@@ -5,11 +5,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic.dates import (
     YearArchiveView, MonthArchiveView, DayArchiveView, DateDetailView)
 
-from . import settings as bs
-from .utils.translation import check_translation_or_404
-from .models import Post, Category, Author
+from blogit import settings as bs
+from blogit.utils.translation import check_translation_or_404
+from blogit.models import Post, Category, Author
 
 
+# Post list.
 class PostListMixin(object):
     model = Post
     template_name = bs.POST_LIST_TEMPLATE
@@ -31,14 +32,11 @@ class PostDateMixin(object):
     allow_future = True
 
 
-class ArchiveListMixin(PostDateMixin, PostListMixin):
-    template_name = bs.ARCHIVE_LIST_TEMPLATE
-
-
 class PostListView(PostListMixin, ListView):
     pass
 
 
+# Category list.
 class CategoryListView(PostListMixin, ListView):
     def get(self, request, *args, **kwargs):
         check_translation_or_404(
@@ -55,6 +53,11 @@ class CategoryListView(PostListMixin, ListView):
         return super(CategoryListView, self).get(request, *args, **kwargs)
 
 
+# Archive list.
+class ArchiveListMixin(PostDateMixin, PostListMixin):
+    template_name = bs.ARCHIVE_LIST_TEMPLATE
+
+
 class PostYearArchiveView(ArchiveListMixin, YearArchiveView):
     pass
 
@@ -67,6 +70,7 @@ class PostDayArchiveView(ArchiveListMixin, DayArchiveView):
     pass
 
 
+# Author list.
 class AuthorListView(ListView):
     model = Author
     template_name = bs.AUTHOR_LIST_TEMPLATE
@@ -83,23 +87,7 @@ class AuthorListView(ListView):
         return super(AuthorListView, self).get(request, *args, **kwargs)
 
 
-class AuthorDetailView(DetailView):
-    model = Author
-    template_name = bs.AUTHOR_DETAIL_TEMPLATE
-    context_object_name = 'author'
-
-    def get_object(self):
-        try:
-            return self.model.objects.language().get(
-                slug=self.kwargs.get('slug'))
-        except self.model.DoesNotExist:
-            try:
-                return self.model.objects.language().get(
-                    pk=self.kwargs.get('slug'))
-            except self.model.DoesNotExist:
-                raise Http404()
-
-
+# Post detail.
 class PostDetailMixin(object):
     model = Post
     template_name = bs.POST_DETAIL_TEMPLATE
@@ -119,3 +107,21 @@ class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
     def get_queryset(self):
         return self.model.objects.language().filter(
             is_public=True).order_by('-date_published')
+
+
+# Author detail.
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = bs.AUTHOR_DETAIL_TEMPLATE
+    context_object_name = 'author'
+
+    def get_object(self):
+        try:
+            return self.model.objects.language().get(
+                slug=self.kwargs.get('slug'))
+        except self.model.DoesNotExist:
+            try:
+                return self.model.objects.language().get(
+                    pk=self.kwargs.get('slug'))
+            except self.model.DoesNotExist:
+                raise Http404()

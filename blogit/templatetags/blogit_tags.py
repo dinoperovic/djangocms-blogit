@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 
-from ..models import Post, Category
+from blogit.models import Post, Category
 
 
 register = template.Library()

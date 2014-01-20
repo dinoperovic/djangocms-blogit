@@ -10,10 +10,10 @@ from taggit.managers import TaggableManager
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
 
-from . import settings as bs
-from .utils.translation import get_translation
-from .utils.noconflict import classmaker
-from .utils.image import thumb
+from blogit import settings as bs
+from blogit.utils.translation import get_translation
+from blogit.utils.noconflict import classmaker
+from blogit.utils.image import thumb
 
 
 class Author(TranslatableModel):

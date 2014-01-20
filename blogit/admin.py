@@ -5,7 +5,7 @@ from mptt.admin import MPTTModelAdmin
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
-from blogit.models import AuthorLink, Author, Category, Post
+from blogit.models import AuthorLink, Author, Category, Tag, TaggedPost, Post
 
 
 class AuthorLinkInline(admin.TabularInline):
@@ -68,6 +68,16 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
         )
 
 
+class TaggedPostInline(admin.TabularInline):
+    model = TaggedPost
+    readonly_fields = ('content_object',)
+    extra = 0
+
+
+class TagAdmin(admin.ModelAdmin):
+    inlines = (TaggedPostInline,)
+
+
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
         'title_', 'slug_', 'date_published',
@@ -107,6 +117,7 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
         )
 
 
-admin.site.register(Post, PostAdmin)
-admin.site.register(Category, CategoryAdmin)
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Post, PostAdmin)

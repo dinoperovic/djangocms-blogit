@@ -7,6 +7,7 @@ from django.utils.translation import get_language, ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from hvad.models import TranslatableModel, TranslatedFields
 from taggit.managers import TaggableManager
+from taggit.models import TagBase, ItemBase
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
 
@@ -16,6 +17,7 @@ from blogit.utils.noconflict import classmaker
 from blogit.utils.image import thumb
 
 
+# Author.
 class Author(TranslatableModel):
     user = models.ForeignKey(
         bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
@@ -121,6 +123,7 @@ class AuthorLink(models.Model):
         return self.url
 
 
+# Category.
 class Category(TranslatableModel, MPTTModel):
     __metaclass__ = classmaker()
 
@@ -176,6 +179,33 @@ class Category(TranslatableModel, MPTTModel):
         return self.__unicode__()
 
 
+# Tag.
+class Tag(TagBase):
+    class Meta:
+        db_table = 'blogit_tags'
+        verbose_name = _(u'tag')
+        verbose_name_plural = _(u'tags')
+
+    def get_absolute_url(self):
+        return '<tag_url>'
+
+
+class TaggedPost(ItemBase):
+    tag = models.ForeignKey(
+        Tag, related_name="tagged_posts", verbose_name=_(u'tag'))
+    content_object = models.ForeignKey(
+        'PostTranslation', verbose_name=_(u'post'))
+
+    class Meta:
+        db_table = 'blogit_tagged_post_translations'
+        verbose_name = _(u'tagged post')
+        verbose_name_plural = _(u'tagged posts')
+
+    def __str__(self):
+        return 'dino'
+
+
+# Post.
 class Post(TranslatableModel):
     category = models.ForeignKey(
         Category, blank=True, null=True, on_delete=models.SET_NULL,
@@ -205,7 +235,8 @@ class Post(TranslatableModel):
             _(u'subtitle'), max_length=255, blank=True, null=True),
         description=models.TextField(
             _(u'description'), blank=True, null=True),
-        tags=TaggableManager(blank=True, verbose_name=_(u'tags')),
+        tags=TaggableManager(
+            through=TaggedPost, blank=True, verbose_name=_(u'tags')),
         meta_title=models.CharField(
             _(u'page title'), max_length=255, blank=True, null=True,
             help_text=_(u'Overwrites what is displayed at the top of your '

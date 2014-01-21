@@ -70,7 +70,6 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
 
 class TaggedPostInline(admin.TabularInline):
     model = TaggedPost
-    readonly_fields = ('content_object',)
     extra = 0
 
 

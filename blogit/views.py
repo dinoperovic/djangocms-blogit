@@ -7,10 +7,10 @@ from django.views.generic.dates import (
 
 from blogit import settings as bs
 from blogit.utils.translation import check_translation_or_404
-from blogit.models import Post, Category, Author
+from blogit.models import Author, Category, Tag, Post
 
 
-# Post list.
+# Mixins
 class PostListMixin(object):
     model = Post
     template_name = bs.POST_LIST_TEMPLATE
@@ -32,42 +32,14 @@ class PostDateMixin(object):
     allow_future = True
 
 
-class PostListView(PostListMixin, ListView):
-    pass
+class PostDetailMixin(object):
+    model = Post
+    template_name = bs.POST_DETAIL_TEMPLATE
+    context_object_name = 'post'
 
 
-# Category list.
-class CategoryListView(PostListMixin, ListView):
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
-
-        # Add category filter to posts.
-        try:
-            category = Category.objects.language().get(
-                slug=kwargs.get('slug'))
-            self.filters = {'category': category}
-        except Category.DoesNotExist:
-            raise Http404()
-
-        return super(CategoryListView, self).get(request, *args, **kwargs)
-
-
-# Archive list.
 class ArchiveListMixin(PostDateMixin, PostListMixin):
     template_name = bs.ARCHIVE_LIST_TEMPLATE
-
-
-class PostYearArchiveView(ArchiveListMixin, YearArchiveView):
-    pass
-
-
-class PostMonthArchiveView(ArchiveListMixin, MonthArchiveView):
-    pass
-
-
-class PostDayArchiveView(ArchiveListMixin, DayArchiveView):
-    pass
 
 
 # Author list.
@@ -87,28 +59,6 @@ class AuthorListView(ListView):
         return super(AuthorListView, self).get(request, *args, **kwargs)
 
 
-# Post detail.
-class PostDetailMixin(object):
-    model = Post
-    template_name = bs.POST_DETAIL_TEMPLATE
-    context_object_name = 'post'
-
-
-class PostDetailView(PostDetailMixin, DetailView):
-    def get_object(self):
-        try:
-            return self.model.objects.language().get(
-                slug=self.kwargs.get('slug'), is_public=True)
-        except self.model.DoesNotExist:
-            raise Http404()
-
-
-class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
-    def get_queryset(self):
-        return self.model.objects.language().filter(
-            is_public=True).order_by('-date_published')
-
-
 # Author detail.
 class AuthorDetailView(DetailView):
     model = Author
@@ -125,3 +75,106 @@ class AuthorDetailView(DetailView):
                     pk=self.kwargs.get('slug'))
             except self.model.DoesNotExist:
                 raise Http404()
+
+
+# Category list.
+class CategoryListView(ListView):
+    model = Category
+    template_name = bs.CATEGORY_LIST_TEMPLATE
+    context_object_name = 'categories'
+    paginate_by = bs.CATEGORIES_PER_PAGE
+
+    def get_queryset(self):
+        return self.model.objects.language().all()
+
+    def get(self, request, *args, **kwargs):
+        check_translation_or_404(
+            bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
+
+        return super(CategoryListView, self).get(request, *args, **kwargs)
+
+
+# Category detail.
+class CategoryDetailView(PostListMixin, ListView):
+    template_name = bs.CATEGORY_DETAIL_TEMPLATE
+
+    def get(self, request, *args, **kwargs):
+        check_translation_or_404(
+            bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
+
+        # Add category filter to posts.
+        try:
+            category = Category.objects.language().get(
+                slug=kwargs.get('slug'))
+            self.filters = {'category': category}
+        except Category.DoesNotExist:
+            raise Http404()
+
+        return super(CategoryDetailView, self).get(request, *args, **kwargs)
+
+
+# Tag list.
+class TagListView(ListView):
+    model = Tag
+    template_name = bs.TAG_LIST_TEMPLATE
+    context_object_name = 'tags'
+    paginate_by = bs.TAGS_PER_PAGE
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        check_translation_or_404(
+            bs.TAG_URL, bs.TAG_URL_TRANSLATION, kwargs.get('url'))
+
+        return super(TagListView, self).get(request, *args, **kwargs)
+
+
+# Tag detail.
+class TagDetailView(PostListMixin, ListView):
+    template_name = bs.TAG_DETAIL_TEMPLATE
+
+    def get(self, request, *args, **kwargs):
+        check_translation_or_404(
+            bs.TAG_URL, bs.TAG_URL_TRANSLATION, kwargs.get('url'))
+
+        tags = kwargs.get('slug')
+
+        # Add tags filter to posts.
+        self.filters = {'translations__tags__slug': tags}
+
+        return super(TagDetailView, self).get(request, *args, **kwargs)
+
+
+# Post archives list.
+class PostYearArchiveView(ArchiveListMixin, YearArchiveView):
+    pass
+
+
+class PostMonthArchiveView(ArchiveListMixin, MonthArchiveView):
+    pass
+
+
+class PostDayArchiveView(ArchiveListMixin, DayArchiveView):
+    pass
+
+
+# Post list.
+class PostListView(PostListMixin, ListView):
+    pass
+
+
+# Post detail.
+class PostDetailView(PostDetailMixin, DetailView):
+    def get_object(self):
+        try:
+            return self.model.objects.language().get(
+                slug=self.kwargs.get('slug'), is_public=True)
+        except self.model.DoesNotExist:
+            raise Http404()
+
+
+class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
+    def get_queryset(self):
+        return self.model.objects.language().filter(
+            is_public=True).order_by('-date_published')

@@ -138,6 +138,8 @@ class Category(TranslatableModel, MPTTModel):
     translations = TranslatedFields(
         title=models.CharField(_(u'title'), max_length=255),
         slug=models.SlugField(_(u'slug'), max_length=255),
+        #description=models.TextField(
+        #   _(u'description'), blank=True, null=True),
     )
 
     class Meta:
@@ -185,9 +187,17 @@ class Tag(TagBase):
         db_table = 'blogit_tags'
         verbose_name = _(u'tag')
         verbose_name_plural = _(u'tags')
+        ordering = ('name',)
 
-    def get_absolute_url(self):
-        return '<tag_url>'
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_language()
+
+        return reverse('blogit_tag_detail', kwargs={
+            'url': get_translation(
+                bs.TAG_URL, bs.TAG_URL_TRANSLATION, language),
+            'slug': self.slug
+        })
 
 
 class TaggedPost(ItemBase):
@@ -201,8 +211,15 @@ class TaggedPost(ItemBase):
         verbose_name = _(u'tagged post')
         verbose_name_plural = _(u'tagged posts')
 
-    def __str__(self):
-        return 'dino'
+    @classmethod
+    def tags_for(cls, model, instance=None):
+        if instance is not None:
+            return cls.tag_model().objects.filter(**{
+                '%s__content_object' % cls.tag_relname(): instance
+            })
+        return cls.tag_model().objects.filter(**{
+            '%s__content_object__isnull' % cls.tag_relname(): False
+        }).distinct()
 
 
 # Post.
@@ -312,3 +329,9 @@ class Post(TranslatableModel):
     @property
     def title_(self):
         return self.__unicode__()
+
+
+# Set PostTranslation unicode.
+def post_translation_unicode(self):
+    return self.title
+PostTranslation.__unicode__ = post_translation_unicode # noqa

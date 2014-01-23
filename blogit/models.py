@@ -334,4 +334,4 @@ class Post(TranslatableModel):
 # Set PostTranslation unicode.
 def post_translation_unicode(self):
     return self.title
-PostTranslation.__unicode__ = post_translation_unicode # noqa
+PostTranslation.__unicode__ = post_translation_unicode  # noqa

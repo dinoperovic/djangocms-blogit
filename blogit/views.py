@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import operator
+
+from django.db.models import Q
 from django.http import Http404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -138,10 +141,9 @@ class TagDetailView(PostListMixin, ListView):
         check_translation_or_404(
             bs.TAG_URL, bs.TAG_URL_TRANSLATION, kwargs.get('url'))
 
-        tags = kwargs.get('slug')
-
-        # Add tags filter to posts.
-        self.filters = {'translations__tags__slug': tags}
+        self.filters = {
+            'tags__slug__iexact': kwargs.get('slug')
+        }
 
         return super(TagDetailView, self).get(request, *args, **kwargs)
 

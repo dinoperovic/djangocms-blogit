@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import operator
-
-from django.db.models import Q
 from django.http import Http404
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView

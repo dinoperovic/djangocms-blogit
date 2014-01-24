@@ -57,5 +57,5 @@ def get_noconflict_metaclass(bases, left_metas, right_metas):
 def classmaker(left_metas=(), right_metas=()):
     def make_class(name, bases, adict):
         metaclass = get_noconflict_metaclass(bases, left_metas, right_metas)
-        return metaclass(name, bases, adict)
+        return metaclass(str(name), bases, adict)
     return make_class

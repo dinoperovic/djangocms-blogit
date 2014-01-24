@@ -20,9 +20,9 @@ def get_readme():
     return ''
 
 setup(
-    name="cmsplugin-blogit",
+    name="djangocms-blogit",
     version=__import__('blogit').__version__,
-    url='http://pypi.python.org/pypi/cmsplugin-blogit/',
+    url='http://pypi.python.org/pypi/djangocms-blogit/',
     author='Dino Perovic',
     author_email='dino.perovic@gmail.com',
     description='django-cms blog plugin',

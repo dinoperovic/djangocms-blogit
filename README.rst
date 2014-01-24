@@ -1,5 +1,5 @@
 ================
-cmsplugin-blogit
+djangocms-blogit
 ================
 
 **Project is a development stage (pre-alpha)**
@@ -18,9 +18,9 @@ Dependencies
 Installation
 ------------
 
-To install ``cmsplugin-blogit`` with ``pip`` run::
+To install ``djangocms-blogit`` with ``pip`` run::
 
-    $ pip install cmsplugin-blogit
+    $ pip install djangocms-blogit
 
 
 Setup

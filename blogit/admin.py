@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
@@ -23,12 +25,12 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
             (None, {
                 'fields': ('slug', 'user'),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
-            (_(u'Personal Info'), {
+            (_('Personal Info'), {
                 'fields': ('first_name', 'last_name', 'email', 'picture'),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
             (None, {
                 'fields': ('description',),
@@ -54,16 +56,16 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
             (None, {
                 'fields': ('title', 'slug'),
             }),
-            (_(u'Common Settings'), {
+            (_('Common Settings'), {
                 'fields': ('parent',),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
-            (_(u'Date Information'), {
+            (_('Date Information'), {
                 'fields': ('date_created', 'last_modified'),
                 'classes': ('collapse',),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
         )
 
@@ -94,19 +96,19 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             (None, {
                 'fields': ('subtitle', 'description', 'tags'),
             }),
-            (_(u'Common Settings'), {
+            (_('Common Settings'), {
                 'fields': (
                     'category', 'author', 'featured_image'),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
-            (_(u'Date Information'), {
+            (_('Date Information'), {
                 'fields': ('date_published', 'date_created', 'last_modified'),
                 'classes': ('collapse',),
                 'description': _(
-                    u'These fields are the same across all languages.'),
+                    'These fields are the same across all languages.'),
             }),
-            (_(u'SEO Settings'), {
+            (_('SEO Settings'), {
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',)
             }),

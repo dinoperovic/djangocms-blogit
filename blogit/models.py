@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 from mptt.models import MPTTModel, TreeForeignKey
 from hvad.models import TranslatableModel, TranslatedFields
@@ -18,42 +21,43 @@ from blogit.utils.image import thumb
 
 
 # Author.
+@python_2_unicode_compatible
 class Author(TranslatableModel):
     user = models.ForeignKey(
         bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
-        verbose_name=_(u'user'), help_text=_(
-            u'If selected, fields "First name", "Last name" and '
-            u'"Email address" will fallback tu "User" values if they are '
-            u'left empty.'))
+        verbose_name=_('user'), help_text=_(
+            'If selected, fields "First name", "Last name" and '
+            '"Email address" will fallback tu "User" values if they are '
+            'left empty.'))
     first_name = models.CharField(
-        _(u'first name'), max_length=30, blank=True, null=True)
+        _('first name'), max_length=30, blank=True, null=True)
     last_name = models.CharField(
-        _(u'last name'), max_length=30, blank=True, null=True)
+        _('last name'), max_length=30, blank=True, null=True)
     slug = models.SlugField(
-        _(u'slug'), max_length=100, unique=True, help_text=_(
-            u'Text used in the url.'))
-    email = models.EmailField(_(u'email address'), blank=True, null=True)
+        _('slug'), max_length=100, unique=True, help_text=_(
+            'Text used in the url.'))
+    email = models.EmailField(_('email address'), blank=True, null=True)
     picture = FilerImageField(
         blank=True, null=True, related_name='author_image',
-        verbose_name=_(u'picture'))
+        verbose_name=_('picture'))
 
     translations = TranslatedFields(
-        description=models.TextField(_(u'description'), blank=True, null=True),
+        description=models.TextField(_('description'), blank=True, null=True),
     )
 
     bio = PlaceholderField(
-        'blogit_author_bio', verbose_name=_(u'bio'))
+        'blogit_author_bio', verbose_name=_('bio'))
 
     class Meta:
         db_table = 'blogit_authors'
-        verbose_name = _(u'author')
-        verbose_name_plural = _(u'authors')
+        verbose_name = _('author')
+        verbose_name_plural = _('authors')
 
-    def __unicode__(self):
+    def __str__(self):
         name = self.get_full_name()
         if not name and self.user and self.user.username:
             name = self.user.username
-        return name if name else u'Author: {}'.format(self.pk)
+        return name if name else 'Author: {}'.format(self.pk)
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -71,7 +75,7 @@ class Author(TranslatableModel):
 
     def get_full_name(self):
         # Returns first_name plus last_name, with a space in between.
-        name = u'{} {}'.format(self.get_first_name(), self.get_last_name())
+        name = '{} {}'.format(self.get_first_name(), self.get_last_name())
         return name.strip()
 
     def get_first_name(self):
@@ -101,29 +105,31 @@ class Author(TranslatableModel):
             return '<img src="{}">'.format(
                 thumb(self.picture, '72x72'))
         return None
-    admin_image.short_description = _(u'author image')
+    admin_image.short_description = _('author image')
     admin_image.allow_tags = True
 
 
+@python_2_unicode_compatible
 class AuthorLink(models.Model):
     author = models.ForeignKey(
-        Author, related_name='author_links', verbose_name=_(u'author'))
+        Author, related_name='author_links', verbose_name=_('author'))
     link_type = models.CharField(
-        _(u'link type'), max_length=255, blank=True, null=True,
+        _('link type'), max_length=255, blank=True, null=True,
         choices=bs.AUTHOR_LINK_TYPE_CHOICES)
-    url = models.URLField(_(u'url'))
+    url = models.URLField(_('url'))
 
     class Meta:
         db_table = 'blogit_author_links'
-        verbose_name = _(u'author link')
-        verbose_name_plural = _(u'author links')
+        verbose_name = _('author link')
+        verbose_name_plural = _('author links')
         ordering = ('pk',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.url
 
 
 # Category.
+@python_2_unicode_compatible
 class Category(TranslatableModel, MPTTModel):
     __metaclass__ = classmaker()
 
@@ -131,29 +137,29 @@ class Category(TranslatableModel, MPTTModel):
         'self', blank=True, null=True, related_name='children', db_index=True)
 
     date_created = models.DateTimeField(
-        _(u'date created'), default=timezone.now)
+        _('date created'), default=timezone.now)
     last_modified = models.DateTimeField(
-        _(u'last modified'), default=timezone.now)
+        _('last modified'), default=timezone.now)
 
     translations = TranslatedFields(
-        title=models.CharField(_(u'title'), max_length=255),
-        slug=models.SlugField(_(u'slug'), max_length=255),
+        title=models.CharField(_('title'), max_length=255),
+        slug=models.SlugField(_('slug'), max_length=255),
         #description=models.TextField(
-        #   _(u'description'), blank=True, null=True),
+        #   _('description'), blank=True, null=True),
     )
 
     class Meta:
         db_table = 'blogit_categories'
-        verbose_name = _(u'category')
-        verbose_name_plural = _(u'categories')
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
         ordering = ('date_created',)
 
     class MPTTMeta:
         pass
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lazy_translation_getter(
-            'title', '{}: {}'.format(_(u'Category'), self.pk))
+            'title', '{}: {}'.format(_('Category'), self.pk))
 
     def save(self, *args, **kwargs):
         self.last_modified = timezone.now()
@@ -178,16 +184,20 @@ class Category(TranslatableModel, MPTTModel):
 
     @property
     def title_(self):
-        return self.__unicode__()
+        return self.__str__()
 
 
 # Tag.
+@python_2_unicode_compatible
 class Tag(TagBase):
     class Meta:
         db_table = 'blogit_tags'
-        verbose_name = _(u'tag')
-        verbose_name_plural = _(u'tags')
+        verbose_name = _('tag')
+        verbose_name_plural = _('tags')
         ordering = ('name',)
+
+    def __str__(self):
+        return self.name
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -200,16 +210,20 @@ class Tag(TagBase):
         })
 
 
+@python_2_unicode_compatible
 class TaggedPost(ItemBase):
     tag = models.ForeignKey(
-        Tag, related_name="tagged_posts", verbose_name=_(u'tag'))
+        Tag, related_name="tagged_posts", verbose_name=_('tag'))
     content_object = models.ForeignKey(
-        'PostTranslation', verbose_name=_(u'post'))
+        'PostTranslation', verbose_name=_('post'))
 
     class Meta:
         db_table = 'blogit_tagged_post_translations'
-        verbose_name = _(u'tagged post')
-        verbose_name_plural = _(u'tagged posts')
+        verbose_name = _('tagged post')
+        verbose_name_plural = _('tagged posts')
+
+    def __str__(self):
+        return self.tag.name
 
     @classmethod
     def tags_for(cls, model, instance=None):
@@ -223,63 +237,64 @@ class TaggedPost(ItemBase):
 
 
 # Post.
+@python_2_unicode_compatible
 class Post(TranslatableModel):
     category = models.ForeignKey(
         Category, blank=True, null=True, on_delete=models.SET_NULL,
-        verbose_name=_(u'category'))
+        verbose_name=_('category'))
     author = models.ForeignKey(
         Author, blank=True, null=True, on_delete=models.SET_NULL,
-        verbose_name=_(u'author'))
+        verbose_name=_('author'))
     featured_image = FilerImageField(
-        blank=True, null=True, verbose_name=_(u'featured image'))
+        blank=True, null=True, verbose_name=_('featured image'))
     date_created = models.DateTimeField(
-        _(u'date created'), blank=True, null=True, default=timezone.now)
+        _('date created'), blank=True, null=True, default=timezone.now)
     last_modified = models.DateTimeField(
-        _(u'last modified'), default=timezone.now)
+        _('last modified'), default=timezone.now)
     date_published = models.DateTimeField(
-        _(u'date published'), default=timezone.now)
+        _('date published'), default=timezone.now)
 
     translations = TranslatedFields(
-        title=models.CharField(_(u'title'), max_length=255),
+        title=models.CharField(_('title'), max_length=255),
         slug=models.SlugField(
-            _(u'slug'), max_length=255,
-            help_text=_(u'Text used in the url.')),
+            _('slug'), max_length=255,
+            help_text=_('Text used in the url.')),
         is_public=models.BooleanField(
-            _(u'is public'), default=True,
-            help_text=_(u'Designates whether the post is visible to the '
-                        u'public.')),
+            _('is public'), default=True,
+            help_text=_('Designates whether the post is visible to the '
+                        'public.')),
         subtitle=models.CharField(
-            _(u'subtitle'), max_length=255, blank=True, null=True),
+            _('subtitle'), max_length=255, blank=True, null=True),
         description=models.TextField(
-            _(u'description'), blank=True, null=True),
+            _('description'), blank=True, null=True),
         tags=TaggableManager(
-            through=TaggedPost, blank=True, verbose_name=_(u'tags')),
+            through=TaggedPost, blank=True, verbose_name=_('tags')),
         meta_title=models.CharField(
-            _(u'page title'), max_length=255, blank=True, null=True,
-            help_text=_(u'Overwrites what is displayed at the top of your '
-                        u'browser or in bookmarks.')),
+            _('page title'), max_length=255, blank=True, null=True,
+            help_text=_('Overwrites what is displayed at the top of your '
+                        'browser or in bookmarks.')),
         meta_description=models.TextField(
-            _(u'description meta tag'), blank=True, null=True,
-            help_text=_(u'A description of the page sometimes used by '
-                        u'search engines.')),
+            _('description meta tag'), blank=True, null=True,
+            help_text=_('A description of the page sometimes used by '
+                        'search engines.')),
         meta_keywords=models.CharField(
-            _(u'keywords meta tag'), max_length=255, blank=True, null=True,
-            help_text=_(u'A list of comma separated keywords sometimes used '
-                        u'by search engines.')),
+            _('keywords meta tag'), max_length=255, blank=True, null=True,
+            help_text=_('A list of comma separated keywords sometimes used '
+                        'by search engines.')),
     )
 
     content = PlaceholderField(
-        'blogit_post_content', verbose_name=_(u'content'))
+        'blogit_post_content', verbose_name=_('content'))
 
     class Meta:
         db_table = 'blogit_posts'
-        verbose_name = _(u'post')
-        verbose_name_plural = _(u'posts')
+        verbose_name = _('post')
+        verbose_name_plural = _('posts')
         ordering = ('-date_published',)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lazy_translation_getter(
-            'title', '{}: {}'.format(_(u'Post'), self.pk))
+            'title', '{}: {}'.format(_('Post'), self.pk))
 
     def save(self, *args, **kwargs):
         self.last_modified = timezone.now()
@@ -319,7 +334,7 @@ class Post(TranslatableModel):
             return '<img src="{}">'.format(
                 thumb(self.featured_image, '72x72'))
         return None
-    admin_image.short_description = _(u'featured image')
+    admin_image.short_description = _('featured image')
     admin_image.allow_tags = True
 
     @property
@@ -328,10 +343,11 @@ class Post(TranslatableModel):
 
     @property
     def title_(self):
-        return self.__unicode__()
+        return self.__str__()
 
 
 # Set PostTranslation unicode.
 def post_translation_unicode(self):
     return self.title
 PostTranslation.__unicode__ = post_translation_unicode  # noqa
+PostTranslation.__str__ = post_translation_unicode  # noqa

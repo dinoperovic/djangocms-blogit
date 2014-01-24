@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 # SOLVING THE METACLASS CONFLICT (Python recipe)
 # http://code.activestate.com/recipes/204197-solving-the-metaclass-conflict/

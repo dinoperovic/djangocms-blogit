@@ -30,12 +30,12 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=(
+        'django-taggit==0.10',
+        'django-filer>=0.9',
+        'easy-thumbnails==1.4',
         'django-cms>=2.4',
         'django-mptt==0.5.5',
         'django-hvad==0.3',
-        'easy-thumbnails==1.4',
-        'django-filer>=0.9',
-        'django-taggit==0.10',
     ),
     zip_safe=False,
     classifiers=[
@@ -45,4 +45,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
     ],
+    test_suite='runtests.main',
 )

@@ -1,0 +1,68 @@
+[
+{
+    "pk": 1, 
+    "model": "blogit.authortranslation", 
+    "fields": {
+        "master": 1, 
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue accumsan nibh, sed molestie ante rhoncus nec. Cras pharetra, ipsum in ultricies accumsan, sem lorem rutrum purus, vel rutrum libero leo sed massa. Aenean ut rutrum neque. Fusce sagittis quis eros at vehicula.", 
+        "language_code": "en"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.authortranslation", 
+    "fields": {
+        "master": 2, 
+        "description": "Aliquam convallis lacus turpis, ac placerat ante suscipit in. Morbi id tristique lacus. Integer ac ante arcu. Phasellus vehicula libero in eros adipiscing pulvinar. Maecenas nec porta nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam tortor libero, ultricies et fermentum at, dignissim sed arcu.", 
+        "language_code": "en"
+    }
+},
+{
+    "pk": 3, 
+    "model": "blogit.authortranslation", 
+    "fields": {
+        "master": 3, 
+        "description": "Vivamus interdum nibh nisl, vitae rhoncus erat luctus a. Cras ut blandit leo, a ultricies massa. Vestibulum laoreet malesuada libero, nec sagittis odio pulvinar vitae. Ut pulvinar massa vel tincidunt congue. Cras sollicitudin ut quam nec tincidunt.", 
+        "language_code": "en"
+    }
+},
+{
+    "pk": 1, 
+    "model": "blogit.author", 
+    "fields": {
+        "picture": null, 
+        "first_name": "John", 
+        "last_name": "Doe", 
+        "bio": 6, 
+        "slug": "john-doe", 
+        "user": null, 
+        "email": "john.doe@gmail.com"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.author", 
+    "fields": {
+        "picture": null, 
+        "first_name": "Jane", 
+        "last_name": "Roe", 
+        "bio": 8, 
+        "slug": "jane-roe", 
+        "user": null, 
+        "email": "jane.roe@gmail.com"
+    }
+},
+{
+    "pk": 3, 
+    "model": "blogit.author", 
+    "fields": {
+        "picture": null, 
+        "first_name": "Mark", 
+        "last_name": "Moe", 
+        "bio": 10, 
+        "slug": "mark-moe", 
+        "user": null, 
+        "email": "mark.moe@gmail.com"
+    }
+}
+]

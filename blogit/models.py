@@ -57,7 +57,7 @@ class Author(TranslatableModel):
         name = self.get_full_name()
         if not name and self.user and self.user.username:
             name = self.user.username
-        return name if name else 'Author: {}'.format(self.pk)
+        return name or 'Author: {}'.format(self.pk)
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -82,19 +82,19 @@ class Author(TranslatableModel):
         # Returns first_name, fallbacks to users first_name.
         if not self.first_name and self.user and self.user.first_name:
             return self.user.first_name
-        return self.first_name
+        return self.first_name or ''
 
     def get_last_name(self):
         # Returns last_name, fallbacks to users last_name.
         if not self.last_name and self.user and self.user.last_name:
             return self.user.last_name
-        return self.last_name
+        return self.last_name or ''
 
     def get_email(self):
         # Returns email, fallbacks to users email.
-        if not self.email and self.user:
+        if not self.email and self.user and self.user.email:
             return self.user.email
-        return self.email
+        return self.email or ''
 
     def get_posts(self):
         # Returns all posts by author.

@@ -223,7 +223,7 @@ class TaggedPost(ItemBase):
         verbose_name_plural = _('tagged posts')
 
     def __str__(self):
-        return self.tag.name
+        return self.content_object.title
 
     @classmethod
     def tags_for(cls, model, instance=None):

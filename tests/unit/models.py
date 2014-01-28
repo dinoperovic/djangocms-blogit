@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import sys
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils.text import slugify
@@ -9,6 +11,8 @@ from blogit.models import Author, Post
 
 
 class AuthorTestCase(TestCase):
+    fixtures = ['blogit_testdata.json']
+
     def setUp(self):
         jane_user = User.objects.create(
             username='janedoe',
@@ -25,6 +29,9 @@ class AuthorTestCase(TestCase):
         self.jane = Author.objects.create(
             user=jane_user,
             last_name='Overriden Doe')
+
+        test_post = Post.objects.all()
+        sys.stderr.write('%s' % test_post.__str__())
 
         for i in range(5):
             title = 'Post #{}'.format(i)

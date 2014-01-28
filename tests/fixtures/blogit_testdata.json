@@ -64,5 +64,305 @@
         "user": null, 
         "email": "mark.moe@gmail.com"
     }
+},
+{
+    "pk": 1, 
+    "model": "blogit.categorytranslation", 
+    "fields": {
+        "language_code": "en", 
+        "master": 1, 
+        "slug": "nature", 
+        "title": "Nature"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.categorytranslation", 
+    "fields": {
+        "language_code": "en", 
+        "master": 2, 
+        "slug": "spiritual", 
+        "title": "Spiritual"
+    }
+},
+{
+    "pk": 3, 
+    "model": "blogit.categorytranslation", 
+    "fields": {
+        "language_code": "en", 
+        "master": 3, 
+        "slug": "sories", 
+        "title": "Sories"
+    }
+},
+{
+    "pk": 1, 
+    "model": "blogit.category", 
+    "fields": {
+        "rght": 2, 
+        "parent": null, 
+        "level": 0, 
+        "lft": 1, 
+        "last_modified": "2014-01-28T12:07:53Z", 
+        "tree_id": 1, 
+        "date_created": "2014-01-28T12:07:01Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.category", 
+    "fields": {
+        "rght": 2, 
+        "parent": null, 
+        "level": 0, 
+        "lft": 1, 
+        "last_modified": "2014-01-28T12:36:17Z", 
+        "tree_id": 2, 
+        "date_created": "2014-01-28T12:31:35Z"
+    }
+},
+{
+    "pk": 3, 
+    "model": "blogit.category", 
+    "fields": {
+        "rght": 2, 
+        "parent": null, 
+        "level": 0, 
+        "lft": 1, 
+        "last_modified": "2014-01-28T12:36:01Z", 
+        "tree_id": 3, 
+        "date_created": "2014-01-28T12:35:57Z"
+    }
+},
+{
+    "pk": 1, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Far", 
+        "slug": "far"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Mountain", 
+        "slug": "mountain"
+    }
+},
+{
+    "pk": 3, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Away", 
+        "slug": "away"
+    }
+},
+{
+    "pk": 4, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Soul", 
+        "slug": "soul"
+    }
+},
+{
+    "pk": 5, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Serenity", 
+        "slug": "serenity"
+    }
+},
+{
+    "pk": 6, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Wonder", 
+        "slug": "wonder"
+    }
+},
+{
+    "pk": 7, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Gregor", 
+        "slug": "gregor"
+    }
+},
+{
+    "pk": 8, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Dream", 
+        "slug": "dream"
+    }
+},
+{
+    "pk": 9, 
+    "model": "blogit.tag", 
+    "fields": {
+        "name": "Morning", 
+        "slug": "morning"
+    }
+},
+{
+    "pk": 10, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 1, 
+        "tag": 1
+    }
+},
+{
+    "pk": 11, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 1, 
+        "tag": 2
+    }
+},
+{
+    "pk": 12, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 1, 
+        "tag": 3
+    }
+},
+{
+    "pk": 22, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 2, 
+        "tag": 4
+    }
+},
+{
+    "pk": 23, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 2, 
+        "tag": 5
+    }
+},
+{
+    "pk": 24, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 2, 
+        "tag": 6
+    }
+},
+{
+    "pk": 31, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 4, 
+        "tag": 8
+    }
+},
+{
+    "pk": 32, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 4, 
+        "tag": 9
+    }
+},
+{
+    "pk": 33, 
+    "model": "blogit.taggedpost", 
+    "fields": {
+        "content_object": 4, 
+        "tag": 7
+    }
+},
+{
+    "pk": 1, 
+    "model": "blogit.posttranslation", 
+    "fields": {
+        "meta_description": "", 
+        "meta_title": "", 
+        "meta_keywords": "", 
+        "subtitle": "Behind the word mountains", 
+        "description": "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia...", 
+        "title": "Far far away", 
+        "master": 1, 
+        "language_code": "en", 
+        "is_public": true, 
+        "slug": "far-far-away"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.posttranslation", 
+    "fields": {
+        "meta_description": "", 
+        "meta_title": "", 
+        "meta_keywords": "", 
+        "subtitle": "Possession of my soul", 
+        "description": "A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents...", 
+        "title": "Wonderful serenity", 
+        "master": 2, 
+        "language_code": "en", 
+        "is_public": true, 
+        "slug": "wonderful-serenity"
+    }
+},
+{
+    "pk": 4, 
+    "model": "blogit.posttranslation", 
+    "fields": {
+        "meta_description": "", 
+        "meta_title": "", 
+        "meta_keywords": "", 
+        "subtitle": "One dark morning", 
+        "description": "One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment...", 
+        "title": "Gregor Samsa", 
+        "master": 4, 
+        "language_code": "en", 
+        "is_public": true, 
+        "slug": "gregor-samsa"
+    }
+},
+{
+    "pk": 1, 
+    "model": "blogit.post", 
+    "fields": {
+        "category": 1, 
+        "author": 1, 
+        "content": 13, 
+        "date_published": "2014-01-28T11:48:10Z", 
+        "last_modified": "2014-01-28T12:16:44Z", 
+        "featured_image": null, 
+        "date_created": "2014-01-28T11:49:42Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "blogit.post", 
+    "fields": {
+        "category": 2, 
+        "author": 2, 
+        "content": 15, 
+        "date_published": "2014-01-28T12:29:21Z", 
+        "last_modified": "2014-01-28T12:33:07Z", 
+        "featured_image": null, 
+        "date_created": "2014-01-28T12:30:05Z"
+    }
+},
+{
+    "pk": 4, 
+    "model": "blogit.post", 
+    "fields": {
+        "category": 3, 
+        "author": 3, 
+        "content": 19, 
+        "date_published": "2014-01-28T12:33:08Z", 
+        "last_modified": "2014-01-28T12:37:14Z", 
+        "featured_image": null, 
+        "date_created": "2014-01-28T12:35:12Z"
+    }
 }
 ]

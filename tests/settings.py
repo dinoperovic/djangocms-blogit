@@ -41,12 +41,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'cms',
+    'cms.plugins.text',
     'mptt',
     'easy_thumbnails',
     'filer',
     'hvad',
     'taggit',
     'blogit',
+    'tests',
 )
 
 BLOGIT_AUTHOR_URL_TRANSLATION = (

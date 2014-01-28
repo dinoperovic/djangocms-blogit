@@ -23,7 +23,7 @@ setup(
         'django-cms==2.4.3',
         'django-filer==0.9.5',
         'django-hvad==0.3',
-        'django-taggit==0.10',
+        'django-taggit==0.11.2',
     ),
     include_package_data=True,
     zip_safe=False,

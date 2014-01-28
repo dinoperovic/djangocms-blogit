@@ -3,13 +3,11 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.test.utils import override_settings
 from django.utils.text import slugify
 
 from blogit.models import Author, Post
 
 
-@override_settings(ROOT_URLCONF='blogit.tests.urls')
 class AuthorTestCase(TestCase):
     def setUp(self):
         jane_user = User.objects.create(
@@ -64,7 +62,6 @@ class AuthorTestCase(TestCase):
         self.assertEqual(posts.count(), 5)
 
 
-@override_settings(ROOT_URLCONF='blogit.tests.urls')
 class CategoryTestCase(TestCase):
     def setUp(self):
         pass
@@ -82,7 +79,6 @@ class CategoryTestCase(TestCase):
         pass
 
 
-@override_settings(ROOT_URLCONF='blogit.tests.urls')
 class TagTestCase(TestCase):
     def setUp(self):
         pass
@@ -94,7 +90,6 @@ class TagTestCase(TestCase):
         pass
 
 
-@override_settings(ROOT_URLCONF='blogit.tests.urls')
 class TaggedPostTestCase(TestCase):
     def setUp(self):
         pass
@@ -106,7 +101,6 @@ class TaggedPostTestCase(TestCase):
         pass
 
 
-@override_settings(ROOT_URLCONF='blogit.tests.urls')
 class PostTestCase(TestCase):
     def setUp(self):
         pass

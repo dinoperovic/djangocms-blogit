@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from mptt.admin import MPTTModelAdmin
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
@@ -41,7 +40,7 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
         )
 
 
-class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin, MPTTModelAdmin):
+class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
         'title_', 'slug_', 'date_created', 'last_modified',
         'all_translations')

@@ -6,19 +6,17 @@ import sys
 import os
 
 
-def main():
-    base_dir = os.path.abspath(os.path.dirname(__file__))
-    sys.path.append(base_dir)
-    sys.path.append(base_dir + '/blogit')
+def main(verbosity=1, *test_args):
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
 
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'blogit.tests.settings'
-    from django.test.simple import DjangoTestSuiteRunner
+    from django_nose import NoseTestSuiteRunner
+    test_runner = NoseTestSuiteRunner(verbosity)
 
-    test_runner = DjangoTestSuiteRunner(verbosity=1)
-    failures = test_runner.run_tests(['blogit', ])
+    if not test_args:
+        test_args = ['tests.unit']
 
-    if failures:
-        sys.exit(failures)
+    failures = test_runner.run_tests(test_args)
+    sys.exit(failures)
 
 if __name__ == '__main__':
-    main()
+    main(1)

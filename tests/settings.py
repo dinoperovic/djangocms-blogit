@@ -11,7 +11,7 @@ LANGUAGES = [
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ROOT_URLCONF = 'blogit.tests.urls'
+ROOT_URLCONF = 'tests.urls'
 
 SECRET_KEY = 'secretkey'
 
@@ -22,22 +22,24 @@ DATABASES = {
     }
 }
 
+STATIC_URL = '/static/'
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.request',
 )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.contenttypes',
+    'django.contrib.sites',
     'django.contrib.admin',
-    'djangocms_text_ckeditor',
     'cms',
     'mptt',
     'easy_thumbnails',

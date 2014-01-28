@@ -1,0 +1,2 @@
+-r base.txt
+django-nose==1.2

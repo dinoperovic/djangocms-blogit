@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from blogit.tests.models import (
+from tests.unit.models import (
     AuthorTestCase, CategoryTestCase, TagTestCase, TaggedPostTestCase,
     PostTestCase)
 

@@ -1,72 +1,61 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sys
-
-from django.contrib.auth.models import User
 from django.test import TestCase
-from django.utils.text import slugify
+from django.utils.translation import activate
 
-from blogit.models import Author, Post
+from blogit.models import Author
 
 
 class AuthorTestCase(TestCase):
-    fixtures = ['blogit_testdata.json']
+    fixtures = [
+        'blogit_author_testdata.json',
+        'blogit_post_testdata.json',
+    ]
 
     def setUp(self):
-        jane_user = User.objects.create(
-            username='janedoe',
-            password='pass',
-            last_name='Doe',
-            first_name='Jane',
-            email='jane.doe@example.com')
-
-        self.john = Author.objects.create(
-            first_name='John',
-            slug='john-doe',
-            email='john.doe@example.com')
-
-        self.jane = Author.objects.create(
-            user=jane_user,
-            last_name='Overriden Doe')
-
-        test_post = Post.objects.all()
-        sys.stderr.write('%s' % test_post.__str__())
-
-        for i in range(5):
-            title = 'Post #{}'.format(i)
-            Post.objects.create(
-                title=title, slug=slugify(title), author=self.john)
+        self.john = Author.objects.get(pk=1)
+        self.jane = Author.objects.get(pk=2)
+        self.mark = Author.objects.get(pk=3)
 
     def test__str__(self):
-        pass
+        self.assertEqual(self.john.__str__(), 'John')
 
     def test_get_absolute_url(self):
-        self.assertEqual(self.john.get_absolute_url(), '/authors/john-doe/')
+        activate('en')
+        self.assertEqual(self.john.get_absolute_url(), '/en/authors/john-doe/')
+        activate('it')
+        self.assertEqual(self.jane.get_absolute_url(), '/it/autori/jane-roe/')
+        activate('hr')
+        self.assertEqual(self.mark.get_absolute_url(), '/hr/autori/mark-moe/')
 
     def test_get_slug(self):
         self.assertEqual(self.john.get_slug(), 'john-doe')
-        self.assertEqual(self.jane.get_slug(), self.jane.pk)
 
     def test_get_first_name(self):
         self.assertEqual(self.john.get_first_name(), 'John')
         self.assertEqual(self.jane.get_first_name(), 'Jane')
+        self.assertEqual(self.mark.get_first_name(), 'Mark')
 
     def test_get_last_name(self):
         self.assertFalse(self.john.get_last_name())
-        self.assertEqual(self.jane.get_last_name(), 'Overriden Doe')
+        self.assertEqual(self.jane.get_last_name(), 'Overriden Roe')
+        self.assertEqual(self.mark.get_last_name(), 'Moe')
 
     def test_get_full_name(self):
         self.assertEqual(self.john.get_full_name(), 'John')
-        self.assertEqual(self.jane.get_full_name(), 'Jane Overriden Doe')
+        self.assertEqual(self.jane.get_full_name(), 'Jane Overriden Roe')
+        self.assertEqual(self.mark.get_full_name(), 'Mark Moe')
 
     def test_get_email(self):
         self.assertEqual(self.john.get_email(), 'john.doe@example.com')
-        self.assertEqual(self.jane.get_email(), 'jane.doe@example.com')
+        self.assertEqual(self.jane.get_email(), 'jane.roe@example.com')
+        self.assertFalse(self.mark.get_email())
 
     def test_get_posts(self):
-        posts = self.john.get_posts()
-        self.assertEqual(posts.count(), 5)
+        self.assertEqual(self.john.get_posts().count(), 2)
+        self.assertEqual(self.jane.get_posts().count(), 1)
+        self.assertFalse(self.mark.get_posts().count())
 
 
 class CategoryTestCase(TestCase):

@@ -1,15 +1,31 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
+
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+
+def ABS_PATH(*args):
+    return os.path.join(ROOT_DIR, *args)
+
 
 LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', 'English'),
-    ('hr', 'Hrvatski'),
+    ('it', 'Italian'),
+    ('hr', 'Croatian'),
 ]
 
 DEBUG = True
 TEMPLATE_DEBUG = True
+
+FIXTURE_DIRS = (
+    ABS_PATH('tests', 'fixtures'),
+)
+
+USE_TZ = True
 
 ROOT_URLCONF = 'tests.urls'
 
@@ -24,13 +40,7 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-)
-
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.i18n',
     'django.core.context_processors.request',
 )
 
@@ -41,26 +51,27 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'cms',
-    'cms.plugins.text',
     'mptt',
     'easy_thumbnails',
     'filer',
     'hvad',
     'taggit',
     'blogit',
-    'tests',
 )
 
 BLOGIT_AUTHOR_URL_TRANSLATION = (
     ('en', 'authors'),
+    ('it', 'autori'),
     ('hr', 'autori'),
 )
 BLOGIT_CATEGORY_URL_TRANSLATION = (
     ('en', 'categories'),
+    ('it', 'categorie'),
     ('hr', 'kategorije'),
 )
 BLOGIT_TAG_URL_TRANSLATION = (
     ('en', 'tags'),
+    ('it', 'tag'),
     ('hr', 'tagovi'),
 )
 

@@ -97,7 +97,7 @@ class Author(TranslatableModel):
 
     def get_posts(self):
         # Returns all posts by author.
-        return Post.objects.language().filter(author=self, is_public=True)
+        return Post.objects.filter(author=self, translations__is_public=True)
 
     def admin_image(self):
         if self.picture:
@@ -143,8 +143,6 @@ class Category(TranslatableModel, MPTTModel):
     translations = TranslatedFields(
         title=models.CharField(_('title'), max_length=255),
         slug=models.SlugField(_('slug'), max_length=255),
-        #description=models.TextField(
-        #   _('description'), blank=True, null=True),
     )
 
     class Meta:

@@ -34,8 +34,8 @@ class Author(TranslatableModel):
     last_name = models.CharField(
         _('last name'), max_length=30, blank=True, null=True)
     slug = models.SlugField(
-        _('slug'), max_length=100, unique=True, help_text=_(
-            'Text used in the url.'))
+        _('slug'), max_length=100, unique=True,
+        help_text=_('Text used in the url.'))
     email = models.EmailField(_('email address'), blank=True, null=True)
     picture = FilerImageField(
         blank=True, null=True, related_name='author_image',
@@ -70,8 +70,7 @@ class Author(TranslatableModel):
         })
 
     def get_slug(self):
-        # If slug specified returns it, else returns pk.
-        return self.slug if self.slug else self.pk
+        return self.slug
 
     def get_full_name(self):
         # Returns first_name plus last_name, with a space in between.

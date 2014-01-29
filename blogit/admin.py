@@ -112,10 +112,10 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',),
             }),
-            # (None, {
-            #     'fields': ('content',),
-            #     'classes': ('plugin-holder', 'plugin-holder-nopage'),
-            # }),
+            (None, {
+                'fields': ('content',),
+                'classes': ('plugin-holder', 'plugin-holder-nopage'),
+            }),
         )
 
 

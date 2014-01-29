@@ -72,11 +72,7 @@ class AuthorDetailView(DetailView):
             return self.model.objects.language().get(
                 slug=self.kwargs.get('slug'))
         except self.model.DoesNotExist:
-            try:
-                return self.model.objects.language().get(
-                    pk=self.kwargs.get('slug'))
-            except self.model.DoesNotExist:
-                raise Http404()
+            raise Http404()
 
 
 # Category list.

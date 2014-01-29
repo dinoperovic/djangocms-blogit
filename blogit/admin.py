@@ -36,6 +36,7 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
             }),
             (None, {
                 'fields': ('bio',),
+                'classes': ('plugin-holder', 'plugin-holder-nopage'),
             }),
         )
 
@@ -109,11 +110,12 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             }),
             (_('SEO Settings'), {
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
-                'classes': ('collapse',)
+                'classes': ('collapse',),
             }),
-            (None, {
-                'fields': ('content',),
-            }),
+            # (None, {
+            #     'fields': ('content',),
+            #     'classes': ('plugin-holder', 'plugin-holder-nopage'),
+            # }),
         )
 
 

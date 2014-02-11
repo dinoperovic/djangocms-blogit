@@ -9,6 +9,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from mptt.models import MPTTModel, TreeForeignKey
 from hvad.models import TranslatableModel, TranslatedFields
+from hvad.manager import TranslationManager
 from taggit.managers import TaggableManager
 from taggit.models import TagBase, ItemBase
 from cms.models.fields import PlaceholderField
@@ -97,7 +98,7 @@ class Author(TranslatableModel):
 
     def get_posts(self):
         # Returns all posts by author.
-        return Post.objects.filter(author=self, translations__is_public=True)
+        return Post.objects.public().filter(author=self)
 
     def admin_image(self):
         if self.picture:
@@ -234,6 +235,12 @@ class TaggedPost(ItemBase):
 
 
 # Post.
+class PostManager(TranslationManager):
+    def public(self, language_code=None):
+        queryset = self.language(language_code)
+        return queryset.filter(is_public=True)
+
+
 @python_2_unicode_compatible
 class Post(TranslatableModel):
     category = models.ForeignKey(
@@ -283,11 +290,12 @@ class Post(TranslatableModel):
     content = PlaceholderField(
         'blogit_post_content', verbose_name=_('content'))
 
+    objects = PostManager()
+
     class Meta:
         db_table = 'blogit_posts'
         verbose_name = _('post')
         verbose_name_plural = _('posts')
-        ordering = ('-date_published',)
 
     def __str__(self):
         return self.lazy_translation_getter(

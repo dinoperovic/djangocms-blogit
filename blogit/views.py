@@ -21,12 +21,12 @@ class PostListMixin(object):
     filters = {}
 
     def get_queryset(self):
-        return self.model.objects.language().filter(
-            is_public=True, **self.filters).order_by('-date_published')
+        qs = self.model.objects.public().filter(**self.filters)
+        return qs.order_by('-date_published')
 
 
 class PostDateMixin(object):
-    date_field = ('date_published')
+    date_field = 'date_published'
     month_format = bs.URL_MONTH_FORMAT
     year_format = bs.URL_YEAR_FORMAT
     day_format = bs.URL_DAY_FORMAT
@@ -69,8 +69,8 @@ class AuthorDetailView(DetailView):
 
     def get_object(self):
         try:
-            return self.model.objects.language().get(
-                slug=self.kwargs.get('slug'))
+            slug = self.kwargs.get('slug')
+            return self.model.objects.language().get(slug=slug)
         except self.model.DoesNotExist:
             raise Http404()
 
@@ -102,8 +102,7 @@ class CategoryDetailView(PostListMixin, ListView):
 
         # Add category filter to posts.
         try:
-            category = Category.objects.language().get(
-                slug=kwargs.get('slug'))
+            category = Category.objects.language().get(slug=kwargs.get('slug'))
             self.filters = {'category': category}
         except Category.DoesNotExist:
             raise Http404()
@@ -165,13 +164,12 @@ class PostListView(PostListMixin, ListView):
 class PostDetailView(PostDetailMixin, DetailView):
     def get_object(self):
         try:
-            return self.model.objects.language().get(
-                slug=self.kwargs.get('slug'), is_public=True)
+            slug = self.kwargs.get('slug')
+            return self.model.objects.public().get(slug=slug)
         except self.model.DoesNotExist:
             raise Http404()
 
 
 class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
     def get_queryset(self):
-        return self.model.objects.language().filter(
-            is_public=True).order_by('-date_published')
+        return self.model.objects.public().order_by('-date_published')

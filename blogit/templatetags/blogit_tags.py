@@ -12,7 +12,7 @@ register = template.Library()
 @register.assignment_tag
 def get_posts(limit):
     # Returns posts by limit.
-    posts = Post.objects.language().filter(is_public=True)
+    posts = Post.objects.public()
     return posts[:limit]
 
 

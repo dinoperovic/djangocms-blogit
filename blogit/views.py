@@ -38,6 +38,10 @@ class PostDetailMixin(object):
     model = Post
     template_name = bs.POST_DETAIL_TEMPLATE
     context_object_name = 'post'
+    slug_field = 'slug'
+
+    def get_queryset(self):
+        return self.model.objects.public()
 
 
 class ArchiveListMixin(PostDateMixin, PostListMixin):
@@ -66,13 +70,16 @@ class AuthorDetailView(DetailView):
     model = Author
     template_name = bs.AUTHOR_DETAIL_TEMPLATE
     context_object_name = 'author'
+    slug_field = 'slug'
 
-    def get_object(self):
-        try:
-            slug = self.kwargs.get('slug')
-            return self.model.objects.language().get(slug=slug)
-        except self.model.DoesNotExist:
-            raise Http404()
+    def get_queryset(self):
+        return self.model.objects.language().all()
+
+    def get(self, request, *args, **kwargs):
+        check_translation_or_404(
+            bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, kwargs.get('url'))
+
+        return super(AuthorDetailView, self).get(request, *args, **kwargs)
 
 
 # Category list.
@@ -162,14 +169,8 @@ class PostListView(PostListMixin, ListView):
 
 # Post detail.
 class PostDetailView(PostDetailMixin, DetailView):
-    def get_object(self):
-        try:
-            slug = self.kwargs.get('slug')
-            return self.model.objects.public().get(slug=slug)
-        except self.model.DoesNotExist:
-            raise Http404()
+    pass
 
 
 class PostDateDetailView(PostDateMixin, PostDetailMixin, DateDetailView):
-    def get_queryset(self):
-        return self.model.objects.public().order_by('-date_published')
+    pass

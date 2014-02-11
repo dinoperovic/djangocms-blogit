@@ -59,6 +59,13 @@ TAG_URL_TRANSLATION = getattr(
     settings, 'BLOGIT_TAG_URL_TRANSLATION', ())
 
 
+# Enable urls.
+ADD_AUTHOR_URLS = getattr(settings, 'BLOGIT_ADD_AUTHOR_URLS', True)
+ADD_CATEGORY_URLS = getattr(settings, 'BLOGIT_ADD_CATEGORY_URLS', True)
+ADD_TAG_URLS = getattr(settings, 'BLOGIT_ADD_TAG_URLS', True)
+ADD_ARCHIVE_URLS = getattr(settings, 'BLOGIT_ADD_ARCHIVE_URLS', True)
+
+
 # Show detail url by date.
 POST_DETAIL_URL_BY_DATE = getattr(
     settings, 'BLOGIT_POST_DETAIL_URL_BY_DATE', False)

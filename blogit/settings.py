@@ -8,8 +8,8 @@ from django.conf import settings
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
-# How many posts per page are displayed.
-AUTHORS_PER_PAGE = getattr(settings, 'BLOGIT_CATEGORIES_PER_PAGE', 5)
+# How many items per page are displayed.
+AUTHORS_PER_PAGE = getattr(settings, 'BLOGIT_AUTHORS_PER_PAGE', 5)
 CATEGORIES_PER_PAGE = getattr(settings, 'BLOGIT_CATEGORIES_PER_PAGE', 5)
 TAGS_PER_PAGE = getattr(settings, 'BLOGIT_TAGS_PER_PAGE', 5)
 POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 5)

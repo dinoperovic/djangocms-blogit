@@ -24,6 +24,9 @@ from blogit.utils.image import thumb
 # Author.
 @python_2_unicode_compatible
 class Author(TranslatableModel):
+    slug = models.SlugField(
+        _('slug'), max_length=100, unique=True,
+        help_text=_('Text used in the url.'))
     user = models.ForeignKey(
         bs.AUTH_USER_MODEL, blank=True, null=True, unique=True,
         verbose_name=_('user'), help_text=_(
@@ -34,9 +37,6 @@ class Author(TranslatableModel):
         _('first name'), max_length=30, blank=True, null=True)
     last_name = models.CharField(
         _('last name'), max_length=30, blank=True, null=True)
-    slug = models.SlugField(
-        _('slug'), max_length=100, unique=True,
-        help_text=_('Text used in the url.'))
     email = models.EmailField(_('email address'), blank=True, null=True)
     picture = FilerImageField(
         blank=True, null=True, related_name='author_image',
@@ -112,20 +112,24 @@ class Author(TranslatableModel):
 @python_2_unicode_compatible
 class AuthorLink(models.Model):
     author = models.ForeignKey(
-        Author, related_name='author_links', verbose_name=_('author'))
+        Author, related_name='links', verbose_name=_('author'))
     link_type = models.CharField(
-        _('link type'), max_length=255, blank=True, null=True,
+        _('type'), max_length=255, blank=True, null=True,
         choices=bs.AUTHOR_LINK_TYPE_CHOICES)
     url = models.URLField(_('url'))
 
     class Meta:
         db_table = 'blogit_author_links'
-        verbose_name = _('author link')
-        verbose_name_plural = _('author links')
+        verbose_name = _('link')
+        verbose_name_plural = _('links')
         ordering = ('pk',)
 
     def __str__(self):
         return self.url
+
+    @property
+    def type(self):
+        return self.link_type
 
 
 # Category.

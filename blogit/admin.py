@@ -47,7 +47,6 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         'all_translations')
     list_filter = ('date_created', 'last_modified')
     readonly_fields = ('last_modified',)
-    mptt_indent_field = 'title_'
 
     def __init__(self, *args, **kwargs):
         super(CategoryAdmin, self).__init__(*args, **kwargs)

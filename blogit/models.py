@@ -18,7 +18,6 @@ from filer.fields.image import FilerImageField
 from blogit import settings as bs
 from blogit.utils.translation import get_translation
 from blogit.utils.noconflict import classmaker
-from blogit.utils.image import thumb
 
 
 # Author.
@@ -100,14 +99,6 @@ class Author(TranslatableModel):
         # Returns all posts by author.
         return Post.objects.public().filter(author=self)
 
-    def admin_image(self):
-        if self.picture:
-            return '<img src="{}">'.format(
-                thumb(self.picture, '72x72'))
-        return None
-    admin_image.short_description = _('author image')
-    admin_image.allow_tags = True
-
 
 @python_2_unicode_compatible
 class AuthorLink(models.Model):
@@ -179,14 +170,6 @@ class Category(TranslatableModel, MPTTModel):
 
     def get_slug(self):
         return self.lazy_translation_getter('slug')
-
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__str__()
 
 
 # Tag.
@@ -337,22 +320,6 @@ class Post(TranslatableModel):
         posts = Post.objects.language().filter(
             date_published__gt=self.date_published).order_by('date_published')
         return posts[0] if posts else None
-
-    def admin_image(self):
-        if self.featured_image:
-            return '<img src="{}">'.format(
-                thumb(self.featured_image, '72x72'))
-        return None
-    admin_image.short_description = _('featured image')
-    admin_image.allow_tags = True
-
-    @property
-    def slug_(self):
-        return self.get_slug()
-
-    @property
-    def title_(self):
-        return self.__str__()
 
 
 # Set PostTranslation unicode.

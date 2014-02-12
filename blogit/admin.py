@@ -7,6 +7,7 @@ from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
 from blogit.models import AuthorLink, Author, Category, Tag, TaggedPost, Post
+from blogit.utils.image import thumb
 
 
 class AuthorLinkInline(admin.TabularInline):
@@ -15,7 +16,7 @@ class AuthorLinkInline(admin.TabularInline):
 
 
 class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
-    list_display = ('__unicode__', 'slug', 'all_translations', 'admin_image')
+    list_display = ('full_name', 'slug', 'all_translations', 'admin_image')
     inlines = (AuthorLinkInline,)
 
     def __init__(self, *args, **kwargs):
@@ -39,6 +40,18 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'classes': ('plugin-holder', 'plugin-holder-nopage'),
             }),
         )
+
+    def admin_image(self, obj):
+        # Returns a thumbnail to display in list_display.
+        if obj.picture:
+            return '<img src="{}">'.format(thumb(obj.picture, '72x72'))
+        return None
+    admin_image.short_description = _('picture')
+    admin_image.allow_tags = True
+
+    def full_name(self, obj):
+        # Returns authors full name.
+        return obj.get_full_name()
 
 
 class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
@@ -67,6 +80,14 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
                     'These fields are the same across all languages.'),
             }),
         )
+
+    def title_(self, obj):
+        # Returns translated title field.
+        return obj.__str__()
+
+    def slug_(self, obj):
+        # Returns translated slug field.
+        return obj.get_slug()
 
 
 class TaggedPostInline(admin.TabularInline):
@@ -116,6 +137,22 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
                 'classes': ('plugin-holder', 'plugin-holder-nopage'),
             }),
         )
+
+    def admin_image(self, obj):
+        # Returns a thumbnail to display in list_display.
+        if obj.featured_image:
+            return '<img src="{}">'.format(thumb(obj.featured_image, '72x72'))
+        return None
+    admin_image.short_description = _('featured image')
+    admin_image.allow_tags = True
+
+    def title_(self, obj):
+        # Returns translated title field.
+        return obj.__str__()
+
+    def slug_(self, obj):
+        # Returns translated slug field.
+        return obj.get_slug()
 
 
 admin.site.register(Author, AuthorAdmin)

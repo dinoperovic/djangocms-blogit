@@ -2,10 +2,24 @@
 from __future__ import unicode_literals
 
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 
-# Use AUTH_USER_MODEL as user.
+# Basic info (used in feeds).
+TITLE = getattr(settings, 'BLOGIT_TITLE', _('Blogit'))
+DESCRIPTION = getattr(
+    settings, 'BLOGIT_DESCRIPTION', _('This is a blog about everything'))
+
+
+# User model.
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
+
+# Feeds.
+RSS_FEED = getattr(settings, 'BLOGIT_RSS_FEED', True)
+ATOM_FEED = getattr(settings, 'BLOGIT_ATOM_FEED', True)
+FEED_LIMIT = getattr(settings, 'BLOGIT_FEED_LIMIT', 100)
+FEED_URL = getattr(settings, 'BLOGIT_FEED_URL', 'feeds')
 
 
 # How many items per page are displayed.

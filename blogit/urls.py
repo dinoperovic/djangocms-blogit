@@ -9,6 +9,7 @@ from blogit.views import (
     AuthorListView, AuthorDetailView, CategoryListView, CategoryDetailView,
     TagListView, TagDetailView, PostYearArchiveView, PostMonthArchiveView,
     PostDayArchiveView, PostListView, PostDetailView, PostDateDetailView)
+from blogit.feeds import PostRssFeed, PostAtomFeed
 
 
 # Post urls.
@@ -99,4 +100,22 @@ if bs.ADD_AUTHOR_URLS:
         url(r'^(?P<url>{})/(?P<slug>[-\w\d]+)/$'.format(
             get_translation_regex(bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION)),
             AuthorDetailView.as_view(), name='blogit_author_detail'),
+    ) + urlpatterns
+
+
+# Feed urls.
+if bs.RSS_FEED:
+    urlpatterns = patterns(
+        '',
+        url(r'^{}/rss/(?P<tag_slug>[-\w]+)/$'.format(
+            bs.FEED_URL), PostRssFeed()),
+        url(r'^{}/rss/$'.format(bs.FEED_URL), PostRssFeed())
+    ) + urlpatterns
+
+if bs.ATOM_FEED:
+    urlpatterns = patterns(
+        '',
+        url(r'^{}/atom/(?P<tag_slug>[-\w]+)/$'.format(
+            bs.FEED_URL), PostAtomFeed()),
+        url(r'^{}/atom/$'.format(bs.FEED_URL), PostAtomFeed())
     ) + urlpatterns

@@ -66,7 +66,7 @@ class Author(TranslatableModel):
         return reverse('blogit_author_detail', kwargs={
             'url': get_translation(
                 bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, language),
-            'slug': self.get_slug()
+            'slug': self.slug
         })
 
     def get_full_name(self):

@@ -69,9 +69,6 @@ class Author(TranslatableModel):
             'slug': self.get_slug()
         })
 
-    def get_slug(self):
-        return self.slug
-
     def get_full_name(self):
         # Returns first_name plus last_name, with a space in between.
         name = '{} {}'.format(self.get_first_name(), self.get_last_name())

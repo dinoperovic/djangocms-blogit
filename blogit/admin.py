@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
 from hvad.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import PlaceholderAdmin
 
@@ -100,6 +101,10 @@ class TaggedPostInline(admin.TabularInline):
 
 class TagAdmin(admin.ModelAdmin):
     inlines = (TaggedPostInline,)
+    list_display = ('name', 'slug')
+    ordering = ('name', 'slug')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
 
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):

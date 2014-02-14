@@ -109,9 +109,11 @@ class TagAdmin(admin.ModelAdmin):
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
-        'get_title', 'get_slug', 'date_published', 'author',
+        'get_title', 'get_slug', 'date_published', 'category', 'author',
         'all_translations', 'get_image', 'get_is_public')
-    list_filter = ('date_published', 'date_created', 'last_modified', 'author')
+    list_filter = (
+        'date_published', 'date_created', 'last_modified', 'category',
+        'author')
     readonly_fields = ('date_created', 'last_modified',)
     actions = ['make_public', 'make_hidden']
 

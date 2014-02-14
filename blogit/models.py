@@ -280,6 +280,7 @@ class Post(TranslatableModel):
         db_table = 'blogit_posts'
         verbose_name = _('post')
         verbose_name_plural = _('posts')
+        ordering = ('-date_published',)
 
     def __str__(self):
         return self.lazy_translation_getter(

@@ -227,7 +227,7 @@ class PostManager(TranslationManager):
 
 @python_2_unicode_compatible
 class Post(TranslatableModel):
-    category = models.ForeignKey(
+    category = TreeForeignKey(
         Category, blank=True, null=True, on_delete=models.SET_NULL,
         verbose_name=_('category'))
     author = models.ForeignKey(

@@ -168,6 +168,10 @@ class Category(TranslatableModel, MPTTModel):
     def get_slug(self):
         return self.lazy_translation_getter('slug')
 
+    def get_posts(self):
+        # Returns all posts in category.
+        return Post.objects.public().filter(category=self)
+
 
 # Tag.
 @python_2_unicode_compatible

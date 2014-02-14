@@ -17,7 +17,9 @@ class AuthorLinkInline(admin.TabularInline):
 
 
 class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
-    list_display = ('get_full_name', 'slug', 'all_translations', 'get_image')
+    list_display = (
+        'get_full_name', 'slug', 'email', 'all_translations',
+        'get_image')
     inlines = (AuthorLinkInline,)
 
     def __init__(self, *args, **kwargs):
@@ -58,7 +60,7 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
 
 class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
-        'get_title', 'get_slug', 'date_created', 'last_modified',
+        'get_title', 'get_slug', 'date_created', 'get_number_of_posts',
         'all_translations')
     list_filter = ('date_created', 'last_modified')
     readonly_fields = ('last_modified',)
@@ -93,6 +95,11 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
         return obj.get_slug()
     get_title.short_description = _('slug')
 
+    def get_number_of_posts(self, obj):
+        # Returns count posts in current category.
+        return Post.objects.public().filter(category=obj).count()
+    get_number_of_posts.short_description = _('number of posts')
+
 
 class TaggedPostInline(admin.TabularInline):
     model = TaggedPost
@@ -101,16 +108,19 @@ class TaggedPostInline(admin.TabularInline):
 
 class TagAdmin(admin.ModelAdmin):
     inlines = (TaggedPostInline,)
-    list_display = ('name', 'slug')
-    ordering = ('name', 'slug')
+    list_display = ('name', 'slug', 'get_number_of_posts_tagged')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+
+    def get_number_of_posts_tagged(self, obj):
+        return TaggedPost.objects.filter(tag=obj).count()
+    get_number_of_posts_tagged.short_description = _('posts tagged')
 
 
 class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
     list_display = (
-        'get_title', 'get_slug', 'date_published', 'category', 'author',
-        'all_translations', 'get_image', 'get_is_public')
+        'get_title', 'get_slug', 'category', 'author', 'date_published',
+        'all_translations', 'get_is_public', 'get_image')
     list_filter = (
         'date_published', 'date_created', 'last_modified', 'category',
         'author')

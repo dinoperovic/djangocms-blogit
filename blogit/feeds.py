@@ -43,13 +43,19 @@ class PostRssFeed(Feed):
         return force_text(item.lazy_translation_getter('description'))
 
     def item_author_email(self, item):
-        return item.author.get_email()
+        if item.author:
+            return item.author.get_email()
+        return None
 
     def item_author_name(self, item):
-        return item.author.get_full_name()
+        if item.author:
+            return item.author.get_full_name()
+        return None
 
     def item_author_link(self, item):
-        return item.author.get_absolute_url()
+        if item.author:
+            return item.author.get_absolute_url()
+        return None
 
     def item_pubdate(self, item):
         return item.date_published

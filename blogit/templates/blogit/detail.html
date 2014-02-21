@@ -1,23 +1,42 @@
+{% extends "blogit/base.html" %}
 {% load placeholder_tags %}
 
-<div>
-    <h1>{{ post.title }}</h2>
+{% block content %}
+    <div>
+        <hr>
+        <h1>{{ post.title }}</h1>
 
-    {% if post.subtitle %}
-        <h2>{{ post.subtitle }}</h2>
-    {% endif %}
+        {% if post.subtitle %}
+            <h2>{{ post.subtitle }}</h2>
+        {% endif %}
 
-    {% if post.featured_image %}
-        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
-    {% endif %}
+        {% if post.featured_image %}
+            <p><img src="{{ post.featured_image.url }}" alt="{{ post.title }}"></p>
+        {% endif %}
 
-    <p>{{ post.date_created }}</p>
+        <p>{{ post.date_published }}</p>
+        {% if post.category %}
+            <p>
+                <strong>Category: </strong>
+                <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a>
+            </p>
+        {% endif %}
 
-    {% include "blogit/includes/categories.html" with categories=post.categories %}
+        {% include "blogit/includes/tags.html" with tags=post.get_tags %}
+        <hr>
+        {% render_placeholder post.content %}
+        {% include "blogit/includes/author.html" with author=post.author %}
 
-    {% include "blogit/includes/tags.html" with tags=post.get_tags %}
-
-    {% render_placeholder post.content %}
-
-    {% include "blogit/includes/author.html" with author=post.author %}
-</div>
+        <hr>
+        {% with prev_post=post.get_previous next_post=post.get_next %}
+            <ul>
+                {% if prev_post %}
+                    <li><a href="{{ prev_post.get_absolute_url }}">Prev post</a></li>
+                {% endif %}
+                {% if next_post %}
+                    <li><a href="{{ next_post.get_absolute_url }}">Next post</a></li>
+                {% endif %}
+            </ul>
+        {% endwith %}
+    </div>
+{% endblock %}

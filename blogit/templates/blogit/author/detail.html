@@ -1,0 +1,35 @@
+{% extends "blogit/author/base.html" %}
+{% load placeholder_tags %}
+
+{% block content %}
+    <div>
+        <hr>
+        <h1>{{ author.get_full_name }}</h1>
+        {% if author.picture %}
+            <p><img src="{{ author.picture.url }}" alt="{{ author.get_full_name }}"></p>
+        {% endif %}
+        {% render_placeholder author.bio %}
+
+        {% if author.links.all %}
+            <hr>
+            <ul>
+                <h4>{{ author.get_first_name }}'s links</h4>
+                {% for link in author.links.all %}
+                    <li><a href="{{ link.url }}" target="_blank">{{ link.type|title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% with posts=author.get_posts %}
+            {% if posts %}
+                <hr>
+                <h4>Post's by {{ author.get_first_name }}</h4>
+                <ul>
+                    {% for post in posts %}
+                        <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+{% endblock %}

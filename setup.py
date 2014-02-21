@@ -1,47 +1,43 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import os
 from setuptools import setup, find_packages
 
 
-def read_file(filename):
-    """Read a file into a string"""
-    path = os.path.abspath(os.path.dirname(__file__))
-    filepath = os.path.join(path, filename)
-    try:
-        return open(filepath).read()
-    except IOError:
-        return ''
-
-
-def get_readme():
-    """Return the README file contents. Supports text,rst, and markdown"""
-    for name in ('README', 'README.rst', 'README.md'):
-        if os.path.exists(name):
-            return read_file(name)
-    return ''
+version = __import__('blogit').__version__
+readme = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
 setup(
-    name="djangocms-blogit",
-    version=__import__('blogit').__version__,
-    url='http://pypi.python.org/pypi/djangocms-blogit/',
+    name='djangocms-blogit',
+    version=version,
+    description='Simple django-cms blog app',
+    long_description=readme,
     author='Dino Perovic',
     author_email='dino.perovic@gmail.com',
-    description='django-cms blog plugin',
-    long_description=get_readme(),
-    packages=find_packages(),
-    include_package_data=True,
+    url='http://pypi.python.org/pypi/djangocms-blogit/',
+    packages=find_packages(exclude=('tests', 'tests.*')),
+    license='BSD',
     install_requires=(
-        'django-cms>=2.4',
+        'django-cms==2.4.3',
+        'django-filer==0.9.5',
         'django-hvad==0.3',
-        'easy-thumbnails==1.4',
-        'django-filer>=0.9',
-        'django-taggit==0.10',
+        'django-taggit==0.11.2',
     ),
+    include_package_data=True,
     zip_safe=False,
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
+        'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Topic :: Internet :: WWW/HTTP',
     ],
+    test_suite='runtests.main',
+    tests_require=(
+        'django-nose==1.2',
+    ),
 )

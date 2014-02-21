@@ -1,27 +1,38 @@
-{% for post in posts %}
-    <div>
-        <a href="{{ post.get_absolute_url }}">
-            <h2>{{ post.title }}</h2>
-        </a>
+{% extends "blogit/base.html" %}
 
-        {% if post.subtitle %}
-            <h3>{{ post.subtitle }}</h3>
-        {% endif %}
-
-        {% if post.featured_image %}
+{% block content %}
+    {% for post in posts %}
+        <div>
+            <hr>
             <a href="{{ post.get_absolute_url }}">
-                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                <h2>{{ post.title }}</h2>
             </a>
-        {% endif %}
 
-        {% if post.description %}
-            <p>{{ post.description }}</p>
-        {% endif %}
+            {% if post.subtitle %}
+                <h3>{{ post.subtitle }}</h3>
+            {% endif %}
 
-        <p>{{ post.date_created }}</p>
+            {% if post.featured_image %}
+                <p><a href="{{ post.get_absolute_url }}">
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                </a></p>
+            {% endif %}
 
-        {% include "blogit/includes/categories.html" with categories=post.categories %}
+            {% if post.description %}
+                <p>{{ post.description }}</p>
+            {% endif %}
 
-        {% include "blogit/includes/tags.html" with tags=post.get_tags %}
-    </div>
-{% endfor %}
+            <p>{{ post.date_published }}</p>
+            {% if post.category %}
+                <p>
+                    <strong>Category: </strong>
+                    <a href="{{ post.category.get_absolute_url }}">{{ post.category }}</a>
+                </p>
+            {% endif %}
+
+            {% include "blogit/includes/tags.html" with tags=post.get_tags %}
+        </div>
+    {% endfor %}
+    <hr>
+    {% include "blogit/includes/pagination.html" %}
+{% endblock %}

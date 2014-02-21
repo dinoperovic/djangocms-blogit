@@ -33,7 +33,7 @@ POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 5)
 AUTHOR_LIST_TEMPLATE = getattr(
     settings, 'BLOGIT_AUTHOR_LIST_TEMPLATE', 'blogit/author/list.html')
 AUTHOR_DETAIL_TEMPLATE = getattr(
-    settings, 'BLOGIT_AUTHOR_LIST_TEMPLATE', 'blogit/author/detail.html')
+    settings, 'BLOGIT_AUTHOR_DETAIL_TEMPLATE', 'blogit/author/detail.html')
 
 CATEGORY_LIST_TEMPLATE = getattr(
     settings, 'BLOGIT_CATEGORY_LIST_TEMPLATE', 'blogit/category/list.html')

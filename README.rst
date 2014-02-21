@@ -2,9 +2,13 @@
 djangocms-blogit
 ================
 
-**Project is a development stage (pre-alpha)**
+A simple blog app for `django-cms`_.
 
-A simple blog plugin for django-cms.
+:Version: 0.1.0
+:Download: http://pypi.python.org/pypi/djangocms-blogit/
+:Source: http://github.com/dinoperovic/djangocms-blogit/
+:Dev Status: Alpha
+
 
 Dependencies
 ------------
@@ -38,33 +42,30 @@ Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``::
 
 Settings
 -------------
+You can browse all the setings in a `settings.py`_ file.
 
-BLOGIT_POSTS_PER_PAGE
-    Number of posts displayed per page.
-    Defaults to 5.
+**Url translation example**::
 
-BLOGIT_LIST_TEMPLATE
-    Path to list template. Defaults to ``blogit/list.html``
-
-BLOGIT_DETAIL_TEMPLATE
-    Path to detail template. Defaults to ``blogit/detail.html``
-
-BLOGIT_AUTHOR_LINK_TYPE_CHOICES
-    Link type choices for authors. List of tuples.
-
-BLOGIT_CATEGORY_URL, BLOGIT_AUTHOR_URL
-    Default url names.
-
-BLOGIT_CATEGORY_URL_TRANSLATION, BLOGIT_AUTHOR_URL_TRANSLATION
-    Url translation.
-    ::
-        BLOGIT_CATEGORY_URL_TRANSLATION = (
-            ('en', 'category'),
-            ('hr', 'kategorija'),
-            ...
-        )
+    BLOGIT_CATEGORY_URL_TRANSLATION = (
+        ('en', 'category'),
+        ('hr', 'kategorija'),
+        ...
+    )
 
 
+Versions
+-------------
+0.1.0 - Alpha release
+    To migrate from earlier versions using south run **(some fields may be lost)**::
+
+        $ pip install --upgrade djangocms-blogit==0.0.99
+        $ python manage.py migrate blogit
+        $ pip install --upgrade djangocms-blogit==0.1.0
+        $ python manage.py migrate blogit 0001 --fake --delete-ghost-migrations
+
+
+
+.. _settings.py: https://github.com/dinoperovic/djangocms-blogit/blob/master/blogit/settings.py
 .. _django-cms: https://github.com/divio/django-cms
 .. _django-filer: https://github.com/stefanfoulis/django-filer
 .. _django-hvad: https://github.com/kristianoellegaard/django-hvad

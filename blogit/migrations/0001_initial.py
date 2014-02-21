@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -8,43 +8,42 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'PostTranslation'
-        db.create_table('blogit_posts_translation', (
+        # Adding model 'AuthorTranslation'
+        db.create_table(u'blogit_authors_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('subtitle', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
-            ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['blogit.Post'])),
+            ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['blogit.Author'])),
         ))
-        db.send_create_signal(u'blogit', ['PostTranslation'])
+        db.send_create_signal(u'blogit', ['AuthorTranslation'])
 
-        # Adding unique constraint on 'PostTranslation', fields ['language_code', 'master']
-        db.create_unique('blogit_posts_translation', ['language_code', 'master_id'])
+        # Adding unique constraint on 'AuthorTranslation', fields ['language_code', 'master']
+        db.create_unique(u'blogit_authors_translation', ['language_code', 'master_id'])
 
-        # Adding model 'Post'
-        db.create_table('blogit_posts', (
+        # Adding model 'Author'
+        db.create_table(u'blogit_authors', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['blogit.Author'], null=True, blank=True)),
-            ('featured_image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
-            ('is_public', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 11, 8, 0, 0))),
-            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 11, 8, 0, 0))),
-            ('content', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cms.Placeholder'], null=True)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=100)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True, null=True, blank=True)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
+            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name=u'author_image', null=True, to=orm['filer.Image'])),
+            ('bio', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cms.Placeholder'], null=True)),
         ))
-        db.send_create_signal(u'blogit', ['Post'])
+        db.send_create_signal(u'blogit', ['Author'])
 
-        # Adding M2M table for field categories on 'Post'
-        db.create_table('blogit_posts_categories', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('post', models.ForeignKey(orm[u'blogit.post'], null=False)),
-            ('category', models.ForeignKey(orm[u'blogit.category'], null=False))
+        # Adding model 'AuthorLink'
+        db.create_table(u'blogit_author_links', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'links', to=orm['blogit.Author'])),
+            ('link_type', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
-        db.create_unique('blogit_posts_categories', ['post_id', 'category_id'])
+        db.send_create_signal(u'blogit', ['AuthorLink'])
 
         # Adding model 'CategoryTranslation'
-        db.create_table('blogit_categories_translation', (
+        db.create_table(u'blogit_categories_translation', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
@@ -54,81 +53,106 @@ class Migration(SchemaMigration):
         db.send_create_signal(u'blogit', ['CategoryTranslation'])
 
         # Adding unique constraint on 'CategoryTranslation', fields ['language_code', 'master']
-        db.create_unique('blogit_categories_translation', ['language_code', 'master_id'])
+        db.create_unique(u'blogit_categories_translation', ['language_code', 'master_id'])
 
         # Adding model 'Category'
-        db.create_table('blogit_categories', (
+        db.create_table(u'blogit_categories', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 11, 8, 0, 0))),
-            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 11, 8, 0, 0))),
+            ('parent', self.gf('mptt.fields.TreeForeignKey')(blank=True, related_name=u'children', null=True, to=orm['blogit.Category'])),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            ('level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
         ))
         db.send_create_signal(u'blogit', ['Category'])
 
-        # Adding model 'AuthorTranslation'
-        db.create_table('blogit_authors_translation', (
+        # Adding model 'Tag'
+        db.create_table(u'blogit_tags', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('bio', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
-            ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['blogit.Author'])),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=100)),
         ))
-        db.send_create_signal(u'blogit', ['AuthorTranslation'])
+        db.send_create_signal(u'blogit', ['Tag'])
 
-        # Adding unique constraint on 'AuthorTranslation', fields ['language_code', 'master']
-        db.create_unique('blogit_authors_translation', ['language_code', 'master_id'])
-
-        # Adding model 'Author'
-        db.create_table('blogit_authors', (
+        # Adding model 'TaggedPost'
+        db.create_table(u'blogit_tagged_post_translations', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], unique=True, null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('tag', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'tagged_posts', to=orm['blogit.Tag'])),
+            ('content_object', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['blogit.PostTranslation'])),
+        ))
+        db.send_create_signal(u'blogit', ['TaggedPost'])
+
+        # Adding model 'PostTranslation'
+        db.create_table(u'blogit_posts_translation', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('picture', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='author_image', null=True, to=orm['filer.Image'])),
+            ('is_public', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('subtitle', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('meta_title', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('meta_description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('meta_keywords', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('language_code', self.gf('django.db.models.fields.CharField')(max_length=15, db_index=True)),
+            ('master', self.gf('django.db.models.fields.related.ForeignKey')(related_name='translations', null=True, to=orm['blogit.Post'])),
         ))
-        db.send_create_signal(u'blogit', ['Author'])
+        db.send_create_signal(u'blogit', ['PostTranslation'])
 
-        # Adding model 'AuthorLink'
-        db.create_table('blogit_author_links', (
+        # Adding unique constraint on 'PostTranslation', fields ['language_code', 'master']
+        db.create_unique(u'blogit_posts_translation', ['language_code', 'master_id'])
+
+        # Adding model 'Post'
+        db.create_table(u'blogit_posts', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name='author_links', to=orm['blogit.Author'])),
-            ('link_type', self.gf('django.db.models.fields.CharField')(default='custom', max_length=255)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('category', self.gf('mptt.fields.TreeForeignKey')(to=orm['blogit.Category'], null=True, on_delete=models.SET_NULL, blank=True)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['blogit.Author'], null=True, on_delete=models.SET_NULL, blank=True)),
+            ('featured_image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['filer.Image'], null=True, blank=True)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now, null=True, blank=True)),
+            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('date_published', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
+            ('content', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cms.Placeholder'], null=True)),
         ))
-        db.send_create_signal(u'blogit', ['AuthorLink'])
+        db.send_create_signal(u'blogit', ['Post'])
 
 
     def backwards(self, orm):
-        # Removing unique constraint on 'AuthorTranslation', fields ['language_code', 'master']
-        db.delete_unique('blogit_authors_translation', ['language_code', 'master_id'])
+        # Removing unique constraint on 'PostTranslation', fields ['language_code', 'master']
+        db.delete_unique(u'blogit_posts_translation', ['language_code', 'master_id'])
 
         # Removing unique constraint on 'CategoryTranslation', fields ['language_code', 'master']
-        db.delete_unique('blogit_categories_translation', ['language_code', 'master_id'])
+        db.delete_unique(u'blogit_categories_translation', ['language_code', 'master_id'])
 
-        # Removing unique constraint on 'PostTranslation', fields ['language_code', 'master']
-        db.delete_unique('blogit_posts_translation', ['language_code', 'master_id'])
-
-        # Deleting model 'PostTranslation'
-        db.delete_table('blogit_posts_translation')
-
-        # Deleting model 'Post'
-        db.delete_table('blogit_posts')
-
-        # Removing M2M table for field categories on 'Post'
-        db.delete_table('blogit_posts_categories')
-
-        # Deleting model 'CategoryTranslation'
-        db.delete_table('blogit_categories_translation')
-
-        # Deleting model 'Category'
-        db.delete_table('blogit_categories')
+        # Removing unique constraint on 'AuthorTranslation', fields ['language_code', 'master']
+        db.delete_unique(u'blogit_authors_translation', ['language_code', 'master_id'])
 
         # Deleting model 'AuthorTranslation'
-        db.delete_table('blogit_authors_translation')
+        db.delete_table(u'blogit_authors_translation')
 
         # Deleting model 'Author'
-        db.delete_table('blogit_authors')
+        db.delete_table(u'blogit_authors')
 
         # Deleting model 'AuthorLink'
-        db.delete_table('blogit_author_links')
+        db.delete_table(u'blogit_author_links')
+
+        # Deleting model 'CategoryTranslation'
+        db.delete_table(u'blogit_categories_translation')
+
+        # Deleting model 'Category'
+        db.delete_table(u'blogit_categories')
+
+        # Deleting model 'Tag'
+        db.delete_table(u'blogit_tags')
+
+        # Deleting model 'TaggedPost'
+        db.delete_table(u'blogit_tagged_post_translations')
+
+        # Deleting model 'PostTranslation'
+        db.delete_table(u'blogit_posts_translation')
+
+        # Deleting model 'Post'
+        db.delete_table(u'blogit_posts')
 
 
     models = {
@@ -162,35 +186,43 @@ class Migration(SchemaMigration):
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'blogit.author': {
-            'Meta': {'object_name': 'Author', 'db_table': "'blogit_authors'"},
+            'Meta': {'object_name': 'Author', 'db_table': "u'blogit_authors'"},
+            'bio': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'picture': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'author_image'", 'null': 'True', 'to': "orm['filer.Image']"}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'picture': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "u'author_image'", 'null': 'True', 'to': "orm['filer.Image']"}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '100'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         u'blogit.authorlink': {
-            'Meta': {'ordering': "('pk',)", 'object_name': 'AuthorLink', 'db_table': "'blogit_author_links'"},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'author_links'", 'to': u"orm['blogit.Author']"}),
+            'Meta': {'ordering': "(u'pk',)", 'object_name': 'AuthorLink', 'db_table': "u'blogit_author_links'"},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'links'", 'to': u"orm['blogit.Author']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'link_type': ('django.db.models.fields.CharField', [], {'default': "'custom'", 'max_length': '255'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+            'link_type': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         },
         u'blogit.authortranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'AuthorTranslation', 'db_table': "'blogit_authors_translation'"},
-            'bio': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'AuthorTranslation', 'db_table': "u'blogit_authors_translation'"},
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['blogit.Author']"})
         },
         u'blogit.category': {
-            'Meta': {'ordering': "('date_created',)", 'object_name': 'Category', 'db_table': "'blogit_categories'"},
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 11, 8, 0, 0)'}),
+            'Meta': {'ordering': "(u'date_created',)", 'object_name': 'Category', 'db_table': "u'blogit_categories'"},
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 11, 8, 0, 0)'})
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "u'children'", 'null': 'True', 'to': u"orm['blogit.Category']"}),
+            'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
+            'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
         u'blogit.categorytranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'CategoryTranslation', 'db_table': "'blogit_categories_translation'"},
+            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'CategoryTranslation', 'db_table': "u'blogit_categories_translation'"},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['blogit.Category']"}),
@@ -198,25 +230,41 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'blogit.post': {
-            'Meta': {'object_name': 'Post', 'db_table': "'blogit_posts'"},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['blogit.Author']", 'null': 'True', 'blank': 'True'}),
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['blogit.Category']", 'null': 'True', 'blank': 'True'}),
+            'Meta': {'ordering': "(u'-date_published',)", 'object_name': 'Post', 'db_table': "u'blogit_posts'"},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['blogit.Author']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
+            'category': ('mptt.fields.TreeForeignKey', [], {'to': u"orm['blogit.Category']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
             'content': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cms.Placeholder']", 'null': 'True'}),
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 11, 8, 0, 0)'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'null': 'True', 'blank': 'True'}),
+            'date_published': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'featured_image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['filer.Image']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 11, 8, 0, 0)'})
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'})
         },
         u'blogit.posttranslation': {
-            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'PostTranslation', 'db_table': "'blogit_posts_translation'"},
+            'Meta': {'unique_together': "[('language_code', 'master')]", 'object_name': 'PostTranslation', 'db_table': "u'blogit_posts_translation'"},
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '15', 'db_index': 'True'}),
             'master': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'translations'", 'null': 'True', 'to': u"orm['blogit.Post']"}),
+            'meta_description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'meta_keywords': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'meta_title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        u'blogit.tag': {
+            'Meta': {'ordering': "(u'name',)", 'object_name': 'Tag', 'db_table': "u'blogit_tags'"},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '100'})
+        },
+        u'blogit.taggedpost': {
+            'Meta': {'object_name': 'TaggedPost', 'db_table': "u'blogit_tagged_post_translations'"},
+            'content_object': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['blogit.PostTranslation']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'tagged_posts'", 'to': u"orm['blogit.Tag']"})
         },
         'cms.placeholder': {
             'Meta': {'object_name': 'Placeholder'},
@@ -274,19 +322,6 @@ class Migration(SchemaMigration):
             'must_always_publish_author_credit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'must_always_publish_copyright': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'subject_location': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '64', 'null': 'True', 'blank': 'True'})
-        },
-        u'taggit.tag': {
-            'Meta': {'object_name': 'Tag'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '100'})
-        },
-        u'taggit.taggeditem': {
-            'Meta': {'object_name': 'TaggedItem'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'taggit_taggeditem_tagged_items'", 'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'object_id': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
-            'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "u'taggit_taggeditem_items'", 'to': u"orm['taggit.Tag']"})
         }
     }
 

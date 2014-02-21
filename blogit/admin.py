@@ -93,7 +93,7 @@ class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
     def get_slug(self, obj):
         # Returns translated slug field.
         return obj.get_slug()
-    get_title.short_description = _('slug')
+    get_slug.short_description = _('slug')
 
     def get_number_of_posts(self, obj):
         # Returns count posts in current category.

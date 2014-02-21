@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # djangocms-blogit documentation build configuration file, created by
-# sphinx-quickstart on Fri Feb 21 12:41:07 2014.
+# sphinx-quickstart on Fri Feb 21 13:01:47 2014.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.

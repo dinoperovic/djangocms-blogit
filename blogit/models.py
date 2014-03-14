@@ -45,8 +45,7 @@ class Author(TranslatableModel):
         description=models.TextField(_('description'), blank=True, null=True),
     )
 
-    bio = PlaceholderField(
-        'blogit_author_bio', verbose_name=_('bio'))
+    bio = PlaceholderField('blogit_author_bio')
 
     class Meta:
         db_table = 'blogit_authors'
@@ -275,8 +274,7 @@ class Post(TranslatableModel):
                         'by search engines.')),
     )
 
-    content = PlaceholderField(
-        'blogit_post_content', verbose_name=_('content'))
+    content = PlaceholderField('blogit_post_content')
 
     objects = PostManager()
 

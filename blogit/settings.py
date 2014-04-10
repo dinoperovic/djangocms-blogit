@@ -23,17 +23,21 @@ FEED_URL = getattr(settings, 'BLOGIT_FEED_URL', 'feeds')
 
 
 # How many items per page are displayed.
-AUTHORS_PER_PAGE = getattr(settings, 'BLOGIT_AUTHORS_PER_PAGE', 5)
-CATEGORIES_PER_PAGE = getattr(settings, 'BLOGIT_CATEGORIES_PER_PAGE', 5)
-TAGS_PER_PAGE = getattr(settings, 'BLOGIT_TAGS_PER_PAGE', 5)
-POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 5)
+ITEMS_PER_PAGE = getattr(settings, 'BLOGIT_ITEMS_PER_PAGE', 6)
+AUTHORS_PER_PAGE = getattr(settings, 'BLOGIT_AUTHORS_PER_PAGE', ITEMS_PER_PAGE)
+CATEGORIES_PER_PAGE = getattr(
+    settings, 'BLOGIT_CATEGORIES_PER_PAGE', ITEMS_PER_PAGE)
+TAGS_PER_PAGE = getattr(
+    settings, 'BLOGIT_TAGS_PER_PAGE', ITEMS_PER_PAGE)
+POSTS_PER_PAGE = getattr(
+    settings, 'BLOGIT_POSTS_PER_PAGE', ITEMS_PER_PAGE)
 
 
 # Templates.
 AUTHOR_LIST_TEMPLATE = getattr(
     settings, 'BLOGIT_AUTHOR_LIST_TEMPLATE', 'blogit/author/list.html')
 AUTHOR_DETAIL_TEMPLATE = getattr(
-    settings, 'BLOGIT_AUTHOR_LIST_TEMPLATE', 'blogit/author/detail.html')
+    settings, 'BLOGIT_AUTHOR_DETAIL_TEMPLATE', 'blogit/author/detail.html')
 
 CATEGORY_LIST_TEMPLATE = getattr(
     settings, 'BLOGIT_CATEGORY_LIST_TEMPLATE', 'blogit/category/list.html')

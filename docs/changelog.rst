@@ -15,5 +15,7 @@ Changelog
         blogit``. Then upgrade to version ``0.1.0`` and run ``python manage.py
         migrate blogit 0001 --fake --delete-ghost-migrations``.
 
+0.1.1
+    Typo fixes
 
 .. _south: http://south.aeracode.org/

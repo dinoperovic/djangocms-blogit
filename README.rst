@@ -29,7 +29,9 @@ To install ``djangocms-blogit`` with ``pip`` run::
 Setup
 -------------
 
-Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``::
+Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``:
+
+.. code:: python
 
     INSTALLED_APPS = (
         ...
@@ -44,7 +46,9 @@ Settings
 -------------
 You can browse all the setings in a `settings.py`_ file.
 
-**Url translation example**::
+**Url translation example**:
+
+.. code:: python
 
     BLOGIT_CATEGORY_URL_TRANSLATION = (
         ('en', 'category'),

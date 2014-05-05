@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
+from django.conf.urls import url
+from django.http import HttpResponseRedirect
 from django.contrib import admin
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from hvad.admin import TranslatableAdmin
-from cms.admin.placeholderadmin import PlaceholderAdminMixin
+from cms.admin.placeholderadmin import (
+    PlaceholderAdminMixin, FrontendEditableAdminMixin)
 
 from blogit.models import AuthorLink, Author, Category, Tag, TaggedPost, Post
 from blogit.utils.image import thumb
@@ -16,10 +21,14 @@ class AuthorLinkInline(admin.TabularInline):
     extra = 0
 
 
-class AuthorAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
+class AuthorAdmin(
+        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
+        admin.ModelAdmin):
     list_display = (
         'get_full_name', 'slug', 'email', 'all_translations',
         'get_image')
+    frontend_editable_fields = (
+        'slug', 'user', 'first_name', 'last_name', 'email', 'picture')
     inlines = (AuthorLinkInline,)
 
     def __init__(self, *args, **kwargs):
@@ -55,12 +64,15 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
 
 
 class CategoryAdmin(
-        TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
+        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
+        admin.ModelAdmin):
     list_display = (
         'get_title', 'get_slug', 'date_created', 'get_number_of_posts',
         'all_translations')
     list_filter = ('date_created', 'last_modified')
     readonly_fields = ('last_modified',)
+    frontend_editable_fields = (
+        'title', 'slug', 'parent', 'date_created', 'last_modified')
 
     def __init__(self, *args, **kwargs):
         super(CategoryAdmin, self).__init__(*args, **kwargs)
@@ -103,25 +115,33 @@ class TaggedPostInline(admin.TabularInline):
     extra = 0
 
 
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
     inlines = (TaggedPostInline,)
     list_display = ('name', 'slug', 'get_number_of_posts_tagged')
     search_fields = ('name',)
     prepopulated_fields = {'slug': ('name',)}
+    frontend_editable_fields = ('name', 'slug')
 
     def get_number_of_posts_tagged(self, obj):
         return TaggedPost.objects.filter(tag=obj).count()
     get_number_of_posts_tagged.short_description = _('posts tagged')
 
 
-class PostAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
+class PostAdmin(
+        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
+        admin.ModelAdmin):
     list_display = (
         'get_title', 'get_slug', 'category', 'author', 'date_published',
         'all_translations', 'get_is_public', 'get_image')
     list_filter = (
         'date_published', 'date_created', 'last_modified', 'category',
         'author')
-    readonly_fields = ('date_created', 'last_modified',)
+    readonly_fields = ('date_created', 'last_modified')
+    frontend_editable_fields = (
+        'title', 'slug', 'is_public', 'subtitle', 'description', 'tags',
+        'category', 'author', 'featured_image', 'date_published',
+        'date_created', 'last_modified', 'meta_title', 'meta_description',
+        'meta_keywords')
     actions = ['make_public', 'make_hidden']
 
     def __init__(self, *args, **kwargs):
@@ -151,6 +171,24 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
                 'classes': ('collapse',),
             }),
         )
+
+    def get_urls(self):
+        # Add custom admin urls.
+        urls = super(PostAdmin, self).get_urls()
+        post_admin_urls = [
+            url(r'^(?P<pk>\d+)/hide/$',
+                self.admin_site.admin_view(self.hide),
+                name='blogit_post_hide'),
+        ]
+        return post_admin_urls + urls
+
+    def hide(self, request, pk):
+        # Hide post view.
+        obj = get_object_or_404(Post, pk=pk)
+        obj.is_public = False
+        obj.save()
+
+        return HttpResponseRedirect(reverse('blogit_post_list'))
 
     def get_image(self, obj):
         # Returns a thumbnail to display in list_display.

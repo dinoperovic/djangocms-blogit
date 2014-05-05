@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 from hvad.admin import TranslatableAdmin
-from cms.admin.placeholderadmin import PlaceholderAdmin
+from cms.admin.placeholderadmin import PlaceholderAdminMixin
 
 from blogit.models import AuthorLink, Author, Category, Tag, TaggedPost, Post
 from blogit.utils.image import thumb
@@ -16,7 +16,7 @@ class AuthorLinkInline(admin.TabularInline):
     extra = 0
 
 
-class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
+class AuthorAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
     list_display = (
         'get_full_name', 'slug', 'email', 'all_translations',
         'get_image')
@@ -38,10 +38,6 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
             (None, {
                 'fields': ('description',),
             }),
-            (_('Bio'), {
-                'fields': ('bio',),
-                'classes': ('plugin-holder', 'plugin-holder-nopage'),
-            }),
         )
 
     def get_image(self, obj):
@@ -58,7 +54,8 @@ class AuthorAdmin(TranslatableAdmin, PlaceholderAdmin):
     get_full_name.short_description = _('full name')
 
 
-class CategoryAdmin(TranslatableAdmin, PlaceholderAdmin):
+class CategoryAdmin(
+        TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
     list_display = (
         'get_title', 'get_slug', 'date_created', 'get_number_of_posts',
         'all_translations')
@@ -117,7 +114,7 @@ class TagAdmin(admin.ModelAdmin):
     get_number_of_posts_tagged.short_description = _('posts tagged')
 
 
-class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
+class PostAdmin(TranslatableAdmin, PlaceholderAdminMixin, admin.ModelAdmin):
     list_display = (
         'get_title', 'get_slug', 'category', 'author', 'date_published',
         'all_translations', 'get_is_public', 'get_image')
@@ -152,10 +149,6 @@ class PostAdmin(TranslatableAdmin, PlaceholderAdmin):
             (_('SEO Settings'), {
                 'fields': ('meta_title', 'meta_description', 'meta_keywords'),
                 'classes': ('collapse',),
-            }),
-            (_('Content'), {
-                'fields': ('content',),
-                'classes': ('plugin-holder', 'plugin-holder-nopage'),
             }),
         )
 

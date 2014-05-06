@@ -53,7 +53,7 @@ class PostRssFeed(Feed):
         return None
 
     def item_author_link(self, item):
-        if item.author:
+        if bs.ADD_AUTHOR_URLS and item.author:
             return item.author.get_absolute_url()
         return None
 

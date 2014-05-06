@@ -144,6 +144,11 @@ class CategoryListView(ListView):
 class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
     template_name = bs.CATEGORY_DETAIL_TEMPLATE
 
+    def get_context_data(self, **kwargs):
+        # Adds current category to context.
+        kwargs.update({'category': self.object})
+        return super(CategoryDetailView, self).get_context_data(**kwargs)
+
     def get(self, request, *args, **kwargs):
         check_translation_or_404(
             bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
@@ -189,6 +194,11 @@ class TagListView(ListView):
 # Tag detail.
 class TagDetailView(ToolbarMixin, PostListMixin, ListView):
     template_name = bs.TAG_DETAIL_TEMPLATE
+
+    def get_context_data(self, **kwargs):
+        # Adds current tag to context.
+        kwargs.update({'tag': self.object})
+        return super(TagDetailView, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):
         check_translation_or_404(

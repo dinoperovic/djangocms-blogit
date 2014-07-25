@@ -2,8 +2,17 @@ Changelog
 #########
 
 
+0.2.0
+    Added support for django CMS 3.x.
+
+    .. note::
+        django CMS 2.x is no longer compatible with this release.
+
+0.1.1
+    Bugfixes.
+
 0.1.0
-    Alpha release, started changelog
+    Alpha release, started changelog.
 
     .. warning::
         If migrating from an earlier version, some fields may be lost. Backup

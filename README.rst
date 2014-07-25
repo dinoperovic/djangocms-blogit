@@ -4,20 +4,20 @@ djangocms-blogit
 
 A simple blog app for `django-cms`_.
 
-:Version: 0.1.1
-:Docs: http://djangocms-blogit.readthedocs.org/
+:Version: 0.2.0
 :Download: http://pypi.python.org/pypi/djangocms-blogit/
 :Source: http://github.com/dinoperovic/djangocms-blogit/
+:Docs: http://djangocms-blogit.readthedocs.org/
 :Dev Status: Alpha
 
 
 Dependencies
 ------------
 
-* `django-cms`_ == 2.4.3
-* `django-filer`_ == 0.9.5
-* `django-hvad`_ == 0.3
-* `django-taggit`_ == 0.10
+* `django-cms`_ >= 3.0.0
+* `django-filer`_ >= 0.9.5
+* `django-hvad`_ >= 0.4.0
+* `django-taggit`_ >= 0.10
 
 Installation
 ------------
@@ -30,7 +30,9 @@ To install ``djangocms-blogit`` with ``pip`` run::
 Setup
 -------------
 
-Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``::
+Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``:
+
+.. code:: python
 
     INSTALLED_APPS = (
         ...
@@ -45,24 +47,15 @@ Settings
 -------------
 You can browse all the setings in a `settings.py`_ file.
 
-**Url translation example**::
+**Url translation example**:
+
+.. code:: python
 
     BLOGIT_CATEGORY_URL_TRANSLATION = (
         ('en', 'category'),
         ('hr', 'kategorija'),
         ...
     )
-
-
-Versions
--------------
-0.1.0 - Alpha release
-    To migrate from earlier versions using south run **(some fields may be lost)**::
-
-        $ pip install --upgrade djangocms-blogit==0.0.99
-        $ python manage.py migrate blogit
-        $ pip install --upgrade djangocms-blogit==0.1.0
-        $ python manage.py migrate blogit 0001 --fake --delete-ghost-migrations
 
 
 

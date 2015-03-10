@@ -1,6 +1,8 @@
 Changelog
 #########
 
+0.2.1
+    Added support for django 1.7
 
 0.2.0
     Added support for django CMS 3.x.

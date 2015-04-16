@@ -14,10 +14,10 @@ import taggit.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taggit', '0001_initial'),
+        ('taggit', '__latest__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('filer', '0002_auto_20150416_1713'),
-        ('cms', '0004_auto_20150416_1713'),
+        ('filer', '__latest__'),
+        ('cms', '__latest__'),
     ]
 
     operations = [

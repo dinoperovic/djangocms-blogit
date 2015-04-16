@@ -1,6 +1,9 @@
 Changelog
 #########
 
+0.3.2
+    + Migration file dependencies fix
+
 0.3.1
     + Update migration file
     + Fixes

@@ -12,15 +12,15 @@ A simple blog app for `django-cms`_.
 
 
 Dependencies
-------------
+############
 
 * `django-cms`_ >= 3.0.0
 * `django-filer`_ >= 0.9.5
-* `django-hvad`_ >= 0.4.0
+* `django-parler`_ >= 1.4
 * `django-taggit`_ >= 0.10
 
 Installation
-------------
+############
 
 To install ``djangocms-blogit`` with ``pip`` run::
 
@@ -28,7 +28,7 @@ To install ``djangocms-blogit`` with ``pip`` run::
 
 
 Setup
--------------
+#####
 
 Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``:
 
@@ -36,7 +36,7 @@ Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``:
 
     INSTALLED_APPS = (
         ...
-        'hvad',
+        'parler',
         'taggit',
         'blogit',
         ...
@@ -44,18 +44,16 @@ Setup `django-cms`_ and `django-filer`_ than add to ``INSTALLED_APPS``:
 
 
 Settings
--------------
+########
 You can browse all the setings in a `settings.py`_ file.
 
-**Url translation example**:
 
-.. code:: python
+Changelog
+#########
 
-    BLOGIT_CATEGORY_URL_TRANSLATION = (
-        ('en', 'category'),
-        ('hr', 'kategorija'),
-        ...
-    )
+0.3.0
+    + Simplified models.
+    + Refactored and not compatible with earlier versions.
 
 
 

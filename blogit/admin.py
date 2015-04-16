@@ -1,235 +1,85 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
-from django.conf.urls import url
-from django.http import HttpResponseRedirect
 from django.contrib import admin
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from hvad.admin import TranslatableAdmin
+from easy_thumbnails.files import get_thumbnailer
+from parler.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import (
     PlaceholderAdminMixin, FrontendEditableAdminMixin)
 
-from blogit.models import AuthorLink, Author, Category, Tag, TaggedPost, Post
-from blogit.utils.image import thumb
+from blogit.models import Category, Post
 
 
-class AuthorLinkInline(admin.TabularInline):
-    model = AuthorLink
-    extra = 0
+class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
+                    TranslatableAdmin, admin.ModelAdmin):
 
-
-class AuthorAdmin(
-        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
-        admin.ModelAdmin):
     list_display = (
-        'get_full_name', 'slug', 'email', 'all_translations',
-        'get_image')
-    frontend_editable_fields = (
-        'slug', 'user', 'first_name', 'last_name', 'email', 'picture')
-    inlines = (AuthorLinkInline,)
+        'name', 'slug', 'date_added', 'get_number_of_posts',
+        'language_column')
 
-    def __init__(self, *args, **kwargs):
-        super(AuthorAdmin, self).__init__(*args, **kwargs)
-        self.fieldsets = (
-            (None, {
-                'fields': ('slug', 'user'),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-            (_('Personal Info'), {
-                'fields': ('first_name', 'last_name', 'email', 'picture'),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-            (None, {
-                'fields': ('description',),
-            }),
-        )
+    list_filter = ('active', 'date_added', 'last_modified')
+    readonly_fields = ('date_added', 'last_modified')
+    frontend_editable_fields = ('name', 'slug', 'description', 'parent')
 
-    def get_image(self, obj):
-        # Returns a thumbnail to display in list_display.
-        if obj.picture:
-            return '<img src="{}">'.format(thumb(obj.picture, '72x72'))
-        return None
-    get_image.short_description = _('picture')
-    get_image.allow_tags = True
+    declared_fieldsets = (
+        (None, {'fields': ('name', 'slug', 'description')}),
+        (None, {'fields': ('active', 'date_added', 'last_modified')}),
+        (None, {'fields': ('parent', )}),
+    )
 
-    def get_full_name(self, obj):
-        # Returns authors full name.
-        return obj.get_full_name()
-    get_full_name.short_description = _('full name')
-
-
-class CategoryAdmin(
-        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
-        admin.ModelAdmin):
-    list_display = (
-        'get_title', 'get_slug', 'date_created', 'get_number_of_posts',
-        'all_translations')
-    list_filter = ('date_created', 'last_modified')
-    readonly_fields = ('last_modified',)
-    frontend_editable_fields = (
-        'title', 'slug', 'parent', 'date_created', 'last_modified')
-
-    def __init__(self, *args, **kwargs):
-        super(CategoryAdmin, self).__init__(*args, **kwargs)
-        self.prepopulated_fields = {'slug': ('title',)}
-        self.fieldsets = (
-            (None, {
-                'fields': ('title', 'slug'),
-            }),
-            (_('Common Settings'), {
-                'fields': ('parent',),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-            (_('Date Information'), {
-                'fields': ('date_created', 'last_modified'),
-                'classes': ('collapse',),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-        )
-
-    def get_title(self, obj):
-        # Returns translated title field.
-        return obj.__str__()
-    get_title.short_description = _('title')
-
-    def get_slug(self, obj):
-        # Returns translated slug field.
-        return obj.get_slug()
-    get_slug.short_description = _('slug')
+    def get_prepopulated_fields(self, request, obj=None):
+        return {'slug': ('name', )}
 
     def get_number_of_posts(self, obj):
-        # Returns count posts in current category.
-        return Post.objects.public().filter(category=obj).count()
-    get_number_of_posts.short_description = _('number of posts')
+        return Post.objects.language().published(category=obj).count()
+    get_number_of_posts.short_description = _('Number of Posts')
 
 
-class TaggedPostInline(admin.TabularInline):
-    model = TaggedPost
-    extra = 0
+class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
+                TranslatableAdmin, admin.ModelAdmin):
 
-
-class TagAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
-    inlines = (TaggedPostInline,)
-    list_display = ('name', 'slug', 'get_number_of_posts_tagged')
-    search_fields = ('name',)
-    prepopulated_fields = {'slug': ('name',)}
-    frontend_editable_fields = ('name', 'slug')
-
-    def get_number_of_posts_tagged(self, obj):
-        return TaggedPost.objects.filter(tag=obj).count()
-    get_number_of_posts_tagged.short_description = _('posts tagged')
-
-
-class PostAdmin(
-        TranslatableAdmin, FrontendEditableAdminMixin, PlaceholderAdminMixin,
-        admin.ModelAdmin):
     list_display = (
-        'get_title', 'get_slug', 'category', 'author', 'date_published',
-        'all_translations', 'get_is_public', 'get_image')
+        'title', 'slug', 'category', 'author', 'date_published',
+        'language_column', 'get_image')
+
     list_filter = (
-        'date_published', 'date_created', 'last_modified', 'category',
-        'author')
-    readonly_fields = ('date_created', 'last_modified')
+        'active', 'date_published', 'date_added', 'last_modified',
+        'category', 'author')
+
+    readonly_fields = ('date_added', 'last_modified')
+
     frontend_editable_fields = (
-        'title', 'slug', 'is_public', 'subtitle', 'description', 'tags',
-        'category', 'author', 'featured_image', 'date_published',
-        'date_created', 'last_modified', 'meta_title', 'meta_description',
-        'meta_keywords')
-    actions = ['make_public', 'make_hidden']
+        'title', 'slug', 'description', 'category', 'author',
+        'featured_image', 'date_published')
 
-    def __init__(self, *args, **kwargs):
-        super(PostAdmin, self).__init__(*args, **kwargs)
-        self.prepopulated_fields = {'slug': ('title',)}
-        self.fieldsets = (
-            (None, {
-                'fields': ('title', 'slug', 'is_public'),
-            }),
-            (None, {
-                'fields': ('subtitle', 'description', 'tags'),
-            }),
-            (_('Common Settings'), {
-                'fields': (
-                    'category', 'author', 'featured_image'),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-            (_('Date Information'), {
-                'fields': ('date_published', 'date_created', 'last_modified'),
-                'classes': ('collapse',),
-                'description': _(
-                    'These fields are the same across all languages.'),
-            }),
-            (_('SEO Settings'), {
-                'fields': ('meta_title', 'meta_description', 'meta_keywords'),
-                'classes': ('collapse',),
-            }),
-        )
+    declared_fieldsets = (
+        (None, {'fields': ('title', 'slug')}),
+        (None, {'fields': (
+            'active', 'date_added', 'last_modified', 'date_published')}),
+        (None, {'fields': ('description', 'tags')}),
+        (None, {'fields': ('author', 'category', 'featured_image')}),
+    )
 
-    def get_urls(self):
-        # Add custom admin urls.
-        urls = super(PostAdmin, self).get_urls()
-        post_admin_urls = [
-            url(r'^(?P<pk>\d+)/hide/$',
-                self.admin_site.admin_view(self.hide),
-                name='blogit_post_hide'),
-        ]
-        return post_admin_urls + urls
-
-    def hide(self, request, pk):
-        # Hide post view.
-        obj = get_object_or_404(Post, pk=pk)
-        obj.is_public = False
-        obj.save()
-
-        return HttpResponseRedirect(reverse('blogit_post_list'))
+    def get_prepopulated_fields(self, request, obj=None):
+        return {'slug': ('title', )}
 
     def get_image(self, obj):
-        # Returns a thumbnail to display in list_display.
-        if obj.featured_image:
-            return '<img src="{}">'.format(thumb(obj.featured_image, '72x72'))
-        return None
-    get_image.short_description = _('featured image')
+        try:
+            options = {
+                'size': [72, 72],
+                'crop': True,
+                'upscale': True,
+            }
+            thumbnailer = get_thumbnailer(obj.featured_image)
+            thumb = thumbnailer.get_thumbnail(options)
+            return '<img src="{}">'.format(thumb.url)
+        except (IOError, ValueError):
+            return None
+    get_image.short_description = _('Featured Image')
     get_image.allow_tags = True
 
-    def get_title(self, obj):
-        # Returns translated title field.
-        return obj.__str__()
-    get_title.short_description = _('title')
 
-    def get_slug(self, obj):
-        # Returns translated slug field.
-        return obj.get_slug()
-    get_slug.short_description = _('slug')
-
-    def get_is_public(self, obj):
-        # Returns translated slug field.
-        return obj.is_public
-    get_is_public.boolean = True
-    get_is_public.short_description = _('is public')
-
-    def make_public(self, request, queryset):
-        # Marks selected posts as public.
-        for obj in queryset:
-            obj.is_public = True
-            obj.save()
-    make_public.short_description = _('Mark selected posts as public')
-
-    def make_hidden(self, request, queryset):
-        # Marks selected posts as hidden.
-        for obj in queryset:
-            obj.is_public = False
-            obj.save()
-    make_hidden.short_description = _('Mark selected posts as hidden')
-
-
-admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(Tag, TagAdmin)
 admin.site.register(Post, PostAdmin)

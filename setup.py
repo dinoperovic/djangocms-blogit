@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import os
@@ -22,7 +22,7 @@ setup(
     install_requires=(
         'django-cms>=3.0.0',
         'django-filer>=0.9.5',
-        'django-hvad>=0.4.0',
+        'django-parler>=1.4',
         'django-taggit>=0.10',
     ),
     include_package_data=True,
@@ -38,6 +38,6 @@ setup(
     ],
     test_suite='runtests.main',
     tests_require=(
-        'django-nose==1.2',
+        'django-nose>=1.2',
     ),
 )

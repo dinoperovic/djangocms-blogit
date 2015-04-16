@@ -10,11 +10,9 @@ from django.views.generic.dates import (
 from django.utils.translation import ugettext_lazy as _
 
 from blogit import settings as bs
-from blogit.utils.translation import check_translation_or_404
-from blogit.models import Author, Category, Tag, Post
+from blogit.models import Category, Post
 
 
-# Mixins
 class ToolbarMixin(object):
     def get(self, request, *args, **kwargs):
         response = super(ToolbarMixin, self).get(request, *args, **kwargs)
@@ -33,133 +31,37 @@ class ToolbarMixin(object):
 
 class PostListMixin(object):
     model = Post
-    template_name = bs.POST_LIST_TEMPLATE
-    context_object_name = 'posts'
+    template_name = 'blogit/post_list.html'
     paginate_by = bs.POSTS_PER_PAGE
     filters = {}
 
     def get_queryset(self):
-        qs = self.model.objects.public().filter(**self.filters)
-        return qs.order_by('-date_published')
+        return Post.objects.language().published(**self.filters)
 
 
-class PostDateMixin(object):
-    date_field = 'date_published'
-    month_format = bs.URL_MONTH_FORMAT
-    year_format = bs.URL_YEAR_FORMAT
-    day_format = bs.URL_DAY_FORMAT
-    make_object_list = True
-    allow_future = True
-
-
-class PostDetailMixin(ToolbarMixin):
-    model = Post
-    template_name = bs.POST_DETAIL_TEMPLATE
-    context_object_name = 'post'
-    slug_field = 'slug'
-
-    def get_queryset(self):
-        return self.model.objects.public()
-
-    def update_menu(self, menu, obj):
-        menu.add_break()
-        url = reverse(
-            'admin:blogit_post_change', args=[self.object.pk])
-        menu.add_modal_item(_('Edit this Post'), url=url)
-        menu.add_break()
-
-        url = reverse('admin:blogit_post_hide', args=[self.object.pk])
-        menu.add_link_item(_('Hide Post'), url=url)
-        url = reverse(
-            'admin:blogit_post_delete', args=[self.object.pk])
-        menu.add_modal_item(_('Delete Post'), url=url)
-
-
-class ArchiveListMixin(PostDateMixin, PostListMixin):
-    template_name = bs.ARCHIVE_LIST_TEMPLATE
-
-
-# Author list.
-class AuthorListView(ListView):
-    model = Author
-    template_name = bs.AUTHOR_LIST_TEMPLATE
-    context_object_name = 'authors'
-    paginate_by = bs.AUTHORS_PER_PAGE
-
-    def get_queryset(self):
-        return self.model.objects.language().all()
-
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, kwargs.get('url'))
-
-        return super(AuthorListView, self).get(request, *args, **kwargs)
-
-
-# Author detail.
-class AuthorDetailView(ToolbarMixin, DetailView):
-    model = Author
-    template_name = bs.AUTHOR_DETAIL_TEMPLATE
-    context_object_name = 'author'
-    slug_field = 'slug'
-
-    def get_queryset(self):
-        return self.model.objects.language().all()
-
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.AUTHOR_URL, bs.AUTHOR_URL_TRANSLATION, kwargs.get('url'))
-
-        return super(AuthorDetailView, self).get(request, *args, **kwargs)
-
-    def update_menu(self, menu, obj):
-        menu.add_break()
-        url = reverse(
-            'admin:blogit_author_change', args=[self.object.pk])
-        menu.add_modal_item(_('Edit this Author'), url=url)
-        menu.add_break()
-        url = reverse(
-            'admin:blogit_author_delete', args=[self.object.pk])
-        menu.add_modal_item(_('Delete Author'), url=url)
-
-
-# Category list.
+# Category views.
 class CategoryListView(ListView):
     model = Category
-    template_name = bs.CATEGORY_LIST_TEMPLATE
-    context_object_name = 'categories'
-    paginate_by = bs.CATEGORIES_PER_PAGE
+    template_name = 'blogit/category_list.html'
 
     def get_queryset(self):
-        return self.model.objects.language().all()
-
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
-
-        return super(CategoryListView, self).get(request, *args, **kwargs)
+        return self.model.objects.language().filter(active=True)
 
 
-# Category detail.
 class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
-    template_name = bs.CATEGORY_DETAIL_TEMPLATE
+    template_name = 'blogit/category_detail.html'
 
     def get_context_data(self, **kwargs):
-        # Adds current category to context.
         kwargs.update({'category': self.object})
         return super(CategoryDetailView, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.CATEGORY_URL, bs.CATEGORY_URL_TRANSLATION, kwargs.get('url'))
-
-        # Add category filter to posts.
         try:
             self.object = Category.objects.language().get(
-                slug=kwargs.get('slug'))
-            self.filters = {'category': self.object}
+                active=True, translations__slug=kwargs.get('slug'))
+            self.filters = {'category_id': self.object.pk}
         except Category.DoesNotExist:
-            raise Http404()
+            raise Http404
 
         return super(CategoryDetailView, self).get(request, *args, **kwargs)
 
@@ -174,56 +76,19 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
         menu.add_modal_item(_('Delete Category'), url=url)
 
 
-# Tag list.
-class TagListView(ListView):
-    model = Tag
-    template_name = bs.TAG_LIST_TEMPLATE
-    context_object_name = 'tags'
-    paginate_by = bs.TAGS_PER_PAGE
-
-    def get_queryset(self):
-        return self.model.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.TAG_URL, bs.TAG_URL_TRANSLATION, kwargs.get('url'))
-
-        return super(TagListView, self).get(request, *args, **kwargs)
+class PostDateMixin(object):
+    date_field = 'date_published'
+    year_format = '%Y'
+    month_format = '%m'
+    day_format = '%d'
+    make_object_list = True
+    allow_future = True
 
 
-# Tag detail.
-class TagDetailView(ToolbarMixin, PostListMixin, ListView):
-    template_name = bs.TAG_DETAIL_TEMPLATE
-
-    def get_context_data(self, **kwargs):
-        # Adds current tag to context.
-        kwargs.update({'tag': self.object})
-        return super(TagDetailView, self).get_context_data(**kwargs)
-
-    def get(self, request, *args, **kwargs):
-        check_translation_or_404(
-            bs.TAG_URL, bs.TAG_URL_TRANSLATION, kwargs.get('url'))
-
-        try:
-            self.object = Tag.objects.get(slug=kwargs.get('slug'))
-            self.filters = {'tags__slug__iexact': kwargs.get('slug')}
-        except Tag.DoesNotExist:
-            raise Http404()
-
-        return super(TagDetailView, self).get(request, *args, **kwargs)
-
-    def update_menu(self, menu, obj):
-        menu.add_break()
-        url = reverse(
-            'admin:blogit_tag_change', args=[self.object.pk])
-        menu.add_modal_item(_('Edit this Tag'), url=url)
-        menu.add_break()
-        url = reverse(
-            'admin:blogit_tag_delete', args=[self.object.pk])
-        menu.add_modal_item(_('Delete Tag'), url=url)
+class ArchiveListMixin(PostDateMixin, PostListMixin):
+    template_name = 'blogit/post_list.html'
 
 
-# Post archives list.
 class PostYearArchiveView(ArchiveListMixin, YearArchiveView):
     pass
 
@@ -236,12 +101,30 @@ class PostDayArchiveView(ArchiveListMixin, DayArchiveView):
     pass
 
 
-# Post list.
 class PostListView(PostListMixin, ListView):
     pass
 
 
-# Post detail.
+class PostDetailMixin(ToolbarMixin):
+    model = Post
+    template_name = 'blogit/post_detail.html'
+    slug_field = 'translations__slug'
+
+    def get_queryset(self):
+        return Post.objects.language().published()
+
+    def update_menu(self, menu, obj):
+        menu.add_break()
+        url = reverse(
+            'admin:blogit_post_change', args=[self.object.pk])
+        menu.add_modal_item(_('Edit this Post'), url=url)
+        menu.add_break()
+
+        url = reverse(
+            'admin:blogit_post_delete', args=[self.object.pk])
+        menu.add_modal_item(_('Delete Post'), url=url)
+
+
 class PostDetailView(PostDetailMixin, DetailView):
     pass
 

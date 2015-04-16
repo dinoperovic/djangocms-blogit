@@ -59,22 +59,6 @@ INSTALLED_APPS = (
     'blogit',
 )
 
-BLOGIT_AUTHOR_URL_TRANSLATION = (
-    ('en', 'authors'),
-    ('it', 'autori'),
-    ('hr', 'autori'),
-)
-BLOGIT_CATEGORY_URL_TRANSLATION = (
-    ('en', 'categories'),
-    ('it', 'categorie'),
-    ('hr', 'kategorije'),
-)
-BLOGIT_TAG_URL_TRANSLATION = (
-    ('en', 'tags'),
-    ('it', 'tag'),
-    ('hr', 'tagovi'),
-)
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

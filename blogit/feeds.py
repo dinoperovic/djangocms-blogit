@@ -8,8 +8,10 @@ from django.utils.feedgenerator import Rss201rev2Feed, Atom1Feed
 from django.utils.encoding import force_text
 from django.utils.html import escape
 
+from taggit.models import Tag
+
 from blogit import settings as bs
-from blogit.models import Post, Tag
+from blogit.models import Post
 
 
 # Post Rss feed.
@@ -24,7 +26,7 @@ class PostRssFeed(Feed):
 
     def title(self, obj=None):
         title = escape(force_text(bs.TITLE))
-        return '{}: {}'.format(title, obj.name) if obj else title
+        return '{}: {}'.format(title, obj.title) if obj else title
 
     def description(self):
         return force_text(bs.DESCRIPTION)
@@ -34,27 +36,22 @@ class PostRssFeed(Feed):
 
     def items(self, obj=None):
         if obj:
-            items = Post.objects.public().filter(tags=obj)
+            items = Post.objects.language().published(tags=obj)
         else:
-            items = Post.objects.public()
-        return items.order_by('-date_published')[:bs.FEED_LIMIT]
+            items = Post.objects.language().published()
+        return items[:bs.FEED_LIMIT]
 
     def item_description(self, item):
-        return force_text(item.lazy_translation_getter('description'))
+        return force_text(item.safe_translation_getter('description'))
 
     def item_author_email(self, item):
         if item.author:
-            return item.author.get_email()
+            return item.author.email
         return None
 
     def item_author_name(self, item):
         if item.author:
             return item.author.get_full_name()
-        return None
-
-    def item_author_link(self, item):
-        if bs.ADD_AUTHOR_URLS and item.author:
-            return item.author.get_absolute_url()
         return None
 
     def item_pubdate(self, item):

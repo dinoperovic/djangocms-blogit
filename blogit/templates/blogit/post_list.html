@@ -1,0 +1,24 @@
+{% extends "blogit/base.html" %}
+
+{% block body %}
+  {% for object in object_list %}
+    <article>
+      <h2><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h2>
+      <p>{{ object.description }}</p>
+    </article>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      {% for page_number in paginator.page_range %}
+        <li><a href="?page={{ page_number }}"{% if page_obj.number == page_number %} class="active"{% endif %}>{{ page_number }}</a></li>
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  {% endif %}
+{% endblock %}

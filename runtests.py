@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import sys
@@ -13,7 +13,7 @@ def main(verbosity=1, *test_args):
     test_runner = NoseTestSuiteRunner(verbosity)
 
     if not test_args:
-        test_args = ['tests.unit']
+        test_args = ['tests.blogit']
 
     failures = test_runner.run_tests(test_args)
     sys.exit(failures)

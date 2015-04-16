@@ -48,12 +48,10 @@ Settings
 You can browse all the setings in a `settings.py`_ file.
 
 
-Changelog
+Important
 #########
 
-0.3.0
-    + Simplified models.
-    + Refactored and not compatible with earlier versions.
+Backwards incompatible with versions below 0.3.0
 
 
 

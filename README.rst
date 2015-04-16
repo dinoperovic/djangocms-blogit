@@ -60,5 +60,5 @@ Changelog
 .. _settings.py: https://github.com/dinoperovic/djangocms-blogit/blob/master/blogit/settings.py
 .. _django-cms: https://github.com/divio/django-cms
 .. _django-filer: https://github.com/stefanfoulis/django-filer
-.. _django-hvad: https://github.com/kristianoellegaard/django-hvad
+.. _django-parler: https://github.com/edoburu/django-parler
 .. _django-taggit: https://github.com/alex/django-taggit

@@ -36,7 +36,7 @@ class PostListMixin(object):
     filters = {}
 
     def get_queryset(self):
-        return Post.objects.language().published(**self.filters)
+        return Post.objects.translated().published(**self.filters)
 
 
 # Category views.
@@ -45,7 +45,7 @@ class CategoryListView(ListView):
     template_name = 'blogit/category_list.html'
 
     def get_queryset(self):
-        return self.model.objects.language().filter(active=True)
+        return self.model.objects.translated().filter(active=True)
 
 
 class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
@@ -57,7 +57,7 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.object = Category.objects.language().get(
+            self.object = Category.objects.translated().get(
                 active=True, translations__slug=kwargs.get('slug'))
             self.filters = {'category_id': self.object.pk}
         except Category.DoesNotExist:
@@ -111,7 +111,7 @@ class PostDetailMixin(ToolbarMixin):
     slug_field = 'translations__slug'
 
     def get_queryset(self):
-        return Post.objects.language().published()
+        return Post.objects.translated().published()
 
     def update_menu(self, menu, obj):
         menu.add_break()

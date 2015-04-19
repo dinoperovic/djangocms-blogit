@@ -20,9 +20,9 @@ def get_posts(limit=None, category=None):
         else:
             filters['category'] = category
 
-    return Post.objects.language().published(**filters)[:limit]
+    return Post.objects.translated().published(**filters)[:limit]
 
 
 @register.assignment_tag
 def get_categories(limit=None):
-    return Category.objects.language().filter(active=True)[:limit]
+    return Category.objects.translated().filter(active=True)[:limit]

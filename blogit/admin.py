@@ -33,7 +33,7 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         return {'slug': ('name', )}
 
     def get_number_of_posts(self, obj):
-        return Post.objects.language().published(category=obj).count()
+        return Post.objects.translated().published(category=obj).count()
     get_number_of_posts.short_description = _('Number of Posts')
 
 

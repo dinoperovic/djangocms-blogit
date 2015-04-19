@@ -36,9 +36,9 @@ class PostRssFeed(Feed):
 
     def items(self, obj=None):
         if obj:
-            items = Post.objects.language().published(tags=obj)
+            items = Post.objects.translated().published(tags=obj)
         else:
-            items = Post.objects.language().published()
+            items = Post.objects.translated().published()
         return items[:bs.FEED_LIMIT]
 
     def item_description(self, item):

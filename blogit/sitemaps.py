@@ -11,7 +11,7 @@ class BlogitSitemap(Sitemap):
     changefreq = 'weekly'
 
     def items(self):
-        return Post.objects.public()
+        return Post.objects.translated().published()
 
     def lastmod(self, obj):
         return obj.last_modified

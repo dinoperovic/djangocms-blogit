@@ -1,6 +1,9 @@
 Changelog
 #########
 
+0.3.4
+    + Make active boolean work.
+
 0.3.3
     + Fix not displaying correct language on detail view.
 

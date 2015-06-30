@@ -33,7 +33,7 @@ class PostListMixin(object):
     model = Post
     template_name = 'blogit/post_list.html'
     paginate_by = bs.POSTS_PER_PAGE
-    filters = {}
+    filters = {'active': True}
 
     def get_queryset(self):
         return Post.objects.translated().published(**self.filters)

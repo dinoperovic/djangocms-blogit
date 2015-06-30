@@ -12,7 +12,7 @@ register = template.Library()
 
 @register.assignment_tag
 def get_posts(limit=None, category=None):
-    filters = {}
+    filters = {'active': True}
 
     if category:
         if isinstance(category, string_types):

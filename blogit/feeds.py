@@ -3,15 +3,12 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.contrib.syndication.views import Feed
-from django.shortcuts import get_object_or_404
 from django.utils.feedgenerator import Rss201rev2Feed, Atom1Feed
 from django.utils.encoding import force_text
 from django.utils.html import escape
 
-from taggit.models import Tag
-
 from blogit import settings as bs
-from blogit.models import Post
+from blogit.models import Tag, Post
 
 
 # Post Rss feed.
@@ -21,12 +18,15 @@ class PostRssFeed(Feed):
     def get_object(self, request, tag_slug=None):
         # Returns Tag object with 'tag_slug' passed in from the urls.py
         if tag_slug:
-            return get_object_or_404(Tag, slug=tag_slug)
+            try:
+                return Tag.objects.translated(slug=tag_slug).get()
+            except Tag.DoesNotExist:
+                pass
         return None
 
     def title(self, obj=None):
         title = escape(force_text(bs.TITLE))
-        return '{}: {}'.format(title, obj.title) if obj else title
+        return '{}: {}'.format(title, obj.name) if obj else title
 
     def description(self):
         return force_text(bs.DESCRIPTION)

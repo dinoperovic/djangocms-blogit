@@ -11,7 +11,6 @@ from django.utils.encoding import python_2_unicode_compatible
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
 from parler.managers import TranslatableManager, TranslatableQuerySet
-from taggit.managers import TaggableManager
 from cms.models.fields import PlaceholderField
 from filer.fields.image import FilerImageField
 
@@ -54,6 +53,33 @@ class Category(MPTTModel, TranslatableModel):
     def get_absolute_url(self):
         return reverse('blogit_category_detail', kwargs={
             'slug': self.safe_translation_getter('slug')})
+
+
+class Tag(TranslatableModel):
+    """
+    Tag
+    """
+    active = models.BooleanField(
+        _('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
+    date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
+
+    translations = TranslatedFields(
+        name=models.CharField(_('Name'), max_length=255),
+        slug=models.SlugField(_('Slug'), db_index=True),
+        description=models.TextField(_('description'), blank=True),
+        meta={'unique_together': [('slug', 'language_code')]},
+    )
+
+    objects = TranslatableManager()
+
+    class Meta:
+        db_table = 'blogit_tags'
+        verbose_name = _('Tag')
+        verbose_name_plural = _('Tags')
+
+    def __str__(self):
+        return self.safe_translation_getter('name')
 
 
 class PostQuerySet(TranslatableQuerySet):
@@ -100,7 +126,11 @@ class Post(TranslatableModel):
     )
 
     body = PlaceholderField('blogit_post_body', related_name='post_body_set')
-    tags = TaggableManager(blank=True, related_name='blogit_post_tags')
+
+    tags = models.ManyToManyField(
+        Tag, blank=True, null=True,
+        related_name='tagged_posts', verbose_name=_('Tags'))
+
     objects = PostManager()
 
     class Meta:
@@ -124,3 +154,7 @@ class Post(TranslatableModel):
 
         return reverse('blogit_post_detail', kwargs={
             'slug': self.safe_translation_getter('slug')})
+
+    @property
+    def name(self):
+        return self.safe_translation_getter('title')

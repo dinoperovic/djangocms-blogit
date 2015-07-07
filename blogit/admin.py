@@ -9,15 +9,14 @@ from parler.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import (
     PlaceholderAdminMixin, FrontendEditableAdminMixin)
 
-from blogit.models import Category, Post
+from blogit.models import Category, Tag, Post
 
 
 class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                     TranslatableAdmin, admin.ModelAdmin):
 
     list_display = (
-        'name', 'slug', 'date_added', 'get_number_of_posts',
-        'language_column')
+        'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
 
     list_filter = ('active', 'date_added', 'last_modified')
     readonly_fields = ('date_added', 'last_modified')
@@ -34,6 +33,27 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     def get_number_of_posts(self, obj):
         return Post.objects.translated().published(category=obj).count()
+    get_number_of_posts.short_description = _('Number of Posts')
+
+
+class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
+    list_display = (
+        'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
+
+    list_filter = ('active', 'date_added', 'last_modified')
+    readonly_fields = ('date_added', 'last_modified')
+    frontend_editable_fields = ('name', 'slug', 'description', )
+
+    declared_fieldsets = (
+        (None, {'fields': ('name', 'slug', 'description')}),
+        (None, {'fields': ('active', 'date_added', 'last_modified')}),
+    )
+
+    def get_prepopulated_fields(self, request, obj=None):
+        return {'slug': ('name', )}
+
+    def get_number_of_posts(self, obj):
+        return obj.tagged_posts.count()
     get_number_of_posts.short_description = _('Number of Posts')
 
 
@@ -54,12 +74,14 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         'title', 'slug', 'description', 'category', 'author',
         'featured_image', 'date_published')
 
+    filter_horizontal = ('tags', )
+
     declared_fieldsets = (
         (None, {'fields': ('title', 'slug')}),
         (None, {'fields': (
             'active', 'date_added', 'last_modified', 'date_published')}),
-        (None, {'fields': ('description', 'tags')}),
-        (None, {'fields': ('author', 'category', 'featured_image')}),
+        (None, {'fields': ('featured_image', 'description')}),
+        (None, {'fields': ('author', 'category', 'tags')}),
     )
 
     def get_prepopulated_fields(self, request, obj=None):
@@ -82,4 +104,5 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
 
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Post, PostAdmin)

@@ -20,11 +20,6 @@ Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
     BLOGIT_RSS_FEED = True
     BLOGIT_ATOM_FEED = True
     BLOGIT_FEED_LIMIT = 100
-    BLOGIT_FEED_URL = 'feeds'
-
-.. Note::
-    ``BLOGIT_FEED_URL`` value should be slugified. (Use dashes and underscores
-    for spaces, and no special characters).
 
 
 Pagination

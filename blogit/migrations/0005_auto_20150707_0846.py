@@ -12,10 +12,11 @@ def add_tags(apps, schema_editor):
     post_tags_map = {}
     for tag in Tag.objects.all():
         for pk in tag.posts.split(','):
-            pk = int(pk)
-            if pk not in post_tags_map:
-                post_tags_map[pk] = []
-            post_tags_map[pk].append(tag.pk)
+            if pk:
+                pk = int(pk)
+                if pk not in post_tags_map:
+                    post_tags_map[pk] = []
+                post_tags_map[pk].append(tag.pk)
 
     for post_pk, tag_pks in post_tags_map.items():
         post = Post.objects.get(pk=post_pk)

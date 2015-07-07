@@ -4,6 +4,7 @@ Changelog
 0.3.5
     + Create own simple tag model
     + Remove category and feed urls settings and translate them automatically
+    + Don't forget to run ``python manage.py migrate`` when updating.
 
 0.3.4
     + Make active boolean work.

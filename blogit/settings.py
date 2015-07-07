@@ -18,7 +18,6 @@ DESCRIPTION = getattr(
 RSS_FEED = getattr(settings, 'BLOGIT_RSS_FEED', True)
 ATOM_FEED = getattr(settings, 'BLOGIT_ATOM_FEED', True)
 FEED_LIMIT = getattr(settings, 'BLOGIT_FEED_LIMIT', 100)
-FEED_URL = getattr(settings, 'BLOGIT_FEED_URL', 'feeds')
 
 
 # How many posts per page are displayed.

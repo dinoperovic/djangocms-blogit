@@ -39,14 +39,14 @@ pats.extend([
 
 if bs.RSS_FEED:
     pats.extend([
-        url(r'^%s/rss/$' % bs.FEED_URL, PostRssFeed()),
-        url(r'^%s/rss/(?P<tag_slug>[-\w]+)/$' % bs.FEED_URL, PostRssFeed()),
+        url(_(r'^feeds/rss/$'), PostRssFeed()),
+        url(_(r'^feeds/rss/(?P<tag_slug>[-\w]+)/$'), PostRssFeed()),
     ])
 
 if bs.ATOM_FEED:
     pats.extend([
-        url(r'^%s/atom/(?P<tag_slug>[-\w]+)/$' % bs.FEED_URL, PostAtomFeed()),
-        url(r'^%s/atom/$' % bs.FEED_URL, PostAtomFeed())
+        url(_(r'^feeds/atom/(?P<tag_slug>[-\w]+)/$'), PostAtomFeed()),
+        url(_(r'^feeds/atom/$'), PostAtomFeed())
     ])
 
 

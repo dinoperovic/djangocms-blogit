@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.conf.urls import patterns, url
+from django.utils.translation import ugettext_lazy as _
 
 from blogit import settings as bs
 from blogit.views import (
@@ -28,10 +29,10 @@ pats.extend([
 
 
 pats.extend([
-    url(r'^%s/$' % bs.CATEGORY_URL,
+    url(_(r'^categories/$'),
         CategoryListView.as_view(), name='blogit_category_list'),
 
-    url(r'^%s/(?P<slug>[-\w\d]+)/$' % bs.CATEGORY_URL,
+    url(_(r'^categories/(?P<slug>[-\w\d]+)/$'),
         CategoryDetailView.as_view(), name='blogit_category_detail'),
 ])
 

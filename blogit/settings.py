@@ -25,10 +25,6 @@ FEED_URL = getattr(settings, 'BLOGIT_FEED_URL', 'feeds')
 POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 10)
 
 
-# Url strings.
-CATEGORY_URL = getattr(settings, 'BLOGIT_CATEGORY_URL', 'categories')
-
-
 # Show detail url by date.
 POST_DETAIL_DATE_URL = getattr(
     settings, 'BLOGIT_POST_DETAIL_DATE_URL', False)

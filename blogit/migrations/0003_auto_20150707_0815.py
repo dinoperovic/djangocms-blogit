@@ -12,8 +12,11 @@ def create_tags(apps, schema_editor):
     TaggitTag = apps.get_model('taggit', 'Tag')
 
     for tag in TaggitTag.objects.all():
-        post_pks = [str(x) for x in tag.taggit_taggeditem_items.values_list(
-            'object_id', flat=True)]
+        post_pks = []
+        for x in tag.taggit_taggeditem_items.all():
+            if (x.content_type.app_label == 'blogit' and
+                    x.content_type.name == 'Post'):
+                post_pks.append(str(x.object_id))
         t = Tag(posts=','.join(post_pks))
         t.save()
 

@@ -19,10 +19,13 @@ def add_tags(apps, schema_editor):
                 post_tags_map[pk].append(tag.pk)
 
     for post_pk, tag_pks in post_tags_map.items():
-        post = Post.objects.get(pk=post_pk)
-        tags = Tag.objects.filter(pk__in=tag_pks)
-        post.tags.add(*tags)
-        post.save()
+        try:
+            post = Post.objects.get(pk=post_pk)
+            tags = Tag.objects.filter(pk__in=tag_pks)
+            post.tags.add(*tags)
+            post.save()
+        except Post.DoesNotExist:
+            pass
 
 
 class Migration(migrations.Migration):

@@ -1,6 +1,9 @@
 Changelog
 #########
 
+0.3.7
+    + Fix migrations
+
 0.3.6
     + Fix 0005 migration
 

@@ -1,6 +1,9 @@
 Changelog
 #########
 
+0.3.6
+    + Fix 0005 migration
+
 0.3.5
     + Create own simple tag model
     + Remove category and feed urls settings and translate them automatically

@@ -41,7 +41,6 @@ class BlogitToolbar(CMSToolbar):
             menu.add_sideframe_item(_('Categories List'), url=url)
             url = reverse('admin:blogit_category_add')
             menu.add_modal_item(_('Add New Category'), url=url)
-            menu.add_break()
 
         if self.is_current_app:
             current_menu = self.toolbar.get_or_create_menu(

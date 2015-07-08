@@ -84,6 +84,10 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         (None, {'fields': ('status', 'date_published')}),
         (None, {'fields': ('featured_image', 'description')}),
         (None, {'fields': ('author', 'category', 'tags')}),
+        (_('SEO'), {'fields': ('meta_title', 'meta_description'),
+                    'classes': ('collapse',),
+                    'description': _('If left blank, fallbacks to the main '
+                                     'title and description fields')}),
     )
 
     def get_prepopulated_fields(self, request, obj=None):

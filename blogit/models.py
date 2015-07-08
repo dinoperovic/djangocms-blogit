@@ -159,6 +159,11 @@ class Post(TranslatableModel):
         title=models.CharField(_('Title'), max_length=255),
         slug=models.SlugField(_('Slug'), db_index=True),
         description=models.TextField(_('Description'), blank=True),
+        meta_title=models.CharField(
+            _('Meta title'), max_length=255, blank=True),
+        meta_description=models.TextField(
+            _('Meta description'), max_length=155, blank=True,
+            help_text=_('The text displayed in search engines.')),
         meta={'unique_together': [('slug', 'language_code')]},
     )
 
@@ -191,6 +196,13 @@ class Post(TranslatableModel):
 
         return reverse('blogit_post_detail', kwargs={
             'slug': self.safe_translation_getter('slug')})
+
+    def get_meta_title(self):
+        return self.safe_translation_getter('meta_title') or self.name
+
+    def get_meta_description(self):
+        return self.safe_translation_getter('meta_description') or \
+            self.safe_translation_getter('description')
 
     @property
     def name(self):

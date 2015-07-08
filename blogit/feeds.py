@@ -41,14 +41,21 @@ class PostRssFeed(Feed):
         return Post.objects.public().published(**filters)[:bs.FEED_LIMIT]
 
     def item_description(self, item):
+        if bs.FEED_ITEM_DESCRIPTION_FULL:
+            # TODO: render all text plugins from body placeholder
+            pass
         return force_text(item.safe_translation_getter('description'))
 
     def item_author_email(self, item):
+        if bs.FEED_ITEM_AUTHOR_EMAIL is not None:
+            return bs.FEED_ITEM_AUTHOR_EMAIL
         if item.author:
             return item.author.email
         return None
 
     def item_author_name(self, item):
+        if bs.FEED_ITEM_AUTHOR_NAME is not None:
+            return bs.FEED_ITEM_AUTHOR_NAME
         if item.author:
             return item.author.get_full_name()
         return None

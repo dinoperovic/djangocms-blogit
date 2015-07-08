@@ -18,6 +18,11 @@ DESCRIPTION = getattr(
 RSS_FEED = getattr(settings, 'BLOGIT_RSS_FEED', True)
 ATOM_FEED = getattr(settings, 'BLOGIT_ATOM_FEED', True)
 FEED_LIMIT = getattr(settings, 'BLOGIT_FEED_LIMIT', 100)
+FEED_ITEM_AUTHOR_NAME = getattr(settings, 'BLOGIT_FEED_ITEM_AUTHOR_NAME', None)
+FEED_ITEM_AUTHOR_EMAIL = getattr(
+    settings, 'BLOGIT_FEED_ITEM_AUTHOR_EMAIL', None)
+FEED_ITEM_DESCRIPTION_FULL = getattr(
+    settings, 'BLOGIT_FEED_ITEM_DESCRIPTION_FULL', False)
 
 
 # How many posts per page are displayed.

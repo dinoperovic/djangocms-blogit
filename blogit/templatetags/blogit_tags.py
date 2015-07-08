@@ -10,9 +10,10 @@ from blogit.models import Post, Category
 register = template.Library()
 
 
-@register.assignment_tag
-def get_posts(limit=None, category=None):
-    filters = {'active': True}
+@register.assignment_tag(takes_context=True)
+def get_posts(context, limit=None, category=None):
+    request = context['request']
+    filters = {}
 
     if category:
         if isinstance(category, string_types):
@@ -20,9 +21,9 @@ def get_posts(limit=None, category=None):
         else:
             filters['category'] = category
 
-    return Post.objects.translated().published(**filters)[:limit]
+    return Post.objects.published(request, **filters)[:limit]
 
 
 @register.assignment_tag
 def get_categories(limit=None):
-    return Category.objects.translated().filter(active=True)[:limit]
+    return Category.objects.filter(active=True)[:limit]

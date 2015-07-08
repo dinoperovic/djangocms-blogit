@@ -35,11 +35,10 @@ class PostRssFeed(Feed):
         return reverse('blogit_post_list')
 
     def items(self, obj=None):
+        filters = {}
         if obj:
-            items = Post.objects.translated().published(tags=obj)
-        else:
-            items = Post.objects.translated().published()
-        return items[:bs.FEED_LIMIT]
+            filters['tags'] = obj
+        return Post.objects.public().published(**filters)[:bs.FEED_LIMIT]
 
     def item_description(self, item):
         return force_text(item.safe_translation_getter('description'))

@@ -33,10 +33,13 @@ class PostListMixin(object):
     model = Post
     template_name = 'blogit/post_list.html'
     paginate_by = bs.POSTS_PER_PAGE
-    filters = {'active': True}
+
+    def __init__(self, *args, **kwargs):
+        super(PostListMixin, self).__init__(*args, **kwargs)
+        self.filters = {}
 
     def get_queryset(self):
-        return Post.objects.translated().published(**self.filters)
+        return self.model.objects.published(self.request, **self.filters)
 
 
 # Category views.
@@ -45,7 +48,7 @@ class CategoryListView(ListView):
     template_name = 'blogit/category_list.html'
 
     def get_queryset(self):
-        return self.model.objects.translated().filter(active=True)
+        return self.model.objects.filter(active=True)
 
 
 class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
@@ -57,9 +60,9 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.object = Category.objects.translated().get(
-                active=True, translations__slug=kwargs.get('slug'))
-            self.filters = {'category_id': self.object.pk}
+            self.object = Category.objects.translated(
+                slug=kwargs.get('slug')).get(active=True)
+            self.filters['category_id'] = self.object.pk
         except Category.DoesNotExist:
             raise Http404
 
@@ -111,7 +114,7 @@ class PostDetailMixin(ToolbarMixin):
     slug_field = 'translations__slug'
 
     def get_queryset(self):
-        return Post.objects.translated().published()
+        return Post.objects.published(self.request)
 
     def update_menu(self, menu, obj):
         menu.add_break()

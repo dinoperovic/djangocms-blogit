@@ -61,11 +61,11 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                 TranslatableAdmin, admin.ModelAdmin):
 
     list_display = (
-        'title', 'slug', 'category', 'author', 'date_published',
-        'language_column', 'get_image')
+        'title', 'slug', 'category', 'author', 'status', 'date_published',
+        'active', 'language_column', 'get_image')
 
     list_filter = (
-        'active', 'date_published', 'date_added', 'last_modified',
+        'active', 'status', 'date_published', 'date_added', 'last_modified',
         'category', 'author')
 
     readonly_fields = ('date_added', 'last_modified')
@@ -76,8 +76,10 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     filter_horizontal = ('tags', )
 
+    raw_id_fields = ('author', )
+
     declared_fieldsets = (
-        (None, {'fields': ('title', 'slug')}),
+        (None, {'fields': ('title', 'slug', 'status')}),
         (None, {'fields': (
             'active', 'date_added', 'last_modified', 'date_published')}),
         (None, {'fields': ('featured_image', 'description')}),

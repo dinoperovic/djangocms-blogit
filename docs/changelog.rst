@@ -1,6 +1,11 @@
 Changelog
 #########
 
+0.3.8
+    + Add SEO fields
+    + Add extra feed settings
+    + Add status fields, fix active boolean to not display in feeds and detail
+
 0.3.7
     + Fix migrations
 
@@ -10,7 +15,6 @@ Changelog
 0.3.5
     + Create own simple tag model
     + Remove category and feed urls settings and translate them automatically
-    + Don't forget to run ``python manage.py migrate`` when updating.
 
 0.3.4
     + Make active boolean work.

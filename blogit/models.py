@@ -96,24 +96,24 @@ class PostManager(TranslatableManager):
         if request.user and request.user.is_staff:
             statuses.append(Post.DRAFT)
 
-        queryset = self.get_queryset().published(
-            status__in=statuses, active=True, **kwargs)
+        queryset = self.get_queryset().published(status__in=statuses, **kwargs)
 
         if request.user.is_authenticated():
             queryset = queryset | self.private(request.user, **kwargs)
         return queryset
 
     def draft(self, **kwargs):
-        return self.get_queryset().filter(
-            status=Post.DRAFT, active=True, **kwargs)
+        return self.get_queryset().filter(status=Post.DRAFT, **kwargs)
 
     def private(self, user, **kwargs):
         return self.get_queryset().filter(
-            status=Post.PRIVATE, author=user, active=True, **kwargs)
+            status=Post.PRIVATE, author=user, **kwargs)
 
     def public(self, **kwargs):
-        return self.get_queryset().filter(
-            status=Post.PUBLIC, active=True, **kwargs)
+        return self.get_queryset().filter(status=Post.PUBLIC, **kwargs)
+
+    def hidden(self, **kwargs):
+        return self.get_queryset().filter(status=Post.HIDDEN, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -124,15 +124,15 @@ class Post(TranslatableModel):
     DRAFT = 0  # Post is visible to staff
     PRIVATE = 1  # Post is visible to author only
     PUBLIC = 2  # Post is public given that date_published has passed
+    HIDDEN = 3  # Post is hidden from everybody
 
     STATUS_CODES = (
         (DRAFT, _('Draft')),
         (PRIVATE, _('Private')),
         (PUBLIC, _('Public')),
+        (HIDDEN, _('Hidden')),
     )
 
-    active = models.BooleanField(
-        _('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
     date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
 

@@ -62,10 +62,10 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     list_display = (
         'title', 'slug', 'category', 'author', 'status', 'date_published',
-        'active', 'language_column', 'get_image')
+        'language_column', 'get_image')
 
     list_filter = (
-        'active', 'status', 'date_published', 'date_added', 'last_modified',
+        'status', 'date_published', 'date_added', 'last_modified',
         'category', 'author')
 
     readonly_fields = ('date_added', 'last_modified')
@@ -80,7 +80,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     declared_fieldsets = (
         (None, {'fields': ('title', 'slug')}),
-        (None, {'fields': ('active', 'date_added', 'last_modified')}),
+        (None, {'fields': ('date_added', 'last_modified')}),
         (None, {'fields': ('status', 'date_published')}),
         (None, {'fields': ('featured_image', 'description')}),
         (None, {'fields': ('author', 'category', 'tags')}),

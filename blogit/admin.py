@@ -79,9 +79,9 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     raw_id_fields = ('author', )
 
     declared_fieldsets = (
-        (None, {'fields': ('title', 'slug', 'status')}),
-        (None, {'fields': (
-            'active', 'date_added', 'last_modified', 'date_published')}),
+        (None, {'fields': ('title', 'slug')}),
+        (None, {'fields': ('active', 'date_added', 'last_modified')}),
+        (None, {'fields': ('status', 'date_published')}),
         (None, {'fields': ('featured_image', 'description')}),
         (None, {'fields': ('author', 'category', 'tags')}),
     )

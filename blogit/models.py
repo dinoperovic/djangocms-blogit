@@ -207,3 +207,42 @@ class Post(TranslatableModel):
     @property
     def name(self):
         return self.safe_translation_getter('title')
+
+    @property
+    def is_published(self):
+        return (self.status == self.PUBLIC and
+                self.date_published <= timezone.now())
+
+    @property
+    def previous_post(self):
+        return self.previous_next_posts[0]
+
+    @property
+    def next_post(self):
+        return self.previous_next_posts[1]
+
+    @property
+    def previous_next_posts(self):
+        previous_next = getattr(self, 'previous_next', None)
+
+        if previous_next is None:
+            if not self.is_published:
+                previous_next = (None, None)
+                setattr(self, 'previous_next', previous_next)
+                return previous_next
+
+            posts = list(Post.objects.public().published())
+            index = posts.index(self)
+
+            try:
+                previous = posts[index + 1]
+            except IndexError:
+                previous = None
+
+            if index:
+                next = posts[index - 1]
+            else:
+                next = None
+            previous_next = (previous, next)
+            setattr(self, 'previous_next', previous_next)
+        return previous_next

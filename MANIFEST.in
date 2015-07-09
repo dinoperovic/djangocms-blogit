@@ -1,6 +1,7 @@
 include LICENSE
 include README.rst
 recursive-include blogit/templates *
+recursive-include blogit/static *
 recursive-include tests *
 recursive-include requirements *
 recursive-include docs *

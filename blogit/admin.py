@@ -61,7 +61,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                 TranslatableAdmin, admin.ModelAdmin):
 
     list_display = (
-        'title', 'slug', 'category', 'author', 'status', 'date_published',
+        'title', 'slug', 'category', 'author', 'get_status', 'date_published',
         'language_column', 'get_image')
 
     list_filter = (
@@ -90,8 +90,19 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                                      'title and description fields')}),
     )
 
+    class Media:
+        css = {'all': ('blogit/css/blogit.css', ) }
+        js = ('blogit/js/admin_post.js', )
+
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('title', )}
+
+    def get_status(self, obj):
+        status_name = dict(Post.STATUS_CODES)[obj.status]
+        return '<span class="blogit-status-{}">{}</span>'.\
+            format(obj.status, status_name)
+    get_status.short_description = _('Status')
+    get_status.allow_tags = True
 
     def get_image(self, obj):
         try:

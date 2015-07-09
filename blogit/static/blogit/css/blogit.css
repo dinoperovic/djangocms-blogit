@@ -1,0 +1,23 @@
+.blogit-status-0,
+label.required.blogit-status-0 {
+  color: cornflowerblue !important;
+  font-weight: bold;
+}
+
+.blogit-status-1,
+label.required.blogit-status-1 {
+  color: firebrick !important;
+  font-weight: bold;
+}
+
+.blogit-status-2,
+label.required.blogit-status-2 {
+  color: limegreen !important;
+  font-weight: bold;
+}
+
+.blogit-status-3,
+label.required.blogit-status-3 {
+  color: gray !important;
+  font-weight: bold;
+}

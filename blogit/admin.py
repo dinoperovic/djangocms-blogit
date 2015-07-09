@@ -102,6 +102,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         return '<span class="blogit-status-{}">{}</span>'.\
             format(obj.status, status_name)
     get_status.short_description = _('Status')
+    get_status.admin_order_field = 'status'
     get_status.allow_tags = True
 
     def get_image(self, obj):

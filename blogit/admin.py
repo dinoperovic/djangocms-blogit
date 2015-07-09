@@ -90,6 +90,8 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                                      'title and description fields')}),
     )
 
+    actions = ['make_draft', 'make_private', 'make_public', 'make_hidden']
+
     class Media:
         css = {'all': ('blogit/css/blogit.css', ) }
         js = ('blogit/js/admin_post.js', )
@@ -119,6 +121,36 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
             return None
     get_image.short_description = _('Featured Image')
     get_image.allow_tags = True
+
+    def message_user_status(self, request, status, rows_updated):
+        status_name = dict(Post.STATUS_CODES)[status]
+        if rows_updated == 1:
+            message_bit = _('1 post was')
+        else:
+            message_bit = _('%s posts were') % rows_updated
+        self.message_user(
+            request, _('%(posts)s successfully marked as %(status)s.') % {
+                'posts': message_bit, 'status': status_name})
+
+    def make_draft(self, request, queryset):
+        rows_updated = queryset.update(status=Post.DRAFT)
+        self.message_user_status(request, Post.DRAFT, rows_updated)
+    make_draft.short_description = _('Mark selected posts as draft')
+
+    def make_private(self, request, queryset):
+        rows_updated = queryset.update(status=Post.PRIVATE)
+        self.message_user_status(request, Post.PRIVATE, rows_updated)
+    make_private.short_description = _('Mark selected posts as private')
+
+    def make_public(self, request, queryset):
+        rows_updated = queryset.update(status=Post.PUBLIC)
+        self.message_user_status(request, Post.PUBLIC, rows_updated)
+    make_public.short_description = _('Mark selected posts as public')
+
+    def make_hidden(self, request, queryset):
+        rows_updated = queryset.update(status=Post.HIDDEN)
+        self.message_user_status(request, Post.HIDDEN, rows_updated)
+    make_hidden.short_description = _('Mark selected posts as hidden')
 
 
 admin.site.register(Category, CategoryAdmin)

@@ -179,7 +179,7 @@ class Post(TranslatableModel):
         db_table = 'blogit_posts'
         verbose_name = _('Post')
         verbose_name_plural = _('Posts')
-        ordering = ('-date_published', '-date_added')
+        ordering = ('-date_published', )
         get_latest_by = 'date_published'
 
     def __str__(self):

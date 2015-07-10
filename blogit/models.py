@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone

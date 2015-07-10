@@ -1,21 +1,25 @@
 Settings
-########
+========
 
 
 Info
-**********
+----
 
-Thease settings are used to render the proper values in feeds.
-::
+Thease settings are used to render the proper values in feeds:
+
+.. code:: python
+
     BLOGIT_TITLE = 'Blogit'
     BLOGIT_DESCRIPTION = 'This is a blog about everything'
 
 
 Feeds
-*****
+-----
 
 Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
-``/<BLOGIT_FEED_URL>/atom/`` by default. Update feeds using thease settings::
+``/<BLOGIT_FEED_URL>/atom/`` by default. Update feeds using thease settings:
+
+.. code:: python
 
     BLOGIT_RSS_FEED = True
     BLOGIT_ATOM_FEED = True
@@ -26,16 +30,21 @@ Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
 
 
 Pagination
-**********
-Pagination per page::
+----------
+
+Pagination per page:
+
+.. code:: python
 
     BLOGIT_POSTS_PER_PAGE = 5
 
 
 Post url
-********
+--------
 
 By default post detail url is ``/<post_slug>/``. If you want to have a dated
-url like this ``/<year>/<month>/<day>/<post_slug>/``, change this setting::
+url like this ``/<year>/<month>/<day>/<post_slug>/``, change this setting:
+
+.. code:: python
 
     BLOGIT_POST_DETAIL_DATE_URL = False

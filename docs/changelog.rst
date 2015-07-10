@@ -1,5 +1,12 @@
 Changelog
-#########
+=========
+
+0.3.9
+    + Add django-mptt as a requirement
+    + Add actions for changing statuses
+    + Add colors to admin statuses
+    + Add previous and next post as a property
+    + Remove active field, add HIDDEN status instead
 
 0.3.8
     + Add SEO fields

@@ -93,7 +93,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     actions = ['make_draft', 'make_private', 'make_public', 'make_hidden']
 
     class Media:
-        css = {'all': ('blogit/css/blogit.css', ) }
+        css = {'all': ('blogit/css/blogit.css', )}
         js = ('blogit/js/admin_post.js', )
 
     def get_prepopulated_fields(self, request, obj=None):

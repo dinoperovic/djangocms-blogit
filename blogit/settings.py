@@ -25,6 +25,11 @@ FEED_ITEM_DESCRIPTION_FULL = getattr(
     settings, 'BLOGIT_FEED_ITEM_DESCRIPTION_FULL', False)
 
 
+# Sitemap.
+SITEMAP_PRIORITY = getattr(settings, 'BLOGIT_SITEMAP_PRIORITY', 0.5)
+SITEMAP_CHANGEFREQ = getattr(settings, 'BLOGIT_SITEMAP_CHANGEFREQ', 'weekly')
+
+
 # How many posts per page are displayed.
 POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 10)
 

@@ -1,3 +1,4 @@
+/* Status colors */
 .blogit-status-0,
 label.required.blogit-status-0 {
   color: cornflowerblue !important;
@@ -20,4 +21,16 @@ label.required.blogit-status-2 {
 label.required.blogit-status-3 {
   color: gray !important;
   font-weight: bold;
+}
+
+/* Featured image */
+.column-get_image {
+  text-align: center;
+}
+
+.field-get_image {
+  text-align: center;
+  width: 72px;
+  height: 72px;
+  padding: 0 !important;
 }

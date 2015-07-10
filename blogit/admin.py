@@ -119,7 +119,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
             return '<img src="{}">'.format(thumb.url)
         except (IOError, ValueError):
             return None
-    get_image.short_description = _('Featured Image')
+    get_image.short_description = _('Image')
     get_image.allow_tags = True
 
     def message_user_status(self, request, status, rows_updated):

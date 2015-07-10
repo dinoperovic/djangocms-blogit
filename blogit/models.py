@@ -91,13 +91,10 @@ class PostManager(TranslatableManager):
     queryset_class = PostQuerySet
 
     def published(self, request, **kwargs):
-        statuses = [Post.PUBLIC]
-        if request.user and request.user.is_staff:
-            statuses.append(Post.DRAFT)
-
-        queryset = self.get_queryset().published(status__in=statuses, **kwargs)
-
+        queryset = self.public(**kwargs).published()
         if request.user.is_authenticated():
+            if request.user.is_staff:
+                queryset = queryset | self.draft(**kwargs)
             queryset = queryset | self.private(request.user, **kwargs)
         return queryset
 

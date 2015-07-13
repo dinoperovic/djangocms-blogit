@@ -119,7 +119,7 @@ class Post(TranslatableModel):
     """
     DRAFT = 0  # Post is visible to staff
     PRIVATE = 1  # Post is visible to author only
-    PUBLIC = 2  # Post is public given that date_published has passed
+    PUBLIC = 2  # Post is public
     HIDDEN = 3  # Post is hidden from everybody
 
     STATUS_CODES = (
@@ -138,7 +138,7 @@ class Post(TranslatableModel):
                     'to author only, and when public to everyone.'))
 
     date_published = models.DateTimeField(
-        _('Published On'), default=timezone.now)
+        _('Published on'), default=timezone.now)
 
     category = TreeForeignKey(
         Category, blank=True, null=True, on_delete=models.SET_NULL,

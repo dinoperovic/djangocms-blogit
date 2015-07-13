@@ -34,3 +34,9 @@ label.required.blogit-status-3 {
   height: 72px;
   padding: 0 !important;
 }
+
+/* Date published */
+.field-get_date_published img {
+  float: right;
+  padding: 0 10px;
+}

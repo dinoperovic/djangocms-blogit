@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+from django.utils import formats
 
 from easy_thumbnails.files import get_thumbnailer
 from parler.admin import TranslatableAdmin
@@ -61,12 +62,12 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
                 TranslatableAdmin, admin.ModelAdmin):
 
     list_display = (
-        'title', 'slug', 'category', 'author', 'get_status', 'date_published',
+        'get_title', 'get_slug', 'get_status', 'get_date_published',
         'language_column', 'get_image')
 
     list_filter = (
         'status', 'date_published', 'date_added', 'last_modified',
-        'category', 'author')
+        'translations__language_code', 'category', 'author')
 
     readonly_fields = ('date_added', 'last_modified')
 
@@ -77,6 +78,8 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     filter_horizontal = ('tags', )
 
     raw_id_fields = ('author', )
+
+    date_hierarchy = 'date_published'
 
     declared_fieldsets = (
         (None, {'fields': ('title', 'slug')}),
@@ -99,6 +102,18 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('title', )}
 
+    def get_title(self, obj):
+        return obj.name
+    get_title.short_description = _('Title')
+    get_title.admin_order_field = 'translations__title'
+
+    def get_slug(self, obj):
+        return '<a href="{}">{}</a>'.format(
+            obj.get_absolute_url(), obj.safe_translation_getter('slug'))
+    get_slug.short_description = _('Slug')
+    get_slug.admin_order_field = 'translations__slug'
+    get_slug.allow_tags = True
+
     def get_status(self, obj):
         status_name = dict(Post.STATUS_CODES)[obj.status]
         return '<span class="blogit-status-{}">{}</span>'.\
@@ -106,6 +121,17 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     get_status.short_description = _('Status')
     get_status.admin_order_field = 'status'
     get_status.allow_tags = True
+
+    def get_date_published(self, obj):
+        if obj.is_published:
+            string = '{} <img src="/static/admin/img/icon-yes.gif" alt="True">'
+        else:
+            string = '{} <img src="/static/admin/img/icon-no.gif" alt="False">'
+        date = formats.date_format(obj.date_published, 'SHORT_DATETIME_FORMAT')
+        return string.format(date)
+    get_date_published.short_description = _('Published on')
+    get_date_published.admin_order_field = 'date_published'
+    get_date_published.allow_tags = True
 
     def get_image(self, obj):
         try:

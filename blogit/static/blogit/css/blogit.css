@@ -1,3 +1,8 @@
+/* Vertically align list */
+table th, table td {
+  vertical-align: middle;
+}
+
 /* Status colors */
 .blogit-status-0,
 label.required.blogit-status-0 {

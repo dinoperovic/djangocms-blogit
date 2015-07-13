@@ -55,6 +55,7 @@ class Category(MPTTModel, TranslatableModel):
             'slug': self.safe_translation_getter('slug')})
 
 
+@python_2_unicode_compatible
 class Tag(TranslatableModel):
     """
     Tag

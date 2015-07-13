@@ -2,7 +2,7 @@ Changelog
 =========
 
 0.3.9
-    + Changes in admin
+    + Changes in admin layout
     + Add settings for sitemap config
     + Add django-mptt as a requirement
     + Add actions for changing statuses

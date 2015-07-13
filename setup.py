@@ -23,7 +23,6 @@ setup(
         'django-cms>=3.0.0',
         'django-filer>=0.9.5',
         'django-parler>=1.4',
-        'django-taggit>=0.10',
         'django-mptt>=0.6.0',
     ),
     include_package_data=True,

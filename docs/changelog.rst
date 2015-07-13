@@ -1,6 +1,20 @@
 Changelog
 =========
 
+0.4.0
+    + Remove django-taggit from requirements
+    + Fix: admin get_image should fail silently if image is missing
+
+    .. attention::
+
+        In version **0.4.0** django-taggit is removed as a requirement so the migrations history must be cleared.
+        To migrate from **0.3.x** to **0.4.x** follow the steps:
+
+            - install version **0.3.10** and run ``python manage.py migrate blogit``
+            - remove blogit from the migration history. SQL example: ``DELETE FROM django_migrations WHERE app="blogit"``
+            - install version **0.4.0** and run ``python manage.py migrate blogit --fake``
+
+
 0.3.10
     + Remove date_hierarchy from admin (breaks when no pytz)
 

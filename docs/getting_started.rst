@@ -16,7 +16,6 @@ Requirements
 - `django-cms`_ >= 3.0.0
 - `django-filer`_ >= 0.9.5
 - `django-parler`_ >= 1.4
-- `django-taggit`_ >= 0.10
 - `django-mptt`_ >= 0.6.0
 
 Installation
@@ -40,7 +39,6 @@ Setup `django-cms`_ and `django-filer`_ than add to settings:
         ...
         'mptt',
         'parler',
-        'taggit',
         'blogit',
     )
 
@@ -61,5 +59,4 @@ Backwards incompatible with versions below 0.3.0
 .. _django-cms: https://github.com/divio/django-cms
 .. _django-filer: https://github.com/stefanfoulis/django-filer
 .. _django-parler: https://github.com/edoburu/django-parler
-.. _django-taggit: https://github.com/alex/django-taggit
 .. _django-mptt: https://github.com/django-mptt/django-mptt

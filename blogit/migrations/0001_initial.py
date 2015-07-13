@@ -8,16 +8,14 @@ import mptt.fields
 import cms.models.fields
 import django.db.models.deletion
 from django.conf import settings
-import taggit.managers
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('taggit', '__latest__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('filer', '__latest__'),
         ('cms', '__latest__'),
+        ('filer', '__first__'),
     ]
 
     operations = [
@@ -64,18 +62,17 @@ class Migration(migrations.Migration):
             name='Post',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('active', models.BooleanField(default=True, help_text='Is this object active?', verbose_name='Active')),
                 ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Date added')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='Last modified')),
-                ('date_published', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Published On')),
+                ('status', models.IntegerField(default=0, help_text='When draft post is visible to staff only, when private to author only, and when public to everyone.', verbose_name='Status', choices=[(0, 'Draft'), (1, 'Private'), (2, 'Public'), (3, 'Hidden')])),
+                ('date_published', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Published on')),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('body', cms.models.fields.PlaceholderField(related_name='post_body_set', slotname='blogit_post_body', editable=False, to='cms.Placeholder', null=True)),
                 ('category', mptt.fields.TreeForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Category', blank=True, to='blogit.Category', null=True)),
                 ('featured_image', filer.fields.image.FilerImageField(verbose_name='Featured Image', blank=True, to='filer.Image', null=True)),
-                ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', blank=True, help_text='A comma-separated list of tags.', verbose_name='Tags')),
             ],
             options={
-                'ordering': ('-date_published', '-date_added'),
+                'ordering': ('-date_published',),
                 'db_table': 'blogit_posts',
                 'verbose_name': 'Post',
                 'verbose_name_plural': 'Posts',
@@ -91,6 +88,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255, verbose_name='Title')),
                 ('slug', models.SlugField(verbose_name='Slug')),
                 ('description', models.TextField(verbose_name='Description', blank=True)),
+                ('meta_title', models.CharField(max_length=255, verbose_name='Meta title', blank=True)),
+                ('meta_description', models.TextField(help_text='The text displayed in search engines.', max_length=155, verbose_name='Meta description', blank=True)),
                 ('master', models.ForeignKey(related_name='translations', editable=False, to='blogit.Post', null=True)),
             ],
             options={
@@ -102,9 +101,53 @@ class Migration(migrations.Migration):
             },
             bases=(models.Model,),
         ),
+        migrations.CreateModel(
+            name='Tag',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('active', models.BooleanField(default=True, help_text='Is this object active?', verbose_name='Active')),
+                ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Date added')),
+                ('last_modified', models.DateTimeField(auto_now=True, verbose_name='Last modified')),
+            ],
+            options={
+                'db_table': 'blogit_tags',
+                'verbose_name': 'Tag',
+                'verbose_name_plural': 'Tags',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='TagTranslation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language_code', models.CharField(max_length=15, verbose_name='Language', db_index=True)),
+                ('name', models.CharField(max_length=255, verbose_name='Name')),
+                ('slug', models.SlugField(verbose_name='Slug')),
+                ('description', models.TextField(verbose_name='description', blank=True)),
+                ('master', models.ForeignKey(related_name='translations', editable=False, to='blogit.Tag', null=True)),
+            ],
+            options={
+                'managed': True,
+                'db_table': 'blogit_tags_translation',
+                'db_tablespace': '',
+                'default_permissions': (),
+                'verbose_name': 'Tag Translation',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='tagtranslation',
+            unique_together=set([('language_code', 'master'), ('slug', 'language_code')]),
+        ),
         migrations.AlterUniqueTogether(
             name='posttranslation',
             unique_together=set([('language_code', 'master'), ('slug', 'language_code')]),
+        ),
+        migrations.AddField(
+            model_name='post',
+            name='tags',
+            field=models.ManyToManyField(related_name='tagged_posts', null=True, verbose_name='Tags', to='blogit.Tag', blank=True),
+            preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
             name='categorytranslation',

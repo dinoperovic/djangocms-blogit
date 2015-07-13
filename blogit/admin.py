@@ -79,8 +79,6 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     raw_id_fields = ('author', )
 
-    date_hierarchy = 'date_published'
-
     declared_fieldsets = (
         (None, {'fields': ('title', 'slug')}),
         (None, {'fields': ('date_added', 'last_modified')}),

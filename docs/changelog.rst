@@ -1,6 +1,9 @@
 Changelog
 =========
 
+0.3.10
+    + Remove date_hierarchy from admin (breaks when no pytz)
+
 0.3.9
     + Changes in admin layout
     + Add settings for sitemap config

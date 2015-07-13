@@ -3,7 +3,7 @@ djangocms-blogit
 
 A simple blog app for `django-cms`_.
 
-:Version: 0.3.9
+:Version: 0.3.10
 :Download: http://pypi.python.org/pypi/djangocms-blogit/
 :Source: http://github.com/dinoperovic/djangocms-blogit/
 :Docs: http://djangocms-blogit.readthedocs.org/

@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
 
 from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.exceptions import InvalidImageFormatError
 from parler.admin import TranslatableAdmin
 from cms.admin.placeholderadmin import (
     PlaceholderAdminMixin, FrontendEditableAdminMixin)
@@ -141,7 +142,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
             thumbnailer = get_thumbnailer(obj.featured_image)
             thumb = thumbnailer.get_thumbnail(options)
             return '<img src="{}">'.format(thumb.url)
-        except (IOError, ValueError):
+        except (IOError, ValueError, InvalidImageFormatError):
             return None
     get_image.short_description = _('Image')
     get_image.allow_tags = True

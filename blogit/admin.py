@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_static import static
 from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
 
@@ -123,11 +124,11 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     def get_date_published(self, obj):
         if obj.is_published:
-            string = '{} <img src="/static/admin/img/icon-yes.gif" alt="True">'
+            string = '{} <img src="{}/img/icon-yes.gif" alt="True">'
         else:
-            string = '{} <img src="/static/admin/img/icon-no.gif" alt="False">'
+            string = '{} <img src="{}/img/icon-no.gif" alt="False">'
         date = formats.date_format(obj.date_published, 'SHORT_DATETIME_FORMAT')
-        return string.format(date)
+        return string.format(date, static('admin'))
     get_date_published.short_description = _('Published on')
     get_date_published.admin_order_field = 'date_published'
     get_date_published.allow_tags = True

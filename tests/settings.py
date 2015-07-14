@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'blogit',
 )
 
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',

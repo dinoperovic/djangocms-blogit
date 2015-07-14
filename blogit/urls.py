@@ -46,17 +46,17 @@ if bs.RSS_FEED:
 if bs.ATOM_FEED:
     pats.extend([
         url(_(r'^feeds/atom/(?P<tag_slug>[-\w]+)/$'), PostAtomFeed()),
-        url(_(r'^feeds/atom/$'), PostAtomFeed())
+        url(_(r'^feeds/atom/$'), PostAtomFeed()),
     ])
 
 
-if bs.POST_DETAIL_DATE_URL:
-    pats.append(url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
-                    r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
-                    name='blogit_post_detail_date'))
-else:
-    pats.append(url(r'^(?P<slug>[-\w\d]+)/$', PostDetailView.as_view(),
-                name='blogit_post_detail'))
+pats.extend([
+    url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
+        r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
+        name='blogit_post_detail_date'),
+    url(r'^(?P<slug>[-\w\d]+)/$', PostDetailView.as_view(),
+        name='blogit_post_detail'),
+])
 
 
 urlpatterns = patterns('', *pats)

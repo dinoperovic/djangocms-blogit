@@ -11,25 +11,25 @@ from blogit.models import Category, Tag, Post
 from blogit import settings as bs
 
 
-def create_category(name, parent=None):
-    return Category.objects.create(name=name, slug=slugify(name), parent=None)
+def create_category(name, **kwargs):
+    return Category.objects.create(name=name, slug=slugify(name), **kwargs)
 
 
 def create_tag(name):
     return Tag.objects.create(name=name, slug=slugify(name))
 
 
-def create_post(title, date_published, status=0):
-    date_published = timezone.make_aware(
-        date_published, timezone.get_default_timezone())
+def create_post(title, date=None, status=2, **kwargs):
+    if date is None:
+        date = timezone.now()
+    else:
+        date = timezone.make_aware(date, timezone.get_default_timezone())
+
+    kwargs['description'] = title
 
     return Post.objects.create(
-        title=title,
-        slug=slugify(title),
-        date_published=date_published,
-        description=title,
-        status=Post.PUBLIC,
-    )
+        title=title, slug=slugify(title), date_published=date,
+        status=status, **kwargs)
 
 
 class TestCategory(TestCase):

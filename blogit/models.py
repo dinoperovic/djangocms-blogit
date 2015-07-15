@@ -217,22 +217,22 @@ class Post(TranslatableModel):
         if not self.pk:
             return ''
 
-        description = self.safe_translation_getter('description', '')
-        bits = [force_unicode(strip_tags(description))]
+        bits = [self.name]
+        description = self.safe_translation_getter('description')
+        if description:
+            bits.append(force_unicode(strip_tags(description)))
 
         if self.category:
-            bits.extend([
-                force_unicode(self.category.safe_translation_getter('name')),
-                force_unicode(strip_tags(
-                    self.category.safe_translation_getter('description', ''))),
-            ])
+            bits.append(self.category.safe_translation_getter('name'))
+            description = self.category.safe_translation_getter('description')
+            if description:
+                bits.append(force_unicode(strip_tags(description)))
 
         for tag in self.tags.all():
-            bits.extend([
-                force_unicode(tag.safe_translation_getter('name')),
-                force_unicode(strip_tags(
-                    tag.safe_translation_getter('description', ''))),
-            ])
+            bits.append(tag.safe_translation_getter('name'))
+            description = tag.safe_translation_getter('description', '')
+            if description:
+                bits.append(force_unicode(strip_tags(description)))
 
         bits.append(get_text_from_placeholder(self.body, language, request))
         return ' '.join(bits)

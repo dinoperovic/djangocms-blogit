@@ -17,8 +17,8 @@ def create_category(name, **kwargs):
     return Category.objects.create(name=name, slug=slugify(name), **kwargs)
 
 
-def create_tag(name):
-    return Tag.objects.create(name=name, slug=slugify(name))
+def create_tag(name, **kwargs):
+    return Tag.objects.create(name=name, slug=slugify(name), **kwargs)
 
 
 def create_post(title, date=None, status=2, **kwargs):
@@ -72,8 +72,10 @@ class TestPost(TestCase):
 
     def test_get_search_data(self):
         self.test_post.category = create_category('C', description='D')
+        self.test_post.tags.add(create_tag('T'))
         add_plugin(self.test_post.body, 'TextPlugin', 'en', body='Hello')
-        self.assertEquals(self.test_post.get_search_data(), 'Test C D Hello')
+        self.assertEquals(
+            self.test_post.get_search_data(), 'Test Test C D T Hello')
 
     def test_get_meta_title(self):
         self.assertEquals(self.test_post.get_meta_title(), 'Test')

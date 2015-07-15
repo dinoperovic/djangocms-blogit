@@ -11,6 +11,8 @@ def ABS_PATH(*args):
     return os.path.join(ROOT_DIR, *args)
 
 
+SITE_ID = 1
+
 LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', 'English'),

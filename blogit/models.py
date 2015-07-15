@@ -5,13 +5,14 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, override
 from django.utils.encoding import python_2_unicode_compatible
 
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
 from parler.managers import TranslatableManager, TranslatableQuerySet
 from cms.models.fields import PlaceholderField
+from cms.utils.i18n import get_current_language
 from filer.fields.image import FilerImageField
 
 from blogit import settings as bs
@@ -182,17 +183,21 @@ class Post(TranslatableModel):
     def __str__(self):
         return self.safe_translation_getter('title')
 
-    def get_absolute_url(self):
-        if bs.POST_DETAIL_DATE_URL:
-            return reverse('blogit_post_detail_date', kwargs={
-                'year': self.date_published.year,
-                'month': self.date_published.month,
-                'day': self.date_published.day,
-                'slug': self.safe_translation_getter('slug'),
-            })
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_current_language()
 
-        return reverse('blogit_post_detail', kwargs={
-            'slug': self.safe_translation_getter('slug')})
+        with override(language):
+            if bs.POST_DETAIL_DATE_URL:
+                return reverse('blogit_post_detail_date', kwargs={
+                    'year': self.date_published.year,
+                    'month': self.date_published.month,
+                    'day': self.date_published.day,
+                    'slug': self.safe_translation_getter('slug'),
+                })
+
+            return reverse('blogit_post_detail', kwargs={
+                'slug': self.safe_translation_getter('slug')})
 
     def get_meta_title(self):
         return self.safe_translation_getter('meta_title') or self.name

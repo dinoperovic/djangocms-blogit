@@ -7,7 +7,7 @@ import os
 
 
 def main(verbosity=1, *test_args):
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.settings')
 
     from django_nose import NoseTestSuiteRunner
     test_runner = NoseTestSuiteRunner(verbosity)

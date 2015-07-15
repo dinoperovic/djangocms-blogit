@@ -7,6 +7,11 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, override
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.html import strip_tags
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode
 
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
@@ -16,6 +21,8 @@ from cms.utils.i18n import get_current_language
 from filer.fields.image import FilerImageField
 
 from blogit import settings as bs
+from blogit.utils import get_text_from_placeholder
+
 
 USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
@@ -94,7 +101,7 @@ class PostManager(TranslatableManager):
 
     def published(self, request, **kwargs):
         queryset = self.public(**kwargs).published()
-        if request.user.is_authenticated():
+        if hasattr(request, 'user') and request.user.is_authenticated():
             if request.user.is_staff:
                 queryset = queryset | self.draft(**kwargs)
             queryset = queryset | self.private(request.user, **kwargs)
@@ -198,6 +205,36 @@ class Post(TranslatableModel):
 
             return reverse('blogit_post_detail', kwargs={
                 'slug': self.safe_translation_getter('slug')})
+
+    def get_search_data(self, language=None, request=None):
+        """
+        Returns search text data for current object
+        """
+        if not self.pk:
+            return ''
+
+        description = self.safe_translation_getter('description', '')
+        bits = [force_unicode(strip_tags(description))]
+
+        if self.category:
+            bits.extend([
+                force_unicode(self.category.safe_translation_getter('name')),
+                force_unicode(strip_tags(
+                    self.category.safe_translation_getter('description', ''))),
+            ])
+
+        for tag in self.tags.all():
+            bits.extend([
+                force_unicode(tag.safe_translation_getter('name')),
+                force_unicode(strip_tags(
+                    tag.safe_translation_getter('description', ''))),
+            ])
+
+        bits.append(get_text_from_placeholder(self.body, language, request))
+        return ' '.join(bits)
+
+    def save(self, *args, **kwargs):
+        super(Post, self).save(*args, **kwargs)
 
     def get_meta_title(self):
         return self.safe_translation_getter('meta_title') or self.name

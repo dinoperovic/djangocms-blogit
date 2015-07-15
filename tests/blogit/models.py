@@ -7,6 +7,8 @@ from django.test import TestCase
 from django.utils.text import slugify
 from django.utils import timezone
 
+from cms.api import add_plugin
+
 from blogit.models import Category, Tag, Post
 from blogit import settings as bs
 
@@ -67,6 +69,11 @@ class TestPost(TestCase):
         self.assertEquals(
             self.test_post.get_absolute_url(), '/en/2015/4/4/test/')
         bs.POST_DETAIL_DATE_URL = False
+
+    def test_get_search_data(self):
+        self.test_post.category = create_category('C', description='D')
+        add_plugin(self.test_post.body, 'TextPlugin', 'en', body='Hello')
+        self.assertEquals(self.test_post.get_search_data(), 'Test C D Hello')
 
     def test_get_meta_title(self):
         self.assertEquals(self.test_post.get_meta_title(), 'Test')

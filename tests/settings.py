@@ -46,6 +46,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.sessions',
@@ -53,13 +62,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'cms',
+    'treebeard',
     'mptt',
+    'djangocms_text_ckeditor',
     'easy_thumbnails',
     'filer',
-    'hvad',
+    'parler',
     'blogit',
 )
-
 
 CACHES = {
     'default': {

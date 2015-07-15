@@ -2,6 +2,8 @@ Changelog
 =========
 
 0.4.0
+    + Add langauge param to Post's get_absolute_url method
+    + Add get_search_data method to Post
     + Remove django-taggit from requirements
     + Fix: admin get_image should fail silently if image is missing
 
@@ -16,7 +18,7 @@ Changelog
 
 
 0.3.10
-    + Remove date_hierarchy from admin (breaks when no pytz)
+    + Remove date_hierarchy from admin
 
 0.3.9
     + Changes in admin layout

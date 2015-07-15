@@ -58,9 +58,13 @@ class Category(MPTTModel, TranslatableModel):
     def __str__(self):
         return self.safe_translation_getter('name')
 
-    def get_absolute_url(self):
-        return reverse('blogit_category_detail', kwargs={
-            'slug': self.safe_translation_getter('slug')})
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_current_language()
+
+        with override(language):
+            return reverse('blogit_category_detail', kwargs={
+                'slug': self.safe_translation_getter('slug')})
 
 
 @python_2_unicode_compatible
@@ -234,6 +238,7 @@ class Post(TranslatableModel):
         return ' '.join(bits)
 
     def save(self, *args, **kwargs):
+        # TODO: save search data into a field (create the field first).
         super(Post, self).save(*args, **kwargs)
 
     def get_meta_title(self):

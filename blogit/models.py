@@ -15,12 +15,13 @@ except ImportError:
 
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
-from parler.managers import TranslatableManager, TranslatableQuerySet
+from parler.managers import TranslatableManager
 from cms.models.fields import PlaceholderField
 from cms.utils.i18n import get_current_language
 from filer.fields.image import FilerImageField
 
 from blogit import settings as bs
+from blogit.managers import PostManager
 from blogit.utils import get_text_from_placeholder
 
 
@@ -93,36 +94,6 @@ class Tag(TranslatableModel):
 
     def __str__(self):
         return self.safe_translation_getter('name')
-
-
-class PostQuerySet(TranslatableQuerySet):
-    def published(self, **kwargs):
-        return self.filter(date_published__lte=timezone.now, **kwargs)
-
-
-class PostManager(TranslatableManager):
-    queryset_class = PostQuerySet
-
-    def published(self, request, **kwargs):
-        queryset = self.public(**kwargs).published()
-        if hasattr(request, 'user') and request.user.is_authenticated():
-            if request.user.is_staff:
-                queryset = queryset | self.draft(**kwargs)
-            queryset = queryset | self.private(request.user, **kwargs)
-        return queryset
-
-    def draft(self, **kwargs):
-        return self.get_queryset().filter(status=Post.DRAFT, **kwargs)
-
-    def private(self, user, **kwargs):
-        return self.get_queryset().filter(
-            status=Post.PRIVATE, author=user, **kwargs)
-
-    def public(self, **kwargs):
-        return self.get_queryset().filter(status=Post.PUBLIC, **kwargs)
-
-    def hidden(self, **kwargs):
-        return self.get_queryset().filter(status=Post.HIDDEN, **kwargs)
 
 
 @python_2_unicode_compatible

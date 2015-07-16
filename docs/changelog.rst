@@ -4,7 +4,6 @@ Changelog
 
 0.4.1
     + Separate managers from models
-    + Add search_data field and update it on save
 
 0.4.0
     + Add langauge param to Post's get_absolute_url method

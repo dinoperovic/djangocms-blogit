@@ -1,9 +1,11 @@
+########
 Settings
-========
+########
 
 
+====
 Info
-----
+====
 
 Thease settings are used to render the proper values in feeds:
 
@@ -13,8 +15,9 @@ Thease settings are used to render the proper values in feeds:
     BLOGIT_DESCRIPTION = 'This is a blog about everything'
 
 
+=====
 Feeds
------
+=====
 
 Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
 ``/<BLOGIT_FEED_URL>/atom/`` by default. Update feeds using thease settings:
@@ -29,8 +32,9 @@ Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
     BLOGIT_FEED_ITEM_DESCRIPTION_FULL = False
 
 
+==========
 Pagination
-----------
+==========
 
 Pagination per page:
 
@@ -38,9 +42,9 @@ Pagination per page:
 
     BLOGIT_POSTS_PER_PAGE = 5
 
-
+========
 Post url
---------
+========
 
 By default post detail url is ``/<post_slug>/``. If you want to have a dated
 url like this ``/<year>/<month>/<day>/<post_slug>/``, change this setting:

@@ -3,6 +3,7 @@
 *.orig
 .DS_Store
 .coverage
+.tox
 dist/
 *.egg-info/
 docs/_build

@@ -1,5 +1,9 @@
+#########
 Changelog
-=========
+#########
+
+0.4.1
+    + Separate managers from models
 
 0.4.0
     + Add langauge param to Post's get_absolute_url method

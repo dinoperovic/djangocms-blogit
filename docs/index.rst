@@ -1,8 +1,12 @@
-Welcome to djangocms-blogit's documentation!
-============================================
+######
+Blogit
+######
 
+Blogit is a simple blog application for `django CMS <http://django-cms.org>`_.
+
+========
 Contents
---------
+========
 
 .. toctree::
    :maxdepth: 2

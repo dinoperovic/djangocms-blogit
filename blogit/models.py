@@ -144,6 +144,7 @@ class Post(TranslatableModel):
         meta_description=models.TextField(
             _('Meta description'), max_length=155, blank=True,
             help_text=_('The text displayed in search engines.')),
+        search_data=models.TextField(blank=True, editable=False),
         meta={'unique_together': [('slug', 'language_code')]},
     )
 
@@ -209,7 +210,8 @@ class Post(TranslatableModel):
         return ' '.join(bits)
 
     def save(self, *args, **kwargs):
-        # TODO: save search data into a field (create the field first).
+        if bs.UPDATE_SEARCH_DATA_ON_SAVE:
+            self.search_data = self.get_search_data()
         super(Post, self).save(*args, **kwargs)
 
     def get_meta_title(self):

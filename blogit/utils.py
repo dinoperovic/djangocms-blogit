@@ -38,10 +38,11 @@ def get_text_from_placeholder(placeholder, language=None, request=None):
     if not request:
         request = get_request(language)
 
+    bits = []
     plugins = placeholder.cmsplugin_set.filter(language=language)
     for base_plugin in plugins:
         instance, plugin_type = base_plugin.get_plugin_instance()
         if instance is None:
             continue
-        text = instance.render_plugin(context=RequestContext(request))
-    return force_unicode(strip_tags(text))
+        bits.append(instance.render_plugin(context=RequestContext(request)))
+    return force_unicode(strip_tags(' '.join(bits)))

@@ -37,3 +37,8 @@ POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 10)
 # Show detail url by date.
 POST_DETAIL_DATE_URL = getattr(
     settings, 'BLOGIT_POST_DETAIL_DATE_URL', False)
+
+
+# Update search data on save.
+UPDATE_SEARCH_DATA_ON_SAVE = getattr(
+    settings, 'BLOGIT_UPDATE_SEARCH_DATA_ON_SAVE', True)

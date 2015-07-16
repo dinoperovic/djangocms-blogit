@@ -2,7 +2,7 @@
 Blogit
 ######
 
-.. image:: https://img.shields.io/travis/joyent/djangocms-blogit.svg
+.. image:: https://img.shields.io/travis/dinoperovic/djangocms-blogit.svg
     :target: https://travis-ci.org/dinoperovic/djangocms-blogit
 .. image:: https://img.shields.io/pypi/v/djangocms-blogit.svg
     :target: https://pypi.python.org/pypi/djangocms-blogit/

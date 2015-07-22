@@ -4,6 +4,8 @@ Changelog
 
 0.4.1
     + Separate managers from models
+    + Fix post detail view returning multiple objects when different language
+      posts have the same slug
 
 0.4.0
     + Add langauge param to Post's get_absolute_url method

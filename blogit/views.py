@@ -9,6 +9,8 @@ from django.views.generic.dates import (
     YearArchiveView, MonthArchiveView, DayArchiveView, DateDetailView)
 from django.utils.translation import ugettext_lazy as _
 
+from parler.views import TranslatableSlugMixin
+
 from blogit import settings as bs
 from blogit.models import Category, Post
 
@@ -111,7 +113,6 @@ class PostListView(PostListMixin, ListView):
 class PostDetailMixin(ToolbarMixin):
     model = Post
     template_name = 'blogit/post_detail.html'
-    slug_field = 'translations__slug'
 
     def get_queryset(self):
         return Post.objects.published(self.request)
@@ -128,7 +129,7 @@ class PostDetailMixin(ToolbarMixin):
         menu.add_modal_item(_('Delete Post'), url=url)
 
 
-class PostDetailView(PostDetailMixin, DetailView):
+class PostDetailView(PostDetailMixin, TranslatableSlugMixin, DetailView):
     pass
 
 

@@ -4,8 +4,11 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Rss201rev2Feed, Atom1Feed
-from django.utils.encoding import force_text
 from django.utils.html import escape
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_text as force_unicode
 
 from blogit import settings as bs
 from blogit.models import Tag, Post
@@ -25,11 +28,11 @@ class PostRssFeed(Feed):
         return None
 
     def title(self, obj=None):
-        title = escape(force_text(bs.TITLE))
+        title = escape(force_unicode(bs.TITLE))
         return '{}: {}'.format(title, obj.name) if obj else title
 
     def description(self):
-        return force_text(bs.DESCRIPTION)
+        return force_unicode(bs.DESCRIPTION)
 
     def link(self):
         return reverse('blogit_post_list')
@@ -44,7 +47,7 @@ class PostRssFeed(Feed):
         if bs.FEED_ITEM_DESCRIPTION_FULL:
             # TODO: render all text plugins from body placeholder
             pass
-        return force_text(item.safe_translation_getter('description'))
+        return force_unicode(item.safe_translation_getter('description'))
 
     def item_author_email(self, item):
         if bs.FEED_ITEM_AUTHOR_EMAIL is not None:

@@ -3,6 +3,7 @@ Changelog
 #########
 
 0.4.1
+    + Fix force_text to try force_unicode first – in feeds.
     + Separate managers from models
     + Fix post detail view returning multiple objects when different language
       posts have the same slug

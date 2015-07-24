@@ -74,8 +74,7 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
         menu.add_break()
         url = reverse(
             'admin:blogit_category_change', args=[self.object.pk])
-        menu.add_modal_item(_('Edit this Category'), url=url)
-        menu.add_break()
+        menu.add_modal_item(_('Edit Category'), url=url)
         url = reverse(
             'admin:blogit_category_delete', args=[self.object.pk])
         menu.add_modal_item(_('Delete Category'), url=url)
@@ -121,8 +120,7 @@ class PostDetailMixin(ToolbarMixin):
         menu.add_break()
         url = reverse(
             'admin:blogit_post_change', args=[self.object.pk])
-        menu.add_modal_item(_('Edit this Post'), url=url)
-        menu.add_break()
+        menu.add_modal_item(_('Edit Post'), url=url)
 
         url = reverse(
             'admin:blogit_post_delete', args=[self.object.pk])

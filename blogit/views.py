@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from parler.views import TranslatableSlugMixin
 
 from blogit import settings as bs
-from blogit.models import Category, Post
+from blogit.models import Category, Tag, Post
 
 
 class ToolbarMixin(object):
@@ -78,6 +78,42 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
         url = reverse(
             'admin:blogit_category_delete', args=[self.object.pk])
         menu.add_modal_item(_('Delete Category'), url=url)
+
+
+# Tag views.
+class TagListView(ListView):
+    model = Tag
+    template_name = 'blogit/tag_list.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(active=True)
+
+
+class TagDetailView(ToolbarMixin, PostListMixin, ListView):
+    template_name = 'blogit/tag_detail.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({'tag': self.object})
+        return super(TagDetailView, self).get_context_data(**kwargs)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = Tag.objects.translated(
+                slug=kwargs.get('slug')).get(active=True)
+            self.filters['tags__in'] = [self.object]
+        except Tag.DoesNotExist:
+            raise Http404
+
+        return super(TagDetailView, self).get(request, *args, **kwargs)
+
+    def update_menu(self, menu, obj):
+        menu.add_break()
+        url = reverse(
+            'admin:blogit_tag_change', args=[self.object.pk])
+        menu.add_modal_item(_('Edit Tag'), url=url)
+        url = reverse(
+            'admin:blogit_tag_delete', args=[self.object.pk])
+        menu.add_modal_item(_('Delete Tag'), url=url)
 
 
 class PostDateMixin(object):

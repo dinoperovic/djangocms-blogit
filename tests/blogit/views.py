@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from blogit.models import Post
 
-from .models import create_category, create_post
+from .models import create_category, create_tag, create_post
 
 
 class TestCategoryViews(TestCase):
@@ -25,6 +25,26 @@ class TestCategoryViews(TestCase):
         r = self.client.get(reverse('blogit_category_detail', args=['game']))
         self.assertEquals(r.status_code, 200)
         self.assertEquals(r.context[-1]['category'], self.game_cat)
+        self.assertEquals(r.context[-1]['object_list'][0], self.test_post)
+
+
+class TestTagViews(TestCase):
+    def setUp(self):
+        self.test_tag = create_tag('Test')
+        self.test_tag2 = create_tag('Test2')
+        self.test_tag3 = create_tag('Test3')
+        self.test_post = create_post('Test')
+        self.test_post.tags.add(self.test_tag)
+
+    def test_tag_list(self):
+        r = self.client.get(reverse('blogit_tag_list'))
+        self.assertEquals(r.status_code, 200)
+        self.assertEquals(len(r.context[-1]['object_list']), 3)
+
+    def test_tag_detail(self):
+        r = self.client.get(reverse('blogit_tag_detail', args=['test']))
+        self.assertEquals(r.status_code, 200)
+        self.assertEquals(r.context[-1]['tag'], self.test_tag)
         self.assertEquals(r.context[-1]['object_list'][0], self.test_post)
 
 

@@ -53,6 +53,10 @@ class TestTag(TestCase):
     def test__str__(self):
         self.assertEquals(str(self.generic_tag), 'Generic')
 
+    def test_get_absolute_url(self):
+        self.assertEquals(
+            self.generic_tag.get_absolute_url(), '/en/tags/generic/')
+
 
 class TestPost(TestCase):
     def setUp(self):

@@ -95,6 +95,14 @@ class Tag(TranslatableModel):
     def __str__(self):
         return self.safe_translation_getter('name')
 
+    def get_absolute_url(self, language=None):
+        if not language:
+            language = get_current_language()
+
+        with override(language):
+            return reverse('blogit_tag_detail', kwargs={
+                'slug': self.safe_translation_getter('slug')})
+
 
 @python_2_unicode_compatible
 class Post(TranslatableModel):

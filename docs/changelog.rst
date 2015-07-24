@@ -3,6 +3,7 @@ Changelog
 #########
 
 0.4.1
+    + Add tag urls and views
     + Add tags to cms toolbar menu
     + Fix force_text to try force_unicode first – in feeds
     + Separate managers from models

@@ -22,7 +22,9 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     list_display = (
         'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
 
-    list_filter = ('active', 'date_added', 'last_modified')
+    list_filter = (
+        'active', 'date_added', 'last_modified', 'translations__language_code')
+
     readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', 'parent')
     search_fields = ('translations__name', )
@@ -56,7 +58,9 @@ class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
     list_display = (
         'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
 
-    list_filter = ('active', 'date_added', 'last_modified')
+    list_filter = (
+        'active', 'date_added', 'last_modified', 'translations__language_code')
+
     readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', )
     search_fields = ('translations__name', )
@@ -94,7 +98,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
 
     list_filter = (
         'status', 'date_published', 'date_added', 'last_modified',
-        'translations__language_code', 'category', 'author')
+        'translations__language_code')
 
     search_fields = ('translations__title', )
 

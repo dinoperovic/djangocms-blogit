@@ -57,7 +57,7 @@ class Category(MPTTModel, TranslatableModel):
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        return self.safe_translation_getter('name')
+        return self.safe_translation_getter('name', '')
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -93,7 +93,7 @@ class Tag(TranslatableModel):
         verbose_name_plural = _('Tags')
 
     def __str__(self):
-        return self.safe_translation_getter('name')
+        return self.safe_translation_getter('name', '')
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -171,7 +171,7 @@ class Post(TranslatableModel):
         get_latest_by = 'date_published'
 
     def __str__(self):
-        return self.safe_translation_getter('title')
+        return self.name
 
     def get_absolute_url(self, language=None):
         if not language:
@@ -225,7 +225,7 @@ class Post(TranslatableModel):
 
     @property
     def name(self):
-        return self.safe_translation_getter('title')
+        return self.safe_translation_getter('title', '')
 
     @property
     def is_published(self):

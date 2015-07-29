@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
 
@@ -22,21 +23,32 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
 
     list_filter = ('active', 'date_added', 'last_modified')
-    readonly_fields = ('date_added', 'last_modified')
+    readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', 'parent')
 
     declared_fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
         (None, {'fields': ('active', 'date_added', 'last_modified')}),
         (None, {'fields': ('parent', )}),
+        (_('Posts in Category'),
+            {'fields': ('get_posts', ), 'classes': ('collapse', )}),
     )
 
     def get_prepopulated_fields(self, request, obj=None):
         return {'slug': ('name', )}
 
     def get_number_of_posts(self, obj):
-        return Post.objects.translated().published(category=obj).count()
+        return obj.post_set.count()
     get_number_of_posts.short_description = _('Number of Posts')
+
+    def get_posts(self, obj):
+        posts = []
+        for post in obj.post_set.all():
+            posts.append('<a href="{}">{}</a>'.format(reverse(
+                'admin:blogit_post_change', args=[post.pk]), post.name))
+        return '<br>'.join(posts) if posts else None
+    get_posts.short_description = _('Posts')
+    get_posts.allow_tags = True
 
 
 class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
@@ -44,12 +56,14 @@ class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
         'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
 
     list_filter = ('active', 'date_added', 'last_modified')
-    readonly_fields = ('date_added', 'last_modified')
+    readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', )
 
     declared_fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
         (None, {'fields': ('active', 'date_added', 'last_modified')}),
+        (_('Tagged Posts'),
+            {'fields': ('get_posts', ), 'classes': ('collapse', )}),
     )
 
     def get_prepopulated_fields(self, request, obj=None):
@@ -58,6 +72,15 @@ class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
     def get_number_of_posts(self, obj):
         return obj.tagged_posts.count()
     get_number_of_posts.short_description = _('Number of Posts')
+
+    def get_posts(self, obj):
+        posts = []
+        for post in obj.tagged_posts.all():
+            posts.append('<a href="{}">{}</a>'.format(reverse(
+                'admin:blogit_post_change', args=[post.pk]), post.name))
+        return '<br>'.join(posts) if posts else None
+    get_posts.short_description = _('Posts')
+    get_posts.allow_tags = True
 
 
 class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
@@ -87,10 +110,11 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         (None, {'fields': ('status', 'date_published')}),
         (None, {'fields': ('featured_image', 'description')}),
         (None, {'fields': ('author', 'category', 'tags')}),
-        (_('SEO'), {'fields': ('meta_title', 'meta_description'),
-                    'classes': ('collapse',),
-                    'description': _('If left blank, fallbacks to the main '
-                                     'title and description fields')}),
+        (_('SEO'),
+            {'fields': ('meta_title', 'meta_description'),
+             'classes': ('collapse',),
+             'description': _('If left blank, fallbacks to the main '
+                              'title and description fields')}),
     )
 
     actions = ['make_draft', 'make_private', 'make_public', 'make_hidden']

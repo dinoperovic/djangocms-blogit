@@ -3,6 +3,7 @@ Changelog
 #########
 
 0.4.1
+    + Add list of posts in category and tag admin detail
     + Add tag urls and views
     + Add tags to cms toolbar menu
     + Fix force_text to try force_unicode first – in feeds

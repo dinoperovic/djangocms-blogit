@@ -25,6 +25,7 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     list_filter = ('active', 'date_added', 'last_modified')
     readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', 'parent')
+    search_fields = ('translations__name', )
 
     declared_fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
@@ -58,6 +59,7 @@ class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
     list_filter = ('active', 'date_added', 'last_modified')
     readonly_fields = ('date_added', 'last_modified', 'get_posts')
     frontend_editable_fields = ('name', 'slug', 'description', )
+    search_fields = ('translations__name', )
 
     declared_fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
@@ -94,6 +96,8 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         'status', 'date_published', 'date_added', 'last_modified',
         'translations__language_code', 'category', 'author')
 
+    search_fields = ('translations__title', )
+
     readonly_fields = ('date_added', 'last_modified')
 
     frontend_editable_fields = (
@@ -101,7 +105,6 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
         'featured_image', 'date_published')
 
     filter_horizontal = ('tags', )
-
     raw_id_fields = ('author', )
 
     declared_fieldsets = (

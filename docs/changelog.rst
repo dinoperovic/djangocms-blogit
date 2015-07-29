@@ -3,6 +3,7 @@ Changelog
 #########
 
 0.4.1
+    + Enable search in admin list
     + Add list of posts in category and tag admin detail
     + Add tag urls and views
     + Add tags to cms toolbar menu

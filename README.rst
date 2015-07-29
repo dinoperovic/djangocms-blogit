@@ -1,6 +1,6 @@
-######
-Blogit
-######
+################
+djangocms-blogit
+################
 
 .. image:: https://img.shields.io/travis/dinoperovic/djangocms-blogit.svg
     :target: https://travis-ci.org/dinoperovic/djangocms-blogit

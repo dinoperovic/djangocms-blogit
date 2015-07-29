@@ -1,8 +1,8 @@
-######
-Blogit
-######
+################
+djangocms-blogit
+################
 
-Blogit is a simple blog application for `django CMS <http://django-cms.org>`_.
+djangocms-blogit is a simple blog application for `django CMS <http://django-cms.org>`_.
 
 ========
 Contents

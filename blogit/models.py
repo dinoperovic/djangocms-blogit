@@ -5,7 +5,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _, override
+from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
 try:
@@ -16,6 +16,7 @@ except ImportError:
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
 from parler.managers import TranslatableManager
+from parler.utils.context import switch_language
 from cms.models.fields import PlaceholderField
 from cms.utils.i18n import get_current_language
 from filer.fields.image import FilerImageField
@@ -63,7 +64,7 @@ class Category(MPTTModel, TranslatableModel):
         if not language:
             language = get_current_language()
 
-        with override(language):
+        with switch_language(self, language):
             return reverse('blogit_category_detail', kwargs={
                 'slug': self.safe_translation_getter('slug')})
 
@@ -99,7 +100,7 @@ class Tag(TranslatableModel):
         if not language:
             language = get_current_language()
 
-        with override(language):
+        with switch_language(self, language):
             return reverse('blogit_tag_detail', kwargs={
                 'slug': self.safe_translation_getter('slug')})
 
@@ -177,7 +178,7 @@ class Post(TranslatableModel):
         if not language:
             language = get_current_language()
 
-        with override(language):
+        with switch_language(self, language):
             if bs.POST_DETAIL_DATE_URL:
                 return reverse('blogit_post_detail_date', kwargs={
                     'year': self.date_published.year,

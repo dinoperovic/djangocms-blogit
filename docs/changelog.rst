@@ -2,6 +2,9 @@
 Changelog
 #########
 
+0.4.2
+    + Replace override function with parlers switch_language to avoid 404's in some cases.
+
 0.4.1
     + Enable search in admin list
     + Add list of posts in category and tag admin detail

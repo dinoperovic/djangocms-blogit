@@ -2,6 +2,9 @@
 Changelog
 #########
 
+0.4.3
+    + Add support for django CMS 3.2
+
 0.4.2
     + Replace override function with parlers switch_language to avoid 404's in some cases.
 

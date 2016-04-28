@@ -131,7 +131,7 @@ class Post(TranslatableModel):
                     'to author only, and when public to everyone.'))
 
     date_published = models.DateTimeField(
-        _('Published on'), default=timezone.now())
+        _('Published on'), default=timezone.now)
 
     category = TreeForeignKey(
         Category, blank=True, null=True, on_delete=models.SET_NULL,

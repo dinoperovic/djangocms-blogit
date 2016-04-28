@@ -29,7 +29,7 @@ class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     frontend_editable_fields = ('name', 'slug', 'description', 'parent')
     search_fields = ('translations__name', )
 
-    declared_fieldsets = (
+    fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
         (None, {'fields': ('active', 'date_added', 'last_modified')}),
         (None, {'fields': ('parent', )}),
@@ -65,7 +65,7 @@ class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
     frontend_editable_fields = ('name', 'slug', 'description', )
     search_fields = ('translations__name', )
 
-    declared_fieldsets = (
+    fieldsets = (
         (None, {'fields': ('name', 'slug', 'description')}),
         (None, {'fields': ('active', 'date_added', 'last_modified')}),
         (_('Tagged Posts'),
@@ -111,7 +111,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     filter_horizontal = ('tags', )
     raw_id_fields = ('author', )
 
-    declared_fieldsets = (
+    fieldsets = (
         (None, {'fields': ('title', 'slug')}),
         (None, {'fields': ('date_added', 'last_modified')}),
         (None, {'fields': ('status', 'date_published')}),

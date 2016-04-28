@@ -2,11 +2,15 @@
 Changelog
 #########
 
+0.4.4
+    + Add support for Django 1.8.x and 1.9.x, drop support for Django 1.7.x
+    + Migration: remove "null=True" from M2M field
+
 0.4.3
     + Add support for django CMS 3.2
 
 0.4.2
-    + Replace override function with parlers switch_language to avoid 404's in some cases.
+    + Replace override function with parlers switch_language to avoid 404's in some cases
 
 0.4.1
     + Enable search in admin list

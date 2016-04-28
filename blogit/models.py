@@ -159,7 +159,7 @@ class Post(TranslatableModel):
     body = PlaceholderField('blogit_post_body', related_name='post_body_set')
 
     tags = models.ManyToManyField(
-        Tag, blank=True, null=True,
+        Tag, blank=True,
         related_name='tagged_posts', verbose_name=_('Tags'))
 
     objects = PostManager()

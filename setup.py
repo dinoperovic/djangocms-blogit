@@ -20,10 +20,10 @@ setup(
     packages=find_packages(exclude=('tests', 'tests.*')),
     license='BSD',
     install_requires=(
-        'django-cms>=3.0.0',
-        'django-filer>=0.9.5',
-        'django-parler>=1.4',
-        'django-mptt>=0.6.0',
+        'django-cms>=3.2',
+        'django-filer>=1.1',
+        'django-parler>=1.6',
+        'django-mptt>=0.8',
     ),
     include_package_data=True,
     zip_safe=False,
@@ -38,6 +38,6 @@ setup(
     ],
     test_suite='runtests.main',
     tests_require=(
-        'django-nose>=1.2',
+        'django-nose>=1.4',
     ),
 )

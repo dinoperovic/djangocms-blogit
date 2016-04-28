@@ -8,7 +8,7 @@ from parler.managers import TranslatableManager, TranslatableQuerySet
 
 class PostQuerySet(TranslatableQuerySet):
     def published(self, **kwargs):
-        return self.filter(date_published__lte=timezone.now, **kwargs)
+        return self.filter(date_published__lte=timezone.now(), **kwargs)
 
 
 class PostManager(TranslatableManager):

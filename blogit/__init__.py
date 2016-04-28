@@ -7,7 +7,7 @@ Release logic:
  2. git add blogit/__init__.py
  3. git commit -m 'Bump to <version>'
  4. git tag <version>
- 5. git push --tags
+ 5. git push && git push --tags
  6. python setup.py sdist upload
  7. bump the __version__, append ".dev0"
  8. git add blogit/__init__.py

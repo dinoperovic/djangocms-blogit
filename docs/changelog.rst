@@ -2,6 +2,10 @@
 Changelog
 #########
 
+0.4.5
+    + Add settings ``BLOGIT_SINGLE_APPHOOK`` and additional apphooks for other modules.
+      This now allows to specify a separate page apphooks for categories, tags, feeds...
+
 0.4.4
     + Add support for Django 1.8.x and 1.9.x, drop support for Django 1.7.x
     + Migration: remove "null=True" from M2M field

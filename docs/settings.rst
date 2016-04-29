@@ -19,17 +19,13 @@ Thease settings are used to render the proper values in feeds:
 Feeds
 =====
 
-Feeds can be accessed on ``/<BLOGIT_FEED_URL>/rss/`` and
-``/<BLOGIT_FEED_URL>/atom/`` by default. Update feeds using thease settings:
-
 .. code:: python
 
-    BLOGIT_RSS_FEED = True
-    BLOGIT_ATOM_FEED = True
     BLOGIT_FEED_LIMIT = 100
     BLOGIT_FEED_ITEM_AUTHOR_NAME = None  # When none displays author info
     BLOGIT_FEED_ITEM_AUTHOR_EMAIL = None  # When none displays author info
     BLOGIT_FEED_ITEM_DESCRIPTION_FULL = False
+    BLOGIT_FEED_DEFAULT = 'rss'  # [rss|atom]
 
 
 ==========

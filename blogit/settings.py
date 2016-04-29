@@ -15,14 +15,15 @@ DESCRIPTION = getattr(
 
 
 # Feeds.
-RSS_FEED = getattr(settings, 'BLOGIT_RSS_FEED', True)
-ATOM_FEED = getattr(settings, 'BLOGIT_ATOM_FEED', True)
 FEED_LIMIT = getattr(settings, 'BLOGIT_FEED_LIMIT', 100)
 FEED_ITEM_AUTHOR_NAME = getattr(settings, 'BLOGIT_FEED_ITEM_AUTHOR_NAME', None)
 FEED_ITEM_AUTHOR_EMAIL = getattr(
     settings, 'BLOGIT_FEED_ITEM_AUTHOR_EMAIL', None)
 FEED_ITEM_DESCRIPTION_FULL = getattr(
     settings, 'BLOGIT_FEED_ITEM_DESCRIPTION_FULL', False)
+
+# Default feed, redirected to when accesing feeds [rss|atom]
+FEED_DEFAULT = getattr(settings, 'BLOGIT_FEED_DEFAULT', 'rss')
 
 
 # Sitemap.
@@ -37,3 +38,7 @@ POSTS_PER_PAGE = getattr(settings, 'BLOGIT_POSTS_PER_PAGE', 10)
 # Show detail url by date.
 POST_DETAIL_DATE_URL = getattr(
     settings, 'BLOGIT_POST_DETAIL_DATE_URL', False)
+
+
+# Load all urls on a single BlogitApphook.
+SINGLE_APPHOOK = getattr(settings, 'BLOGIT_SINGLE_APPHOOK', True)

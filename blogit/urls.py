@@ -31,9 +31,6 @@ def get_urls(name):
                 name='blogit_post_archive_month'),
             url(r'^(?P<year>\d+)/$', PostYearArchiveView.as_view(),
                 name='blogit_post_archive_year'),
-            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
-                r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
-                name='blogit_post_detail_date'),
         ]
 
     elif name == 'categories':
@@ -86,6 +83,9 @@ def get_urls(name):
     elif name == 'posts':
         return [
             url(regex_list, PostListView.as_view(), name='blogit_post_list'),
+            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
+                r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
+                name='blogit_post_detail_date'),
             url(regex_detail, PostDetailView.as_view(),
                 name='blogit_post_detail'),
         ]

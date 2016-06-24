@@ -4,6 +4,7 @@ Changelog
 
 0.4.7
     + Make multiple apphooks the default
+    + Make detail category view fetch all descendants posts
 
 0.4.6
     + Require django CMS 3.3.x

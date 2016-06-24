@@ -64,7 +64,9 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
         try:
             self.object = Category.objects.translated(
                 slug=kwargs.get('slug')).get(active=True)
-            self.filters['category_id'] = self.object.pk
+            ids = self.object.get_descendants(include_self=True).\
+                values_list('id', flat=True)
+            self.filters['category_id__in'] = ids
         except Category.DoesNotExist:
             raise Http404
 

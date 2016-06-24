@@ -41,4 +41,4 @@ POST_DETAIL_DATE_URL = getattr(
 
 
 # Load all urls on a single BlogitApphook.
-SINGLE_APPHOOK = getattr(settings, 'BLOGIT_SINGLE_APPHOOK', True)
+SINGLE_APPHOOK = getattr(settings, 'BLOGIT_SINGLE_APPHOOK', False)

@@ -13,9 +13,9 @@ class BlogitApphook(CMSApp):
     name = _('Blogit')
 
     def get_urls(self, page=None, language=None, **kwargs):
-        if not bs.SINGLE_APPHOOK:
-            return [get_urls('archive'), get_urls('posts')]
-        return ['blogit.urls']
+        if bs.SINGLE_APPHOOK:
+            return ['blogit.urls']
+        return [get_urls('archive'), get_urls('posts')]
 
 
 class BlogitCategoriesApphook(CMSApp):
@@ -40,6 +40,8 @@ class BlogitFeedsApphook(CMSApp):
 
 
 apphook_pool.register(BlogitApphook)
-apphook_pool.register(BlogitCategoriesApphook)
-apphook_pool.register(BlogitTagsApphook)
-apphook_pool.register(BlogitFeedsApphook)
+
+if not bs.SINGLE_APPHOOK:
+    apphook_pool.register(BlogitCategoriesApphook)
+    apphook_pool.register(BlogitTagsApphook)
+    apphook_pool.register(BlogitFeedsApphook)

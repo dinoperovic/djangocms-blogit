@@ -2,6 +2,9 @@
 Changelog
 #########
 
+0.4.7
+    + Make multiple apphooks the default
+
 0.4.6
     + Require django CMS 3.3.x
 

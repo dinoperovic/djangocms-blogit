@@ -6,8 +6,6 @@ djangocms-blogit
     :target: https://travis-ci.org/dinoperovic/djangocms-blogit
 .. image:: https://img.shields.io/pypi/v/djangocms-blogit.svg
     :target: https://pypi.python.org/pypi/djangocms-blogit/
-.. image:: https://img.shields.io/pypi/dm/djangocms-blogit.svg
-    :target: https://pypi.python.org/pypi/djangocms-blogit/
 
 
 Blogit is a simple blog application for `django CMS <http://django-cms.org>`_.

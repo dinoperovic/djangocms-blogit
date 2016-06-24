@@ -89,3 +89,7 @@ CACHES = {
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',
 )
+
+
+# blogit
+BLOGIT_SINGLE_APPHOOK = True

@@ -2,6 +2,9 @@
 Changelog
 #########
 
+0.4.8
+    + Fix tests settings, update requirements
+
 0.4.7
     + Make multiple apphooks the default
     + Make detail category view fetch all descendants posts

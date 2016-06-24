@@ -2,6 +2,9 @@
 Changelog
 #########
 
+0.4.6
+    + Require django CMS 3.3.x
+
 0.4.5
     + Add settings ``BLOGIT_SINGLE_APPHOOK`` and additional apphooks for other modules.
       This now allows to specify a separate page apphooks for categories, tags, feeds...

@@ -20,7 +20,7 @@ setup(
     packages=find_packages(exclude=('tests', 'tests.*')),
     license='BSD',
     install_requires=(
-        'django-cms>=3.2',
+        'django-cms>=3.3',
         'django-filer>=1.1',
         'django-parler>=1.6',
         'django-mptt>=0.8',

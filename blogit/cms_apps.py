@@ -11,27 +11,32 @@ from blogit.urls import get_urls
 
 class BlogitApphook(CMSApp):
     name = _('Blogit')
-    urls = [get_urls('archive'), get_urls('posts')]
 
-    def __init__(self):
-        super(BlogitApphook, self).__init__()
-        if bs.SINGLE_APPHOOK:
-            self.urls = ['blogit.urls']
+    def get_urls(self, page=None, language=None, **kwargs):
+        if not bs.SINGLE_APPHOOK:
+            return [get_urls('archive'), get_urls('posts')]
+        return ['blogit.urls']
 
 
 class BlogitCategoriesApphook(CMSApp):
     name = _('Blogit Categories')
-    urls = [get_urls('categories')]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [get_urls('categories')]
 
 
 class BlogitTagsApphook(CMSApp):
     name = _('Blogit Tags')
-    urls = [get_urls('tags')]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [get_urls('tags')]
 
 
 class BlogitFeedsApphook(CMSApp):
     name = _('Blogit Feeds')
-    urls = [get_urls('feeds')]
+
+    def get_urls(self, page=None, language=None, **kwargs):
+        return [get_urls('feeds')]
 
 
 apphook_pool.register(BlogitApphook)

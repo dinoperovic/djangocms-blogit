@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
 
+from mptt.admin import DraggableMPTTAdmin
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.exceptions import InvalidImageFormatError
 from parler.admin import TranslatableAdmin
@@ -17,10 +18,11 @@ from blogit.models import Category, Tag, Post
 
 
 class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
-                    TranslatableAdmin, admin.ModelAdmin):
+                    TranslatableAdmin, DraggableMPTTAdmin):
 
     list_display = (
-        'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
+        'tree_actions', 'indented_title', 'name', 'slug', 'date_added',
+        'get_number_of_posts', 'language_column')
 
     list_filter = (
         'active', 'date_added', 'last_modified', 'translations__language_code')

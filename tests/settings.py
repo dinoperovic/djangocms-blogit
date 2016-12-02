@@ -77,7 +77,6 @@ INSTALLED_APPS = (
     'filer',
     'djangocms_text_ckeditor',
     'parler',
-    'adminsortable2',
     'blogit',
 )
 

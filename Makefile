@@ -1,6 +1,11 @@
 clean:
-	rm -rf dist/ build/ .tox/ *.egg-info .coverage .DS_Store
+	rm -rf build dist .tox .cache .eggs *.egg-info .coverage .DS_Store
 	find . -name '*.pyc' -exec rm '{}' ';'
 
-lint:
-	flake8 --exclude=.git,migrations,docs,.tox --max-complexity=10 .
+sort:
+	isort -rc blogit tests -s migrations
+
+coverage:
+	coverage erase
+	coverage run -m pytest
+	coverage report

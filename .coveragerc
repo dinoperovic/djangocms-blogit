@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = blogit
+
+[report]
+show_missing = True

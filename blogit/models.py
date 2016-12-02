@@ -34,14 +34,11 @@ class Category(MPTTModel, TranslatableModel):
     """
     Category
     """
-    active = models.BooleanField(
-        _('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
+    active = models.BooleanField(_('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
     date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
 
-    parent = TreeForeignKey(
-        'self', blank=True, null=True,
-        related_name='children', verbose_name=_('Parent'))
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children', verbose_name=_('Parent'))
 
     translations = TranslatedFields(
         name=models.CharField(_('Name'), max_length=255),
@@ -58,15 +55,14 @@ class Category(MPTTModel, TranslatableModel):
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        return self.safe_translation_getter('name', '')
+        return self.safe_translation_getter('name', any_language=True)
 
     def get_absolute_url(self, language=None):
         if not language:
             language = get_current_language()
 
         with switch_language(self, language):
-            return reverse('blogit_category_detail', kwargs={
-                'slug': self.safe_translation_getter('slug')})
+            return reverse('blogit_category_detail', kwargs={'slug': self.safe_translation_getter('slug')})
 
 
 @python_2_unicode_compatible
@@ -74,8 +70,7 @@ class Tag(TranslatableModel):
     """
     Tag
     """
-    active = models.BooleanField(
-        _('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
+    active = models.BooleanField(_('Active'), default=True, help_text=bs.ACTIVE_FIELD_HELP_TEXT)
     date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
 
@@ -94,15 +89,14 @@ class Tag(TranslatableModel):
         verbose_name_plural = _('Tags')
 
     def __str__(self):
-        return self.safe_translation_getter('name', '')
+        return self.safe_translation_getter('name', any_language=True)
 
     def get_absolute_url(self, language=None):
         if not language:
             language = get_current_language()
 
         with switch_language(self, language):
-            return reverse('blogit_tag_detail', kwargs={
-                'slug': self.safe_translation_getter('slug')})
+            return reverse('blogit_tag_detail', kwargs={'slug': self.safe_translation_getter('slug')})
 
 
 @python_2_unicode_compatible
@@ -125,42 +119,26 @@ class Post(TranslatableModel):
     date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
 
-    status = models.IntegerField(
-        _('Status'), choices=STATUS_CODES, default=DRAFT,
-        help_text=_('When draft post is visible to staff only, when private '
-                    'to author only, and when public to everyone.'))
+    status = models.IntegerField(_('Status'), choices=STATUS_CODES, default=DRAFT, help_text=_(
+        'When draft post is visible to staff only, when private to author only, and when public to everyone.'))
 
-    date_published = models.DateTimeField(
-        _('Published on'), default=timezone.now)
-
-    category = TreeForeignKey(
-        Category, blank=True, null=True, on_delete=models.SET_NULL,
-        verbose_name=_('Category'))
-
-    author = models.ForeignKey(
-        USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL,
-        verbose_name=_('Author'))
-
-    featured_image = FilerImageField(
-        blank=True, null=True, verbose_name=_('Featured Image'))
+    date_published = models.DateTimeField(_('Published on'), default=timezone.now)
+    category = TreeForeignKey(Category, models.SET_NULL, blank=True, null=True, verbose_name=_('Category'))
+    tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_posts', verbose_name=_('Tags'))
+    author = models.ForeignKey(USER_MODEL, models.SET_NULL, blank=True, null=True, verbose_name=_('Author'))
+    featured_image = FilerImageField(blank=True, null=True, verbose_name=_('Featured Image'))
 
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),
         slug=models.SlugField(_('Slug'), db_index=True),
         description=models.TextField(_('Description'), blank=True),
-        meta_title=models.CharField(
-            _('Meta title'), max_length=255, blank=True),
-        meta_description=models.TextField(
-            _('Meta description'), max_length=155, blank=True,
-            help_text=_('The text displayed in search engines.')),
+        meta_title=models.CharField(_('Meta title'), max_length=255, blank=True),
+        meta_description=models.TextField(_('Meta description'), max_length=155, blank=True, help_text=_(
+            'The text displayed in search engines.')),
         meta={'unique_together': [('slug', 'language_code')]},
     )
 
     body = PlaceholderField('blogit_post_body', related_name='post_body_set')
-
-    tags = models.ManyToManyField(
-        Tag, blank=True,
-        related_name='tagged_posts', verbose_name=_('Tags'))
 
     objects = PostManager()
 
@@ -215,23 +193,21 @@ class Post(TranslatableModel):
                 bits.append(force_unicode(strip_tags(description)))
 
         bits.append(get_text_from_placeholder(self.body, language, request))
-        return ' '.join(bits)
+        return ' '.join(bits).strip()
 
     def get_meta_title(self):
         return self.safe_translation_getter('meta_title') or self.name
 
     def get_meta_description(self):
-        return self.safe_translation_getter('meta_description') or \
-            self.safe_translation_getter('description')
+        return self.safe_translation_getter('meta_description') or self.safe_translation_getter('description')
 
     @property
     def name(self):
-        return self.safe_translation_getter('title', '')
+        return self.safe_translation_getter('title', any_language=True)
 
     @property
     def is_published(self):
-        return (self.status == self.PUBLIC and
-                self.date_published <= timezone.now())
+        return self.status == self.PUBLIC and self.date_published <= timezone.now()
 
     @property
     def previous_post(self):

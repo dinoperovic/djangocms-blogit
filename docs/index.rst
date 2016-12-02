@@ -1,23 +1,23 @@
-################
-djangocms-blogit
-################
+Blogit's documentation!
+#######################
 
-djangocms-blogit is a simple blog application for `django CMS <http://django-cms.org>`_.
+**Blogit is a simple blog application for** `djangoCMS <http://django-cms.org>`_.
 
-========
+----
+
 Contents
 ========
 
 .. toctree::
    :maxdepth: 2
 
-   getting_started
-   settings
-   changelog
+   Gettings started <getting_started.rst>
+   Settings <settings.rst>
+   Release notes <release_notes.rst>
 
 
 Indices and tables
-##################
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

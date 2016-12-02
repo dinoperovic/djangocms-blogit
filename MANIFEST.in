@@ -1,9 +1,8 @@
 include AUTHORS
-include LICENSE
+include LICENSE.txt
 include README.rst
-recursive-include blogit/templates *
+include setup.py
+recursive-include blogit *.py
 recursive-include blogit/static *
-recursive-include tests *
-recursive-include requirements *
-recursive-include docs *
+recursive-include blogit/templates *
 recursive-exclude * *.pyc

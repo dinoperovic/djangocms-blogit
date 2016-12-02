@@ -73,10 +73,11 @@ INSTALLED_APPS = (
     'menus',
     'treebeard',
     'mptt',
-    'djangocms_text_ckeditor',
     'easy_thumbnails',
     'filer',
+    'djangocms_text_ckeditor',
     'parler',
+    'adminsortable2',
     'blogit',
 )
 

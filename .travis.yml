@@ -1,11 +1,35 @@
+sudo: false
 language: python
 
-env:
-  - TOX_ENV=py27
-  - TOX_ENV=flake8
+python:
+  - 2.7
+  - 3.4
+  - 3.5
 
-install:
-  - pip install tox
+env:
+  - DJANGO=1.9
+  - DJANGO=1.10
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - env: DJANGO=1.10
+  include:
+  - python: "3.5"
+    env: TOXENV=flake8
+  - python: "3.5"
+    env: TOXENV=docs
+
+before_install: pip install codecov
+install: pip install tox
 
 script:
-  - tox -e $TOX_ENV
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' && $DJANGO == '1.9' ]]; then export TOXENV=py27-django19; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' && $DJANGO == '1.10' ]]; then export TOXENV=py27-django110; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' && $DJANGO == '1.9' ]]; then export TOXENV=py34-django19; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' && $DJANGO == '1.10' ]]; then export TOXENV=py34-django110; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '1.9' ]]; then export TOXENV=py35-django19; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '1.10' ]]; then export TOXENV=py35-django110; fi"
+  - tox -e $TOXENV
+
+after_success: codecov

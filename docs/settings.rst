@@ -1,9 +1,7 @@
-########
 Settings
 ########
 
 
-====
 Info
 ====
 
@@ -15,7 +13,6 @@ Thease settings are used to render the proper values in feeds:
     BLOGIT_DESCRIPTION = 'This is a blog about everything'
 
 
-=====
 Feeds
 =====
 
@@ -28,7 +25,6 @@ Feeds
     BLOGIT_FEED_DEFAULT = 'rss'  # [rss|atom]
 
 
-==========
 Pagination
 ==========
 
@@ -38,7 +34,6 @@ Pagination per page:
 
     BLOGIT_POSTS_PER_PAGE = 5
 
-========
 Post url
 ========
 

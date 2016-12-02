@@ -1,5 +1,4 @@
-django>=1.8,<1.10
-django-nose>=1.4
-djangocms_text_ckeditor
-
 -r base.txt
+pytest-django
+coverage
+djangocms-text-ckeditor

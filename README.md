@@ -1,4 +1,4 @@
-# Shopit
+# Blogit
 
 [![Build Status](https://img.shields.io/travis/dinoperovic/djangocms-blogit.svg)](https://travis-ci.org/dinoperovic/djangocms-blogit)
 [![Codecov](https://img.shields.io/codecov/c/github/dinoperovic/djangocms-blogit.svg)](http://codecov.io/github/dinoperovic/djangocms-blogit)

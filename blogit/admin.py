@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
 
@@ -17,123 +16,79 @@ from cms.admin.placeholderadmin import (
 from blogit.models import Category, Tag, Post
 
 
-class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
-                    TranslatableAdmin, DraggableMPTTAdmin):
+class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableAdmin, DraggableMPTTAdmin):
+    list_display = ['tree_actions', 'indented_title', 'name', 'slug', 'date_added', 'get_number_of_posts',
+                    'language_column']
 
-    list_display = (
-        'tree_actions', 'indented_title', 'name', 'slug', 'date_added',
-        'get_number_of_posts', 'language_column')
+    list_filter = ['active', 'date_added', 'last_modified', 'translations__language_code']
+    readonly_fields = ['date_added', 'last_modified']
+    frontend_editable_fields = ['name', 'slug', 'description', 'parent']
+    search_fields = ['translations__name']
 
-    list_filter = (
-        'active', 'date_added', 'last_modified', 'translations__language_code')
-
-    readonly_fields = ('date_added', 'last_modified', 'get_posts')
-    frontend_editable_fields = ('name', 'slug', 'description', 'parent')
-    search_fields = ('translations__name', )
-
-    fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description')}),
-        (None, {'fields': ('active', 'date_added', 'last_modified')}),
-        (None, {'fields': ('parent', )}),
-        (_('Posts in Category'),
-            {'fields': ('get_posts', ), 'classes': ('collapse', )}),
-    )
+    fieldsets = [
+        (None, {'fields': ['name', 'slug', 'description']}),
+        (None, {'fields': ['active', 'date_added', 'last_modified']}),
+        (None, {'fields': ['parent']}),
+    ]
 
     def get_prepopulated_fields(self, request, obj=None):
-        return {'slug': ('name', )}
+        return {'slug': ['name']}
 
     def get_number_of_posts(self, obj):
         return obj.post_set.count()
     get_number_of_posts.short_description = _('Number of Posts')
 
-    def get_posts(self, obj):
-        posts = []
-        for post in obj.post_set.all():
-            posts.append('<a href="{}">{}</a>'.format(reverse(
-                'admin:blogit_post_change', args=[post.pk]), post.name))
-        return '<br>'.join(posts) if posts else None
-    get_posts.short_description = _('Posts')
-    get_posts.allow_tags = True
-
 
 class TagAdmin(TranslatableAdmin, admin.ModelAdmin):
-    list_display = (
-        'name', 'slug', 'date_added', 'get_number_of_posts', 'language_column')
+    list_display = ['name', 'slug', 'date_added', 'get_number_of_posts', 'language_column']
+    list_filter = ['active', 'date_added', 'last_modified', 'translations__language_code']
+    readonly_fields = ['date_added', 'last_modified']
+    frontend_editable_fields = ['name', 'slug', 'description']
+    search_fields = ['translations__name']
 
-    list_filter = (
-        'active', 'date_added', 'last_modified', 'translations__language_code')
-
-    readonly_fields = ('date_added', 'last_modified', 'get_posts')
-    frontend_editable_fields = ('name', 'slug', 'description', )
-    search_fields = ('translations__name', )
-
-    fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description')}),
-        (None, {'fields': ('active', 'date_added', 'last_modified')}),
-        (_('Tagged Posts'),
-            {'fields': ('get_posts', ), 'classes': ('collapse', )}),
-    )
+    fieldsets = [
+        (None, {'fields': ['name', 'slug', 'description']}),
+        (None, {'fields': ['active', 'date_added', 'last_modified']}),
+    ]
 
     def get_prepopulated_fields(self, request, obj=None):
-        return {'slug': ('name', )}
+        return {'slug': ['name']}
 
     def get_number_of_posts(self, obj):
         return obj.tagged_posts.count()
     get_number_of_posts.short_description = _('Number of Posts')
 
-    def get_posts(self, obj):
-        posts = []
-        for post in obj.tagged_posts.all():
-            posts.append('<a href="{}">{}</a>'.format(reverse(
-                'admin:blogit_post_change', args=[post.pk]), post.name))
-        return '<br>'.join(posts) if posts else None
-    get_posts.short_description = _('Posts')
-    get_posts.allow_tags = True
 
+class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableAdmin, admin.ModelAdmin):
+    list_display = ['get_title', 'get_slug', 'get_status', 'get_date_published', 'language_column', 'get_image']
+    list_filter = ['status', 'date_published', 'date_added', 'last_modified', 'translations__language_code']
+    search_fields = ['translations__title']
+    readonly_fields = ['date_added', 'last_modified']
+    frontend_editable_fields = ['title', 'slug', 'description', 'category', 'author', 'featured_image',
+                                'date_published']
 
-class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
-                TranslatableAdmin, admin.ModelAdmin):
+    filter_horizontal = ['tags']
+    raw_id_fields = ['author']
 
-    list_display = (
-        'get_title', 'get_slug', 'get_status', 'get_date_published',
-        'language_column', 'get_image')
-
-    list_filter = (
-        'status', 'date_published', 'date_added', 'last_modified',
-        'translations__language_code')
-
-    search_fields = ('translations__title', )
-
-    readonly_fields = ('date_added', 'last_modified')
-
-    frontend_editable_fields = (
-        'title', 'slug', 'description', 'category', 'author',
-        'featured_image', 'date_published')
-
-    filter_horizontal = ('tags', )
-    raw_id_fields = ('author', )
-
-    fieldsets = (
-        (None, {'fields': ('title', 'slug')}),
-        (None, {'fields': ('date_added', 'last_modified')}),
-        (None, {'fields': ('status', 'date_published')}),
-        (None, {'fields': ('featured_image', 'description')}),
-        (None, {'fields': ('author', 'category', 'tags')}),
-        (_('SEO'),
-            {'fields': ('meta_title', 'meta_description'),
-             'classes': ('collapse',),
-             'description': _('If left blank, fallbacks to the main '
-                              'title and description fields')}),
-    )
+    fieldsets = [
+        (None, {'fields': ['title', 'slug']}),
+        (None, {'fields': ['date_added', 'last_modified']}),
+        (None, {'fields': ['status', 'date_published']}),
+        (None, {'fields': ['featured_image', 'description']}),
+        (None, {'fields': ['author', 'category', 'tags']}),
+        (_('SEO'), {'fields': ['meta_title', 'meta_description'],
+                    'classes': ('collapse',),
+                    'description': _('If left blank, fallbacks to the main title and description fields')}),
+    ]
 
     actions = ['make_draft', 'make_private', 'make_public', 'make_hidden']
 
     class Media:
-        css = {'all': ('blogit/css/blogit.css', )}
-        js = ('blogit/js/admin_post.js', )
+        css = {'all': ['blogit/css/post_admin.css']}
+        js = ['blogit/js/post_admin.js']
 
     def get_prepopulated_fields(self, request, obj=None):
-        return {'slug': ('title', )}
+        return {'slug': ['title']}
 
     def get_title(self, obj):
         return obj.name
@@ -141,16 +96,14 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin,
     get_title.admin_order_field = 'translations__title'
 
     def get_slug(self, obj):
-        return '<a href="{}">{}</a>'.format(
-            obj.get_absolute_url(), obj.safe_translation_getter('slug'))
+        return '<a href="{}">{}</a>'.format(obj.get_absolute_url(), obj.safe_translation_getter('slug'))
     get_slug.short_description = _('Slug')
     get_slug.admin_order_field = 'translations__slug'
     get_slug.allow_tags = True
 
     def get_status(self, obj):
         status_name = dict(Post.STATUS_CODES)[obj.status]
-        return '<span class="blogit-status-{}">{}</span>'.\
-            format(obj.status, status_name)
+        return '<span class="blogit-status-{}">{}</span>'.format(obj.status, status_name)
     get_status.short_description = _('Status')
     get_status.admin_order_field = 'status'
     get_status.allow_tags = True

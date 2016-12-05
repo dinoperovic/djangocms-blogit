@@ -1,6 +1,7 @@
 /* Vertically align list */
-table th, table td {
-  vertical-align: middle;
+.app-blogit .results table tbody th,
+.app-blogit .results table tbody td {
+  vertical-align: middle !important;
 }
 
 /* Status colors */
@@ -29,11 +30,7 @@ label.required.blogit-status-3 {
 }
 
 /* Featured image */
-.column-get_image {
-  text-align: center;
-}
-
-.field-get_image {
+.app-blogit .field-get_image {
   text-align: center;
   width: 72px;
   height: 72px;
@@ -41,7 +38,7 @@ label.required.blogit-status-3 {
 }
 
 /* Date published */
-.field-get_date_published img {
+.app-blogit .field-get_date_published img {
   float: right;
   padding: 0 10px;
 }

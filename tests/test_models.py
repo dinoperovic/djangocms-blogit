@@ -68,7 +68,7 @@ class TestPost(TestCase):
     def test_get_search_data(self):
         self.test_post.category = create_category('C', description='D')
         self.test_post.tags.add(create_tag('T'))
-        # TODO: add text plugin to body
+        # TODO: add text plugin to body.
         # add_plugin(self.test_post.body, 'TextPlugin', 'en', body='Hello')
         self.assertEquals(self.test_post.get_search_data(), 'Test Test C D T')
 

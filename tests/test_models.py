@@ -14,7 +14,6 @@ from blogit.models import Category, Post, Tag
 # from cms.api import add_plugin
 
 
-
 def create_category(name, **kwargs):
     return Category.objects.create(name=name, slug=slugify(name), **kwargs)
 

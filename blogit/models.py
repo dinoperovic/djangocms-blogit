@@ -62,7 +62,16 @@ class Category(MPTTModel, TranslatableModel):
             language = get_current_language()
 
         with switch_language(self, language):
-            return reverse('blogit_category_detail', kwargs={'slug': self.safe_translation_getter('slug')})
+            return reverse('blogit_category_detail', args=[self.get_path()])
+
+    def get_path(self):
+        """
+        Returns ful url path for category.
+        """
+        path = []
+        for obj in self.get_ancestors(include_self=True):
+            path.append(obj.safe_translation_getter('slug', ''))
+        return '/'.join(path)
 
 
 @python_2_unicode_compatible

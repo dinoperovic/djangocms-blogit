@@ -8,6 +8,7 @@ Release notes for **Blogit**.
 0.4.9
 =====
 
+* Change url of categories to use full path, instead of slug.
 * Maintenance.
 
 0.4.8

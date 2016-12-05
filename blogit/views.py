@@ -5,9 +5,10 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.dates import DateDetailView, DayArchiveView, MonthArchiveView, YearArchiveView
+from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from parler.views import TranslatableSlugMixin
+from parler.views import TranslatableSlugMixin, ViewUrlMixin
 
 from blogit import settings as bs
 from blogit.models import Category, Post, Tag
@@ -22,7 +23,6 @@ class ToolbarMixin(object):
             menu = request.toolbar.get_menu('blogit-current-menu')
             if menu:
                 self.update_menu(menu, self.object)
-
         return response
 
     def update_menu(self, menu, obj):
@@ -51,28 +51,45 @@ class CategoryListView(ListView):
         return self.model.objects.filter(active=True)
 
 
-class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
+class CategoryDetailView(ToolbarMixin, ViewUrlMixin, PostListMixin, ListView):
     template_name = 'blogit/category_detail.html'
 
     def get_context_data(self, **kwargs):
-        kwargs.update({'category': self.object})
+        kwargs.update({'category': self.get_category_object()})
         return super(CategoryDetailView, self).get_context_data(**kwargs)
 
     def get(self, request, *args, **kwargs):
         try:
-            self.object = Category.objects.translated(slug=kwargs.get('slug')).get(active=True)
-            ids = self.object.get_descendants(include_self=True).values_list('id', flat=True)
+            ids = self.get_category_object().get_descendants(include_self=True).values_list('id', flat=True)
             self.filters['category_id__in'] = ids
         except Category.DoesNotExist:
             raise Http404
         return super(CategoryDetailView, self).get(request, *args, **kwargs)
 
+    def get_category_object(self):
+        if not hasattr(self, '_category_object'):
+            path = self.kwargs['path']
+            slug = path.split('/').pop()
+            queryset = Category.objects.translated(slug=slug)
+            category = get_object_or_404(queryset, active=True)
+            if category.get_path() != path:
+                raise Http404
+            setattr(self, '_category_object', category)
+        return getattr(self, '_category_object')
+
     def update_menu(self, menu, obj):
+        pk = self.get_category_object().id
         menu.add_break()
-        url = reverse('admin:blogit_category_change', args=[self.object.pk])
+        url = reverse('admin:blogit_category_change', args=[pk])
         menu.add_modal_item(_('Edit Category'), url=url)
-        url = reverse('admin:blogit_category_delete', args=[self.object.pk])
+        url = reverse('admin:blogit_category_delete', args=[pk])
         menu.add_modal_item(_('Delete Category'), url=url)
+
+    def get_view_url(self):
+        """
+        Return object view url. Used in `get_translated_url` templatetag from parler.
+        """
+        return self.get_category_object().get_absolute_url()
 
 
 # Tag views.

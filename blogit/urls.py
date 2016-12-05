@@ -16,8 +16,10 @@ def get_urls(name):
     Returns url patterns for the given module.
     Checks if urls are handled with single or multiple apphooks.
     """
-    regex_list = r'^$'
-    regex_detail = r'^(?P<slug>[-\w\d]+)/$'
+    slug_regexp = r'(?P<slug>[-_\w\d]+)'
+    path_regexp = r'(?P<path>[-_/\w\d]+)'
+    list_regexp = r'^$'
+    detail_regexp = r'^%s/$' % slug_regexp
 
     if name == 'archive':
         return [
@@ -29,42 +31,44 @@ def get_urls(name):
         ]
 
     elif name == 'categories':
+        detail_regexp = r'^%s/$' % path_regexp
+
         if bs.SINGLE_APPHOOK:
-            regex_list = _(r'^categories/$')
-            regex_detail = _(r'^categories/(?P<slug>[-\w\d]+)/$')
+            list_regexp = _(r'^categories/$')
+            detail_regexp = _(r'^categories/%s/$') % path_regexp
 
         return [
-            url(regex_list, CategoryListView.as_view(), name='blogit_category_list'),
-            url(regex_detail, CategoryDetailView.as_view(), name='blogit_category_detail'),
+            url(list_regexp, CategoryListView.as_view(), name='blogit_category_list'),
+            url(detail_regexp, CategoryDetailView.as_view(), name='blogit_category_detail'),
         ]
 
     elif name == 'tags':
         if bs.SINGLE_APPHOOK:
-            regex_list = _(r'^tags/$')
-            regex_detail = _(r'^tags/(?P<slug>[-\w\d]+)/$')
+            list_regexp = _(r'^tags/$')
+            detail_regexp = _(r'^tags/%s/$') % slug_regexp
 
         return [
-            url(regex_list, TagListView.as_view(), name='blogit_tag_list'),
-            url(regex_detail, TagDetailView.as_view(), name='blogit_tag_detail'),
+            url(list_regexp, TagListView.as_view(), name='blogit_tag_list'),
+            url(detail_regexp, TagDetailView.as_view(), name='blogit_tag_detail'),
         ]
 
     elif name == 'feeds':
         regex_rss = r'rss/$'
-        regex_rss_tag = r'^rss/(?P<tag_slug>[-\w\d]+)/$'
+        regex_rss_tag = r'^rss/%s/$' % slug_regexp
         regex_atom = r'atom/$'
-        regex_atom_tag = r'^atom/(?P<tag_slug>[-\w\d]+)/$'
+        regex_atom_tag = r'^atom/%s/$' % slug_regexp
 
         if bs.SINGLE_APPHOOK:
-            regex_list = _(r'feeds/$')
+            list_regexp = _(r'feeds/$')
             regex_rss = _(r'feeds/rss/$')
-            regex_rss_tag = _(r'feeds/^rss/(?P<tag_slug>[-\w\d]+)/$')
+            regex_rss_tag = _(r'feeds/^rss/%s/$') % slug_regexp
             regex_atom = _(r'feeds/atom/$')
-            regex_atom_tag = _(r'feeds/^atom/(?P<tag_slug>[-\w\d]+)/$')
+            regex_atom_tag = _(r'feeds/^atom/%s/$') % slug_regexp
 
         default_name = 'blogit_%s_feed' % bs.FEED_DEFAULT
 
         return [
-            url(regex_list, RedirectView.as_view(pattern_name=default_name), name='blogit_feed'),
+            url(list_regexp, RedirectView.as_view(pattern_name=default_name), name='blogit_feed'),
             url(regex_rss, PostRssFeed(), name='blogit_rss_feed'),
             url(regex_rss_tag, PostRssFeed(), name='blogit_rss_feed_tag'),
             url(regex_atom, PostAtomFeed(), name='blogit_atom_feed'),
@@ -73,10 +77,10 @@ def get_urls(name):
 
     elif name == 'posts':
         return [
-            url(regex_list, PostListView.as_view(), name='blogit_post_list'),
-            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
+            url(list_regexp, PostListView.as_view(), name='blogit_post_list'),
+            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)/%s/$' % slug_regexp, PostDateDetailView.as_view(),
                 name='blogit_post_detail_date'),
-            url(regex_detail, PostDetailView.as_view(), name='blogit_post_detail'),
+            url(detail_regexp, PostDetailView.as_view(), name='blogit_post_detail'),
         ]
 
 

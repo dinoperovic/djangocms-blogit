@@ -19,11 +19,11 @@ except ImportError:
 class PostRssFeed(Feed):
     feed_type = Rss201rev2Feed
 
-    def get_object(self, request, tag_slug=None):
-        # Returns Tag object with 'tag_slug' passed in from the urls.py
-        if tag_slug:
+    def get_object(self, request, slug=None):
+        # Returns Tag object with 'slug' passed in from the urls.py
+        if slug:
             try:
-                return Tag.objects.translated(slug=tag_slug).get()
+                return Tag.objects.translated(slug=slug).get()
             except Tag.DoesNotExist:
                 pass
         return None

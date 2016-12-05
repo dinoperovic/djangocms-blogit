@@ -1,6 +1,9 @@
 Settings
 ########
 
+Available settings to override.
+
+----
 
 Info
 ====
@@ -15,6 +18,8 @@ Thease settings are used to render the proper values in feeds:
 
 Feeds
 =====
+
+Feed settings:
 
 .. code:: python
 
@@ -37,8 +42,8 @@ Pagination per page:
 Post url
 ========
 
-By default post detail url is ``/<post_slug>/``. If you want to have a dated
-url like this ``/<year>/<month>/<day>/<post_slug>/``, change this setting:
+By default post detail url is ``/<slug>/``. If you want to have a dated
+url like this ``/<year>/<month>/<day>/<slug>/``, change this setting:
 
 .. code:: python
 

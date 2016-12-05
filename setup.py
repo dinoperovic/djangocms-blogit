@@ -36,8 +36,8 @@ setup(
     install_requires=[
         'django-cms>=3.3',
         'django-filer>=1.2',
-        'django-parler>=1.6.5',
         'django-mptt>=0.8.6',
+        'django-parler>=1.6.5',
     ],
     setup_requires=['pytest-runner'] if {'pytest', 'test', 'ptr'}.intersection(sys.argv) else ['setuptools-markdown'],
     tests_require=['pytest-django'],

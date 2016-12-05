@@ -4,13 +4,15 @@ from __future__ import unicode_literals
 from datetime import datetime
 
 from django.test import TestCase
-from django.utils.text import slugify
 from django.utils import timezone
+from django.utils.text import slugify
+
+from blogit import settings as bs
+from blogit.models import Category, Post, Tag
+
 
 # from cms.api import add_plugin
 
-from blogit.models import Category, Tag, Post
-from blogit import settings as bs
 
 
 def create_category(name, **kwargs):

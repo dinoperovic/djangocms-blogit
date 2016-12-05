@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models
-from django.core.urlresolvers import reverse
+from cms.models.fields import PlaceholderField
+from cms.utils.i18n import get_current_language
 from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
+from django.utils.translation import ugettext_lazy as _
+from filer.fields.image import FilerImageField
+from mptt.models import MPTTModel, TreeForeignKey
+from parler.managers import TranslatableManager
+from parler.models import TranslatableModel, TranslatedFields
+from parler.utils.context import switch_language
+
+from blogit import settings as bs
+from blogit.managers import PostManager
+from blogit.utils import get_text_from_placeholder
+
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
-from mptt.models import MPTTModel, TreeForeignKey
-from parler.models import TranslatableModel, TranslatedFields
-from parler.managers import TranslatableManager
-from parler.utils.context import switch_language
-from cms.models.fields import PlaceholderField
-from cms.utils.i18n import get_current_language
-from filer.fields.image import FilerImageField
 
-from blogit import settings as bs
-from blogit.managers import PostManager
-from blogit.utils import get_text_from_placeholder
 
 
 USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')

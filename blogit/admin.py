@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
-from django.utils.translation import ugettext_lazy as _
 from django.utils import formats
-
-from mptt.admin import DraggableMPTTAdmin
-from easy_thumbnails.files import get_thumbnailer
+from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.exceptions import InvalidImageFormatError
+from easy_thumbnails.files import get_thumbnailer
+from mptt.admin import DraggableMPTTAdmin
 from parler.admin import TranslatableAdmin
-from cms.admin.placeholderadmin import (
-    PlaceholderAdminMixin, FrontendEditableAdminMixin)
 
-from blogit.models import Category, Tag, Post
+from blogit.models import Category, Post, Tag
 
 
 class CategoryAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableAdmin, DraggableMPTTAdmin):

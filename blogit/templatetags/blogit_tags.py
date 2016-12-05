@@ -4,8 +4,7 @@ from __future__ import unicode_literals
 from django import template
 from django.utils.six import string_types
 
-from blogit.models import Post, Category
-
+from blogit.models import Category, Post
 
 register = template.Library()
 

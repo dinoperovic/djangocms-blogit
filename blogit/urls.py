@@ -6,12 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 
 from blogit import settings as bs
-from blogit.feeds import PostRssFeed, PostAtomFeed
-from blogit.views import (
-    CategoryListView, CategoryDetailView,
-    TagListView, TagDetailView,
-    PostListView, PostDetailView, PostDateDetailView,
-    PostDayArchiveView, PostMonthArchiveView, PostYearArchiveView)
+from blogit.feeds import PostAtomFeed, PostRssFeed
+from blogit.views import (CategoryDetailView, CategoryListView, PostDateDetailView, PostDayArchiveView, PostDetailView,
+                          PostListView, PostMonthArchiveView, PostYearArchiveView, TagDetailView, TagListView)
 
 
 def get_urls(name):

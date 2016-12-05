@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-
 ACTIVE_FIELD_HELP_TEXT = _('Is this object active?')
 
 # Basic info (used in feeds).

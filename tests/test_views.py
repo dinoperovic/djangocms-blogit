@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from blogit.models import Post
 
-from .test_models import create_category, create_tag, create_post
+from .test_models import create_category, create_post, create_tag
 
 
 class TestCategoryViews(TestCase):

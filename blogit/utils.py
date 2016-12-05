@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from cms.utils.i18n import get_current_language
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
-from django.test import RequestFactory
 from django.template import RequestContext
+from django.test import RequestFactory
 from django.utils.html import strip_tags
+
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
-from cms.utils.i18n import get_current_language
 
 
 def get_request(language=None):

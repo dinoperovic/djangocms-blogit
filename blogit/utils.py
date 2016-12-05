@@ -14,7 +14,6 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 
-
 def get_request(language=None):
     """
     Returns a Request instance populated with cms specific attributes

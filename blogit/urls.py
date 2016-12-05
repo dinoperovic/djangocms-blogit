@@ -21,13 +21,11 @@ def get_urls(name):
 
     if name == 'archive':
         return [
-            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)/$',
-                PostDayArchiveView.as_view(), name='blogit_post_archive_day'),
-            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/$',
-                PostMonthArchiveView.as_view(),
+            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)/$', PostDayArchiveView.as_view(),
+                name='blogit_post_archive_day'),
+            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/$', PostMonthArchiveView.as_view(),
                 name='blogit_post_archive_month'),
-            url(r'^(?P<year>\d+)/$', PostYearArchiveView.as_view(),
-                name='blogit_post_archive_year'),
+            url(r'^(?P<year>\d+)/$', PostYearArchiveView.as_view(), name='blogit_post_archive_year'),
         ]
 
     elif name == 'categories':
@@ -36,10 +34,8 @@ def get_urls(name):
             regex_detail = _(r'^categories/(?P<slug>[-\w\d]+)/$')
 
         return [
-            url(regex_list, CategoryListView.as_view(),
-                name='blogit_category_list'),
-            url(regex_detail, CategoryDetailView.as_view(),
-                name='blogit_category_detail'),
+            url(regex_list, CategoryListView.as_view(), name='blogit_category_list'),
+            url(regex_detail, CategoryDetailView.as_view(), name='blogit_category_detail'),
         ]
 
     elif name == 'tags':
@@ -49,8 +45,7 @@ def get_urls(name):
 
         return [
             url(regex_list, TagListView.as_view(), name='blogit_tag_list'),
-            url(regex_detail, TagDetailView.as_view(),
-                name='blogit_tag_detail'),
+            url(regex_detail, TagDetailView.as_view(), name='blogit_tag_detail'),
         ]
 
     elif name == 'feeds':
@@ -69,8 +64,7 @@ def get_urls(name):
         default_name = 'blogit_%s_feed' % bs.FEED_DEFAULT
 
         return [
-            url(regex_list, RedirectView.as_view(pattern_name=default_name),
-                name='blogit_feed'),
+            url(regex_list, RedirectView.as_view(pattern_name=default_name), name='blogit_feed'),
             url(regex_rss, PostRssFeed(), name='blogit_rss_feed'),
             url(regex_rss_tag, PostRssFeed(), name='blogit_rss_feed_tag'),
             url(regex_atom, PostAtomFeed(), name='blogit_atom_feed'),
@@ -80,11 +74,9 @@ def get_urls(name):
     elif name == 'posts':
         return [
             url(regex_list, PostListView.as_view(), name='blogit_post_list'),
-            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)'
-                r'/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
+            url(r'^(?P<year>\d+)/(?P<month>[-\w\d]+)/(?P<day>\d+)/(?P<slug>[-\w\d]+)/$', PostDateDetailView.as_view(),
                 name='blogit_post_detail_date'),
-            url(regex_detail, PostDetailView.as_view(),
-                name='blogit_post_detail'),
+            url(regex_detail, PostDetailView.as_view(), name='blogit_post_detail'),
         ]
 
 

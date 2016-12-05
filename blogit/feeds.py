@@ -15,7 +15,6 @@ except ImportError:
     from django.utils.encoding import force_text as force_unicode
 
 
-
 # Post Rss feed.
 class PostRssFeed(Feed):
     feed_type = Rss201rev2Feed

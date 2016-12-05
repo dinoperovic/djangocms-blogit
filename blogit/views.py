@@ -60,23 +60,18 @@ class CategoryDetailView(ToolbarMixin, PostListMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.object = Category.objects.translated(
-                slug=kwargs.get('slug')).get(active=True)
-            ids = self.object.get_descendants(include_self=True).\
-                values_list('id', flat=True)
+            self.object = Category.objects.translated(slug=kwargs.get('slug')).get(active=True)
+            ids = self.object.get_descendants(include_self=True).values_list('id', flat=True)
             self.filters['category_id__in'] = ids
         except Category.DoesNotExist:
             raise Http404
-
         return super(CategoryDetailView, self).get(request, *args, **kwargs)
 
     def update_menu(self, menu, obj):
         menu.add_break()
-        url = reverse(
-            'admin:blogit_category_change', args=[self.object.pk])
+        url = reverse('admin:blogit_category_change', args=[self.object.pk])
         menu.add_modal_item(_('Edit Category'), url=url)
-        url = reverse(
-            'admin:blogit_category_delete', args=[self.object.pk])
+        url = reverse('admin:blogit_category_delete', args=[self.object.pk])
         menu.add_modal_item(_('Delete Category'), url=url)
 
 
@@ -98,8 +93,7 @@ class TagDetailView(ToolbarMixin, PostListMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.object = Tag.objects.translated(
-                slug=kwargs.get('slug')).get(active=True)
+            self.object = Tag.objects.translated(slug=kwargs.get('slug')).get(active=True)
             self.filters['tags__in'] = [self.object]
         except Tag.DoesNotExist:
             raise Http404
@@ -108,11 +102,9 @@ class TagDetailView(ToolbarMixin, PostListMixin, ListView):
 
     def update_menu(self, menu, obj):
         menu.add_break()
-        url = reverse(
-            'admin:blogit_tag_change', args=[self.object.pk])
+        url = reverse('admin:blogit_tag_change', args=[self.object.pk])
         menu.add_modal_item(_('Edit Tag'), url=url)
-        url = reverse(
-            'admin:blogit_tag_delete', args=[self.object.pk])
+        url = reverse('admin:blogit_tag_delete', args=[self.object.pk])
         menu.add_modal_item(_('Delete Tag'), url=url)
 
 
@@ -154,12 +146,10 @@ class PostDetailMixin(ToolbarMixin):
 
     def update_menu(self, menu, obj):
         menu.add_break()
-        url = reverse(
-            'admin:blogit_post_change', args=[self.object.pk])
+        url = reverse('admin:blogit_post_change', args=[self.object.pk])
         menu.add_modal_item(_('Edit Post'), url=url)
 
-        url = reverse(
-            'admin:blogit_post_delete', args=[self.object.pk])
+        url = reverse('admin:blogit_post_delete', args=[self.object.pk])
         menu.add_modal_item(_('Delete Post'), url=url)
 
 

@@ -3,17 +3,16 @@ from __future__ import unicode_literals
 
 """
 Release logic:
- 1. Remove ".devX" from __version__ (below)
+ 1. Bump the __version__.
  2. git add blogit/__init__.py
  3. git commit -m 'Bump to <version>'
- 4. git tag v<version>
- 5. git push && git push --tags
- 6. python setup.py sdist
- 7. twine upload dist/djangocms-blogit-<version>.tar.gz
- 8. bump the __version__, append ".dev0"
- 9. git add blogit/__init__.py
-10. git commit -m 'Start with <version>'
-11. git push
+ 4. git push
+ 5. Make sure all tests pass on https://travis-ci.org/dinoperovic/djangocms-blogit
+ 6. git tag v<version>
+ 7. git push --tags
+ 8. python setup.py sdist
+ 9. twine upload dist/djangocms-blogit-<version>.tar.gz
+10. Done!
 """
 __version__ = '0.4.9'
 

@@ -5,6 +5,11 @@ Release notes for **Blogit**.
 
 ----
 
+0.4.10
+======
+
+* Move urls into modules (for now) to fix potential errors with appresolver from django-cms.
+
 0.4.9
 =====
 

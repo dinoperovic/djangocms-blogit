@@ -8,7 +8,7 @@ Get started with installing and configuring **Shopit**.
 Requirements
 ============
 
-* Django_ 1.9
+* Django_ 1.10, 1.9
 * django-cms_ for placeholders.
 * django-filer_ for file management.
 * django-mptt_ for tree management.

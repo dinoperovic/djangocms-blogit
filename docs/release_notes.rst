@@ -9,6 +9,7 @@ Release notes for **Blogit**.
 ======
 
 * Move urls into modules (for now) to fix potential errors with appresolver from django-cms.
+* Support Django 1.10.
 
 0.4.9
 =====

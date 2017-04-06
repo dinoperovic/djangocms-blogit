@@ -10,7 +10,7 @@
 
 ## Requirements
 
-* [Django] 1.9
+* [Django] 1.10, 1.9
 * [django-cms] for placeholders.
 * [django-filer] for file management.
 * [django-mptt] for tree management.

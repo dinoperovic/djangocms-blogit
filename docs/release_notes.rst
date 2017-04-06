@@ -5,6 +5,11 @@ Release notes for **Blogit**.
 
 ----
 
+0.4.12
+======
+
+* Fix manifest.
+
 0.4.11
 ======
 

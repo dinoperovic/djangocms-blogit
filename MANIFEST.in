@@ -1,6 +1,6 @@
 include AUTHORS
 include LICENSE.txt
-include README.rst
+include README.md
 include setup.py
 recursive-include blogit *.py
 recursive-include blogit/static *

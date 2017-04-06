@@ -5,6 +5,11 @@ Release notes for **Blogit**.
 
 ----
 
+0.4.11
+======
+
+* Fix setup.py.
+
 0.4.10
 ======
 

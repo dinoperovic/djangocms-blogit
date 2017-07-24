@@ -135,7 +135,7 @@ class PostDateMixin(object):
 
 
 class ArchiveListMixin(PostDateMixin, PostListMixin):
-    template_name = 'blogit/post_list.html'
+    template_name = 'blogit/post_archive.html'
 
 
 class PostYearArchiveView(ArchiveListMixin, YearArchiveView):

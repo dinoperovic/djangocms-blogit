@@ -5,6 +5,12 @@ Release notes for **Blogit**.
 
 ----
 
+0.4.13
+======
+
+* Add separate template for arvhive view.
+* Refactor starting templates.
+
 0.4.12
 ======
 

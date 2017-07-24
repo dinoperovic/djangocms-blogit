@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic.dates import DateDetailView, DayArchiveView, MonthArchiveView, YearArchiveView
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic.dates import (DateDetailView, DayArchiveView,
+                                        MonthArchiveView, YearArchiveView)
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from parler.views import TranslatableSlugMixin, ViewUrlMixin

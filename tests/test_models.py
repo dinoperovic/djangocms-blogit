@@ -10,7 +10,6 @@ from django.utils.text import slugify
 from blogit import settings as bs
 from blogit.models import Category, Post, Tag
 
-
 # from cms.api import add_plugin
 
 

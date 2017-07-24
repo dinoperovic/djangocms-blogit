@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from cms.admin.placeholderadmin import FrontendEditableAdminMixin, PlaceholderAdminMixin
+from cms.admin.placeholderadmin import (FrontendEditableAdminMixin,
+                                        PlaceholderAdminMixin)
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
 from django.utils import formats

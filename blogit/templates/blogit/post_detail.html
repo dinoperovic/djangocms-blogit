@@ -1,7 +1,7 @@
 {% extends "blogit/base.html" %}
 {% load cms_tags %}
 
-{% block body %}
-  <h1>{{ object.title }}</h1>
-  {% render_placeholder object.body %}
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  {% render_placeholder post.body %}
 {% endblock %}

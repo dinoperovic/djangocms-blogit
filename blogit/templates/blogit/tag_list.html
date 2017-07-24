@@ -1,8 +1,8 @@
 {% extends "blogit/base.html" %}
 
-{% block body %}
+{% block content %}
   <h1>Tags:</h1>
-  {% for object in object_list %}
-    <a href="{{ object.get_absolute_url }}">{{ object.name }}</a><br>
+  {% for tag in tag_list %}
+    <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a><br>
   {% endfor %}
 {% endblock %}

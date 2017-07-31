@@ -14,6 +14,6 @@ Release logic:
  9. twine upload dist/djangocms-blogit-<version>.tar.gz
 10. Done!
 """
-__version__ = '0.4.12'
+__version__ = '0.4.13'
 
 default_app_config = 'blogit.apps.BlogitConfig'

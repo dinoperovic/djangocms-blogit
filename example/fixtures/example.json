@@ -1,0 +1,46 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$30000$8SWZdkNCVAnm$hqQMLQ4HFz42CtMaNSfuOK/u+lqr1lfx7hv6C9uqNtU=",
+    "last_login": "2017-08-22T12:04:04.737Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Admin",
+    "last_name": "Istrator",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-08-22T12:03:30.224Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "cms.usersettings",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "language": "en",
+    "clipboard": 1
+  }
+},
+{
+  "model": "cms.placeholder",
+  "pk": 1,
+  "fields": {
+    "slot": "clipboard",
+    "default_width": null
+  }
+},
+{
+  "model": "cms.urlconfrevision",
+  "pk": 1,
+  "fields": {
+    "revision": "fed3337d-0651-4340-859c-52cd1ea92e29"
+  }
+}
+]

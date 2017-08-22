@@ -1,4 +1,4 @@
 -r base.txt
 pytest-django
 coverage
-djangocms-text-ckeditor
+djangocms-text-ckeditor>=3.5.0

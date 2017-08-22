@@ -1,6 +1,7 @@
 *.egg-info/
 *.orig
 *.pyc
+*.sqlite3
 *.sw[op]
 .cache
 .coverage
@@ -8,7 +9,10 @@
 .eggs
 .python-version
 .tox
+__pycache__/
 build/
 dist/
 docs/_build
+example/media/
+example/static/
 htmlcov/

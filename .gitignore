@@ -6,6 +6,7 @@
 .coverage
 .DS_Store
 .eggs
+.pytest_cache
 .python-version
 .tox
 build/

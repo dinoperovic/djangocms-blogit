@@ -35,7 +35,7 @@ class TestCategory(TestCase):
         self.assertEquals(str(self.food_cat), 'Food')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.food_cat.get_absolute_url(), '/en/categories/food/')
+        self.assertEquals(self.food_cat.get_absolute_url(), '/en/blog/categories/food/')
 
 
 class TestTag(TestCase):
@@ -46,7 +46,7 @@ class TestTag(TestCase):
         self.assertEquals(str(self.generic_tag), 'Generic')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.generic_tag.get_absolute_url(), '/en/tags/generic/')
+        self.assertEquals(self.generic_tag.get_absolute_url(), '/en/blog/tags/generic/')
 
 
 class TestPost(TestCase):
@@ -59,9 +59,9 @@ class TestPost(TestCase):
         self.assertEquals(str(self.test_post), 'Test')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.test_post.get_absolute_url(), '/en/test/')
+        self.assertEquals(self.test_post.get_absolute_url(), '/en/blog/test/')
         bs.POST_DETAIL_DATE_URL = True
-        self.assertEquals(self.test_post.get_absolute_url(), '/en/2015/4/4/test/')
+        self.assertEquals(self.test_post.get_absolute_url(), '/en/blog/2015/4/4/test/')
         bs.POST_DETAIL_DATE_URL = False
 
     def test_get_search_data(self):

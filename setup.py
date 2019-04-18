@@ -7,15 +7,6 @@ import blogit
 
 from setuptools import find_packages, setup
 
-try:
-    from pypandoc import convert
-except ImportError:
-    import io
-
-    def convert(filename, fmt):
-        with io.open(filename, encoding='utf-8') as fd:
-            return fd.read()
-
 
 CLASSIFIERS = [
     'Environment :: Web Environment',
@@ -34,7 +25,8 @@ setup(
     name='djangocms-blogit',
     version=blogit.__version__,
     description='A simple djangoCMS blog app.',
-    long_description=convert('README.md', 'rst'),
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     url='https://github.com/dinoperovic/djangocms-blogit',
     license='BSD License',
     platforms=['OS Independent'],

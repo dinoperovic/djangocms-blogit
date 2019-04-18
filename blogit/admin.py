@@ -6,6 +6,7 @@ from cms.admin.placeholderadmin import (FrontendEditableAdminMixin,
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_static import static
 from django.utils import formats
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 from easy_thumbnails.exceptions import InvalidImageFormatError
 from easy_thumbnails.files import get_thumbnailer
@@ -95,14 +96,14 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableA
     get_title.admin_order_field = 'translations__title'
 
     def get_slug(self, obj):
-        return '<a href="{}">{}</a>'.format(obj.get_absolute_url(), obj.safe_translation_getter('slug'))
+        return format_html('<a href="{}">{}</a>'.format(obj.get_absolute_url(), obj.safe_translation_getter('slug')))  # noqa
     get_slug.short_description = _('Slug')
     get_slug.admin_order_field = 'translations__slug'
     get_slug.allow_tags = True
 
     def get_status(self, obj):
         status_name = dict(Post.STATUS_CODES)[obj.status]
-        return '<span class="blogit-status-{}">{}</span>'.format(obj.status, status_name)
+        return format_html('<span class="blogit-status-{}">{}</span>'.format(obj.status, status_name))
     get_status.short_description = _('Status')
     get_status.admin_order_field = 'status'
     get_status.allow_tags = True
@@ -113,7 +114,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableA
         else:
             string = '{} <img src="{}/img/icon-no.gif" alt="False">'
         date = formats.date_format(obj.date_published, 'SHORT_DATETIME_FORMAT')
-        return string.format(date, static('admin'))
+        return format_html(string.format(date, static('admin')))
     get_date_published.short_description = _('Published on')
     get_date_published.admin_order_field = 'date_published'
     get_date_published.allow_tags = True
@@ -127,7 +128,7 @@ class PostAdmin(FrontendEditableAdminMixin, PlaceholderAdminMixin, TranslatableA
             }
             thumbnailer = get_thumbnailer(obj.featured_image)
             thumb = thumbnailer.get_thumbnail(options)
-            return '<img src="{}">'.format(thumb.url)
+            return format_html('<img src="{}">'.format(thumb.url))
         except (IOError, ValueError, InvalidImageFormatError):
             return None
     get_image.short_description = _('Image')

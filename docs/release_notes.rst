@@ -5,6 +5,11 @@ Release notes for **Blogit**.
 
 ----
 
+0.5.1
+=====
+
+* Set `long_description_content_type='text/markdown'` to `setup.py`.
+
 0.5.0
 =====
 

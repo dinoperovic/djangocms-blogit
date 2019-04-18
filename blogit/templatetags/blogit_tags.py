@@ -9,7 +9,7 @@ from blogit.models import Category, Post
 register = template.Library()
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def get_posts(context, limit=None, category=None):
     request = context['request']
     filters = {}
@@ -23,6 +23,6 @@ def get_posts(context, limit=None, category=None):
     return Post.objects.published(request, **filters)[:limit]
 
 
-@register.assignment_tag
+@register.simple_tag
 def get_categories(limit=None):
     return Category.objects.filter(active=True)[:limit]

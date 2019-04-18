@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 from blogit.models import Post
 
@@ -18,14 +18,14 @@ class TestCategoryViews(TestCase):
 
     def test_category_list(self):
         r = self.client.get(reverse('blogit_category_list'))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(len(r.context[-1]['object_list']), 2)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.context[-1]['object_list']), 2)
 
     def test_category_detail(self):
         r = self.client.get(reverse('blogit_category_detail', args=['game']))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(r.context[-1]['category'], self.game_cat)
-        self.assertEquals(r.context[-1]['object_list'][0], self.test_post)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.context[-1]['category'], self.game_cat)
+        self.assertEqual(r.context[-1]['object_list'][0], self.test_post)
 
 
 class TestTagViews(TestCase):
@@ -38,14 +38,14 @@ class TestTagViews(TestCase):
 
     def test_tag_list(self):
         r = self.client.get(reverse('blogit_tag_list'))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(len(r.context[-1]['object_list']), 3)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.context[-1]['object_list']), 3)
 
     def test_tag_detail(self):
         r = self.client.get(reverse('blogit_tag_detail', args=['test']))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(r.context[-1]['tag'], self.test_tag)
-        self.assertEquals(r.context[-1]['object_list'][0], self.test_post)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.context[-1]['tag'], self.test_tag)
+        self.assertEqual(r.context[-1]['object_list'][0], self.test_post)
 
 
 class TestPostViews(TestCase):
@@ -56,10 +56,10 @@ class TestPostViews(TestCase):
 
     def test_post_list(self):
         r = self.client.get(reverse('blogit_post_list'))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(len(r.context[-1]['object_list']), 2)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(len(r.context[-1]['object_list']), 2)
 
     def test_post_detail(self):
         r = self.client.get(reverse('blogit_post_detail', args=['test']))
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(r.context[-1]['object'], self.test_post)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.context[-1]['object'], self.test_post)

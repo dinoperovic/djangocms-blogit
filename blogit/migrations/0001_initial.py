@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('rght', models.PositiveIntegerField(editable=False, db_index=True)),
                 ('tree_id', models.PositiveIntegerField(editable=False, db_index=True)),
                 ('level', models.PositiveIntegerField(editable=False, db_index=True)),
-                ('parent', mptt.fields.TreeForeignKey(related_name='children', verbose_name='Parent', blank=True, to='blogit.Category', null=True)),
+                ('parent', mptt.fields.TreeForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='children', verbose_name='Parent', blank=True, to='blogit.Category', null=True)),
             ],
             options={
                 'db_table': 'blogit_categories',
@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, verbose_name='Name')),
                 ('slug', models.SlugField(verbose_name='Slug')),
                 ('description', models.TextField(verbose_name='description', blank=True)),
-                ('master', models.ForeignKey(related_name='translations', editable=False, to='blogit.Category', null=True)),
+                ('master', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='translations', editable=False, to='blogit.Category', null=True)),
             ],
             options={
                 'managed': True,
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Author', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('body', cms.models.fields.PlaceholderField(related_name='post_body_set', slotname='blogit_post_body', editable=False, to='cms.Placeholder', null=True)),
                 ('category', mptt.fields.TreeForeignKey(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Category', blank=True, to='blogit.Category', null=True)),
-                ('featured_image', filer.fields.image.FilerImageField(verbose_name='Featured Image', blank=True, to='filer.Image', null=True)),
+                ('featured_image', filer.fields.image.FilerImageField(on_delete=django.db.models.deletion.SET_NULL, verbose_name='Featured Image', blank=True, to='filer.Image', null=True)),
             ],
             options={
                 'ordering': ('-date_published',),
@@ -90,7 +90,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(verbose_name='Description', blank=True)),
                 ('meta_title', models.CharField(max_length=255, verbose_name='Meta title', blank=True)),
                 ('meta_description', models.TextField(help_text='The text displayed in search engines.', max_length=155, verbose_name='Meta description', blank=True)),
-                ('master', models.ForeignKey(related_name='translations', editable=False, to='blogit.Post', null=True)),
+                ('master', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='translations', editable=False, to='blogit.Post', null=True)),
             ],
             options={
                 'managed': True,
@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255, verbose_name='Name')),
                 ('slug', models.SlugField(verbose_name='Slug')),
                 ('description', models.TextField(verbose_name='description', blank=True)),
-                ('master', models.ForeignKey(related_name='translations', editable=False, to='blogit.Tag', null=True)),
+                ('master', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, related_name='translations', editable=False, to='blogit.Tag', null=True)),
             ],
             options={
                 'managed': True,

@@ -2,32 +2,29 @@ sudo: false
 language: python
 
 python:
-  - 2.7
-  - 3.4
   - 3.5
+  - 3.6
 
 env:
-  - DJANGO=1.9
-  - DJANGO=1.10
+  - DJANGO=2.0
+  - DJANGO=2.1
 
 matrix:
   fast_finish: true
   include:
-  - python: "3.5"
+  - python: "3.6"
     env: TOXENV=flake8
-  - python: "3.5"
+  - python: "3.6"
     env: TOXENV=docs
 
 before_install: pip install codecov
 install: pip install tox
 
 script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' && $DJANGO == '1.9' ]]; then export TOXENV=py27-django19; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' && $DJANGO == '1.10' ]]; then export TOXENV=py27-django110; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' && $DJANGO == '1.9' ]]; then export TOXENV=py34-django19; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.4' && $DJANGO == '1.10' ]]; then export TOXENV=py34-django110; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '1.9' ]]; then export TOXENV=py35-django19; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '1.10' ]]; then export TOXENV=py35-django110; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '2.0' ]]; then export TOXENV=py35-django20; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.5' && $DJANGO == '2.1' ]]; then export TOXENV=py35-django21; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' && $DJANGO == '2.0' ]]; then export TOXENV=py36-django20; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' && $DJANGO == '2.1' ]]; then export TOXENV=py36-django21; fi"
   - tox -e $TOXENV
 
 after_success: codecov

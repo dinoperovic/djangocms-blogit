@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from cms.models.fields import PlaceholderField
 from cms.utils.i18n import get_current_language
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import strip_tags
@@ -38,7 +38,14 @@ class Category(MPTTModel, TranslatableModel):
     date_added = models.DateTimeField(_('Date added'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'), auto_now=True)
 
-    parent = TreeForeignKey('self', blank=True, null=True, related_name='children', verbose_name=_('Parent'))
+    parent = TreeForeignKey(
+        'self',
+        models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='children',
+        verbose_name=_('Parent'),
+    )
 
     translations = TranslatedFields(
         name=models.CharField(_('Name'), max_length=255),
@@ -135,7 +142,13 @@ class Post(TranslatableModel):
     category = TreeForeignKey(Category, models.SET_NULL, blank=True, null=True, verbose_name=_('Category'))
     tags = models.ManyToManyField(Tag, blank=True, related_name='tagged_posts', verbose_name=_('Tags'))
     author = models.ForeignKey(USER_MODEL, models.SET_NULL, blank=True, null=True, verbose_name=_('Author'))
-    featured_image = FilerImageField(blank=True, null=True, verbose_name=_('Featured Image'))
+
+    featured_image = FilerImageField(
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name=_('Featured Image'),
+    )
 
     translations = TranslatedFields(
         title=models.CharField(_('Title'), max_length=255),

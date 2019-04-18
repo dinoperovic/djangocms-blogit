@@ -1,4 +1,4 @@
 [flake8]
-exclude = .tox,.eggs,.git,migrations,docs
+exclude = .tox,.eggs,.git,migrations,docs,.venv
 max-complexity = 10
 max-line-length = 119

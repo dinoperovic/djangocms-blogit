@@ -2,13 +2,15 @@
 *.orig
 *.pyc
 *.sw[op]
+.DS_Store
 .cache
 .coverage
-.DS_Store
 .eggs
 .pytest_cache
 .python-version
 .tox
+.venv
+.vscode
 build/
 dist/
 docs/_build

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.feedgenerator import Atom1Feed, Rss201rev2Feed
 from django.utils.html import escape
 

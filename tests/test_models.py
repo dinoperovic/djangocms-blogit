@@ -32,10 +32,10 @@ class TestCategory(TestCase):
         self.food_cat = create_category('Food')
 
     def test__str__(self):
-        self.assertEquals(str(self.food_cat), 'Food')
+        self.assertEqual(str(self.food_cat), 'Food')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.food_cat.get_absolute_url(), '/en/blog/categories/food/')
+        self.assertEqual(self.food_cat.get_absolute_url(), '/en/blog/categories/food/')
 
 
 class TestTag(TestCase):
@@ -43,10 +43,10 @@ class TestTag(TestCase):
         self.generic_tag = create_tag('Generic')
 
     def test__str__(self):
-        self.assertEquals(str(self.generic_tag), 'Generic')
+        self.assertEqual(str(self.generic_tag), 'Generic')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.generic_tag.get_absolute_url(), '/en/blog/tags/generic/')
+        self.assertEqual(self.generic_tag.get_absolute_url(), '/en/blog/tags/generic/')
 
 
 class TestPost(TestCase):
@@ -56,12 +56,12 @@ class TestPost(TestCase):
         self.next_post = create_post('Next', datetime(2015, 5, 5))
 
     def test__str__(self):
-        self.assertEquals(str(self.test_post), 'Test')
+        self.assertEqual(str(self.test_post), 'Test')
 
     def test_get_absolute_url(self):
-        self.assertEquals(self.test_post.get_absolute_url(), '/en/blog/test/')
+        self.assertEqual(self.test_post.get_absolute_url(), '/en/blog/test/')
         bs.POST_DETAIL_DATE_URL = True
-        self.assertEquals(self.test_post.get_absolute_url(), '/en/blog/2015/4/4/test/')
+        self.assertEqual(self.test_post.get_absolute_url(), '/en/blog/2015/4/4/test/')
         bs.POST_DETAIL_DATE_URL = False
 
     def test_get_search_data(self):
@@ -69,36 +69,36 @@ class TestPost(TestCase):
         self.test_post.tags.add(create_tag('T'))
         # TODO: add text plugin to body.
         # add_plugin(self.test_post.body, 'TextPlugin', 'en', body='Hello')
-        self.assertEquals(self.test_post.get_search_data(), 'Test Test C D T')
+        self.assertEqual(self.test_post.get_search_data(), 'Test Test C D T')
 
     def test_get_meta_title(self):
-        self.assertEquals(self.test_post.get_meta_title(), 'Test')
+        self.assertEqual(self.test_post.get_meta_title(), 'Test')
         self.test_post.meta_title = 'Test title'
-        self.assertEquals(self.test_post.get_meta_title(), 'Test title')
+        self.assertEqual(self.test_post.get_meta_title(), 'Test title')
 
     def test_get_meta_description(self):
-        self.assertEquals(self.test_post.get_meta_description(), 'Test')
+        self.assertEqual(self.test_post.get_meta_description(), 'Test')
         self.test_post.meta_description = 'Test desc'
-        self.assertEquals(self.test_post.get_meta_description(), 'Test desc')
+        self.assertEqual(self.test_post.get_meta_description(), 'Test desc')
 
     def test_name(self):
-        self.assertEquals(self.test_post.name, 'Test')
+        self.assertEqual(self.test_post.name, 'Test')
 
     def test_is_published(self):
         self.test_post.status = Post.DRAFT
-        self.assertEquals(self.test_post.is_published, False)
+        self.assertEqual(self.test_post.is_published, False)
         self.test_post.status = Post.PUBLIC
-        self.assertEquals(self.test_post.is_published, True)
+        self.assertEqual(self.test_post.is_published, True)
 
     def test_previous_post(self):
-        self.assertEquals(self.test_post.previous_post, self.prev_post)
+        self.assertEqual(self.test_post.previous_post, self.prev_post)
 
     def test_next_post(self):
-        self.assertEquals(self.test_post.next_post, self.next_post)
+        self.assertEqual(self.test_post.next_post, self.next_post)
 
     def test_previous_next_posts(self):
         self.test_post.status = Post.PRIVATE
-        self.assertEquals(self.test_post.previous_next_posts, (None, None))
+        self.assertEqual(self.test_post.previous_next_posts, (None, None))
         self.test_post.status = Post.PUBLIC
         setattr(self.test_post, 'previous_next', None)
-        self.assertEquals(self.test_post.previous_next_posts, (self.prev_post, self.next_post))
+        self.assertEqual(self.test_post.previous_next_posts, (self.prev_post, self.next_post))

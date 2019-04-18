@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from cms.toolbar.items import Break, SubMenu
 from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from blogit.models import Category, Post, Tag

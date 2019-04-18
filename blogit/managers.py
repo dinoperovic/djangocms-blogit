@@ -15,7 +15,7 @@ class PostManager(TranslatableManager):
 
     def published(self, request, **kwargs):
         queryset = self.public(**kwargs).published()
-        if hasattr(request, 'user') and request.user.is_authenticated():
+        if hasattr(request, 'user') and request.user.is_authenticated:
             if request.user.is_staff:
                 queryset = queryset | self.draft(**kwargs)
             queryset = queryset | self.private(request.user, **kwargs)

@@ -5,6 +5,12 @@ Release notes for **Blogit**.
 
 ----
 
+0.5.0
+=====
+
+* Add support for Django 2.0 & 2.1, drop support for Django 1.11 and below.
+* Drop support for Python 2.
+
 0.4.13
 ======
 
